@@ -1,0 +1,178 @@
+<!--
+ Web Server of the Chess Puzzle Database Explorer
+ Copyright (C) 2025  Lluís Alemany Puig
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published
+ by the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+ Contact:
+
+ 		Lluís Alemany Puig
+ 		https://github.com/lluisalemanypuig
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Chess Puzzle Database</title>
+
+	<script src="js/bdl__main.js"> </script>
+
+	<link rel="stylesheet" type="text/css" href="/css/chessground_base.css" />
+    <link rel="stylesheet" type="text/css" href="/css/chessground_brown.css" />
+    <link rel="stylesheet" type="text/css" href="/css/chessground_cburnett.css" />
+	<link rel="stylesheet" type="text/css" href="/css/menu.css" />
+	<style>
+		cg-board {
+			background-color: #bfcfdd;
+		}
+	</style>
+</head>
+<body>
+	<div class="vertical">
+		<h2>Chess Puzzle Database Explorer</h2>
+		<div class="vertical">
+			<div class="horizontal">
+				<div class="horizontal">
+					<div class="squares-vertical">
+						<div id="black_square" class="square black"></div>
+						<div id="white_square" class="square white"></div>
+					</div>
+					<div class="chessground" id="board"></div>
+				</div>
+				<div class="vertical">
+					<!-- PAWNS -->
+					<div class="horizontal">
+						<input id="1" type="checkbox"></input>
+						<label id="1_1">White pawns</label>
+						<input id="1_2" type="number" value=0></input>
+						<input id="1_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="2" type="checkbox"></input>
+						<label id="2_1">Black pawns</label>
+						<input id="2_2" type="number" value=0></input>
+						<input id="2_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="3" type="checkbox"></input>
+						<label id="3_1">Total pawns</label>
+						<input id="3_2" type="number" value=0></input>
+						<input id="3_3" type="number" value=0></input>
+					</div>
+					<!-- ROOKS -->
+					<div class="horizontal">
+						<input id="4" type="checkbox"></input>
+						<label id="4_1">White rooks</label>
+						<input id="4_2" type="number" value=0></input>
+						<input id="4_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="5" type="checkbox"></input>
+						<label id="5_1">Black rooks</label>
+						<input id="5_2" type="number" value=0></input>
+						<input id="5_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="6" type="checkbox"></input>
+						<label id="6_1">Total rooks</label>
+						<input id="6_2" type="number" value=0></input>
+						<input id="6_3" type="number" value=0></input>
+					</div>
+					<!-- KNIGHTS -->
+					<div class="horizontal">
+						<input id="7" type="checkbox"></input>
+						<label id="7_1">White knights</label>
+						<input id="7_2" type="number" value=0></input>
+						<input id="7_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="8" type="checkbox"></input>
+						<label id="8_1">Black knights</label>
+						<input id="8_2" type="number" value=0></input>
+						<input id="8_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="9" type="checkbox"></input>
+						<label id="9_1">Total knights</label>
+						<input id="9_2" type="number" value=0></input>
+						<input id="9_3" type="number" value=0></input>
+					</div>
+					<!-- BISHOPS -->
+					<div class="horizontal">
+						<input id="10" type="checkbox"></input>
+						<label id="10_1">White bishops</label>
+						<input id="10_2" type="number" value=0></input>
+						<input id="10_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="11" type="checkbox"></input>
+						<label id="11_1">Black bishops</label>
+						<input id="11_2" type="number" value=0></input>
+						<input id="11_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="12" type="checkbox"></input>
+						<label id="12_1">Total bishops</label>
+						<input id="12_2" type="number" value=0></input>
+						<input id="12_3" type="number" value=0></input>
+					</div>
+					<!-- QUEENS -->
+					<div class="horizontal">
+						<input id="13" type="checkbox"></input>
+						<label id="13_1">White queens</label>
+						<input id="13_2" type="number" value=0></input>
+						<input id="13_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="14" type="checkbox"></input>
+						<label id="14_1">Black queens</label>
+						<input id="14_2" type="number" value=0></input>
+						<input id="14_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="15" type="checkbox"></input>
+						<label id="15_1">Total queens</label>
+						<input id="15_2" type="number" value=0></input>
+						<input id="15_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal">
+						<input id="16" type="checkbox"></input>
+						<label id="16_1">Total pieces</label>
+						<input id="16_2" type="number" value=0></input>
+						<input id="16_3" type="number" value=0></input>
+					</div>
+					<div class="horizontal6">
+						<input id="17" type="checkbox"></input>
+						<label id="17_1">Turn</label>
+						<input id="17_2" type="radio" value="White"></input>
+						<label for="17_2">White</label><br>
+						<input id="17_3" type="radio" value="Black"></input>
+						<label for="17_3">Black</label><br>
+					</div>
+					<div class="horizontal">
+						<button id="query">Find</button>
+						<button id="previous">Previous</button>
+						<button id="next">Next</button>
+					</div>
+				</div>
+			</div>
+			<div class="horizontal">
+				<label id="counter">Counter: 0/0</label>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

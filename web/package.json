@@ -1,0 +1,13 @@
+{
+	"name": "web",
+	"version": "1.0.0",
+	"description": "Puzzle viewer",
+	"license": "AGPLv3",
+	"author": "",
+	"type": "commonjs",
+	"main": "index.js",
+	"scripts": {},
+	"dependencies": {
+		"@lichess-org/chessground": "^9.2.3"
+	}
+}
