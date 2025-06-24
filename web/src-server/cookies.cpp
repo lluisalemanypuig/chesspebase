@@ -39,6 +39,10 @@ void add_key_value_pair(
 	cookie_map& m
 )
 {
+	if (s == "") {
+		return;
+	}
+
 	const std::size_t eq_pos = s.find("=", i);
 	if (eq_pos == std::string::npos) {
 		std::cerr << __PRETTY_FUNCTION__ << '\n';
