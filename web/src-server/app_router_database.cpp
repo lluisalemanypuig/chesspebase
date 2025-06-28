@@ -313,7 +313,7 @@ void make_query(
 	query_it->second.current = 1;
 	query_it->second.total = count;
 
-	[[maybe_unused]] const auto _ = db_it.at_begin();
+	[[maybe_unused]] const auto _ = db_it.to_begin();
 
 	res.body = "{";
 	if (new_id_created) {

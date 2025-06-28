@@ -41,7 +41,7 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 {
 	svr.Get(
 		"/next",
-		[&](const httplib::Request& req, httplib::Response& res)
+		[&user_query](const httplib::Request& req, httplib::Response& res)
 		{
 			std::string id;
 
@@ -71,9 +71,13 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 			auto& db_it = it->second.it;
 
 			bool include_fen = false;
+
 			if (not db_it.end()) {
 				++db_it;
-				if (not db_it.end()) {
+				if (db_it.end()) {
+					--db_it;
+				}
+				else {
 					++it->second.current;
 					include_fen = true;
 				}
@@ -98,7 +102,7 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 
 	svr.Get(
 		"/previous",
-		[&](const httplib::Request& req, httplib::Response& res)
+		[&user_query](const httplib::Request& req, httplib::Response& res)
 		{
 			std::string id;
 
@@ -109,7 +113,7 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 				if (it == cs.end()) {
 					std::cerr << __PRETTY_FUNCTION__ << '\n';
 					std::cerr << "Token 'sessionid' not found in the cookie.\n";
-					std::cerr << "Cannot proceed with 'next' position.\n";
+					std::cerr << "Cannot proceed with 'previous' position.\n";
 					res.status = 400;
 					return;
 				}
@@ -120,7 +124,7 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 			if (it == user_query.end()) {
 				std::cerr << __PRETTY_FUNCTION__ << '\n';
 				std::cerr << "User with token does not exist.\n";
-				std::cerr << "Cannot proceed with 'next' position.\n";
+				std::cerr << "Cannot proceed with 'previous' position.\n";
 				res.status = 400;
 				return;
 			}
@@ -128,9 +132,13 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 			auto& db_it = it->second.it;
 
 			bool include_fen = false;
+
 			if (not db_it.past_begin()) {
 				--db_it;
-				if (not db_it.past_begin()) {
+				if (db_it.past_begin()) {
+					++db_it;
+				}
+				else {
 					--it->second.current;
 					include_fen = true;
 				}
