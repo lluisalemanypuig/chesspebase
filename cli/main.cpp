@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
 			show_turn_query();
 		}
 		else if (option == "run") {
-			auto it = db.get_const_range_iterator(
+			auto it = db.get_const_range_iterator_begin(
 				white_pawns,
 				black_pawns,
 				white_rooks,
