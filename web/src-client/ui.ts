@@ -25,21 +25,21 @@ export function on_check(event: any) {
 	const select = event.target;
 	const id = select.getAttribute("id");
 
-	//let label = document.getElementById(id + "_1") as HTMLLabelElement;
-	let lower = document.getElementById(id + "_2") as HTMLInputElement;
-	let upper = document.getElementById(id + "_3") as HTMLInputElement;
+	(document.getElementById(id + "_2") as HTMLInputElement).disabled = !select.checked;
+	(document.getElementById(id + "_3") as HTMLInputElement).disabled = !select.checked;
+}
 
-	//label.disabled = !label.disabled;
-	lower.disabled = not select.disabled;
-	upper.disabled = not select.disabled;
+export function enable_disable(elem: HTMLInputElement, id: string) {
+	(document.getElementById(id + "_2") as HTMLInputElement).disabled = !elem.checked;
+	(document.getElementById(id + "_3") as HTMLInputElement).disabled = !elem.checked;
 }
 
 export function configure_ui() {
-	for (let i = 1; i <= 15; ++i) {
-		let elem = document.getElementById(i.toString()) as HTMLInputElement;
-		if (elem.disabled) {
+	for (let i = 1; i <= 17; ++i) {
+		const istr: string = i.toString();
+		let elem = document.getElementById(istr) as HTMLInputElement;
 
-		}
+		enable_disable(elem, istr);
 		elem.onchange = on_check;
 	}
 }
