@@ -21,7 +21,7 @@ To use any of the tools, it is recommended to build the project with the followi
 
 - One dependency of this project is the [classification-tree](https://github.com/lluisalemanypuig/classification-tree.git) library. It is a header-only library, so you only need to download it.
 
-    $ git clone git@github.com:lluisalemanypuig/classification-tree.git
+        $ git clone git@github.com:lluisalemanypuig/classification-tree.git
 
 - We also use [cpp-httplib](https://github.com/yhirose/cpp-httplib) to build the web server. It is downloaded automatically.
 
