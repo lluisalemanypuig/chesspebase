@@ -138,6 +138,13 @@ export async function query(_event: any) {
 	}
 	//(document.getElementById("time") as HTMLLabelElement).innerHTML = `Time: ${data.time}`;
 	(document.getElementById("counter") as HTMLLabelElement).innerHTML = `Counter: 1/${data.count}`;
+
+	if (data.count > 0) {
+		let previous_button = document.getElementById("previous") as HTMLButtonElement;
+		previous_button.disabled = false;
+		let next_button = document.getElementById("next") as HTMLButtonElement;
+		next_button.disabled = false;
+	}
 }
 
 window.onload = function() {
@@ -152,7 +159,13 @@ window.onload = function() {
 	configure_ui();
 
 	(document.getElementById("query") as HTMLInputElement).onclick = query;
-	(document.getElementById("previous") as HTMLButtonElement).onclick = previous;
-	(document.getElementById("next") as HTMLButtonElement).onclick = next;
+
+	let previous_button = document.getElementById("previous") as HTMLButtonElement;
+	previous_button.disabled = true;
+	previous_button.onclick = previous;
+
+	let next_button = document.getElementById("next") as HTMLButtonElement;
+	next_button.disabled = true;
+	next_button.onclick = next;
 
 }
