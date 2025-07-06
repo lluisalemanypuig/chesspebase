@@ -39,14 +39,7 @@ export function set_value_to_upper(event: any) {
 	const id = lower.getAttribute("id");
 
 	const upper_id = id.substring(0, id.length - 1) + "3";
-
-	console.log("upper_id=", upper_id);
-
 	const upper = document.getElementById(upper_id) as HTMLInputElement;
-
-	console.log("lower.value=", lower.value);
-	console.log("upper.value=", upper.value);
-
 	if (lower.value > upper.value) {
 		upper.value = lower.value;
 	}
@@ -57,14 +50,7 @@ export function set_value_to_lower(event: any) {
 	const id = upper.getAttribute("id");
 
 	const lower_id = id.substring(0, id.length - 1) + "2";
-
-	console.log("lower_id=", lower_id);
-
 	const lower = document.getElementById(lower_id) as HTMLInputElement;
-
-	console.log("lower.value=", lower.value);
-	console.log("upper.value=", upper.value);
-
 	if (lower.value > upper.value) {
 		lower.value = upper.value;
 	}
