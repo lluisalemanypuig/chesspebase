@@ -118,13 +118,14 @@ void make_query(
 
 	// parse body and assign values to 'query_it->second.Q'
 
-	cpb::querier& Q = query_it->second.Q;
-	parse_query_body(req.body, Q);
+	cpb::querier& Q_ = query_it->second.Q;
+	parse_query_body(req.body, Q_);
 
 	// create lambda functions that take a reference to 'query_it->second.Q'
 
-	auto white_inspect = [&](const cpb::query_data& q,
-							 const int total_so_far) -> bool
+	auto white_inspect = [](const cpb::querier& Q,
+							const cpb::query_data& q,
+							const int total_so_far) -> bool
 	{
 		if (q.query_white) {
 			const bool cond =
@@ -153,8 +154,9 @@ void make_query(
 		return true;
 	};
 
-	auto black_inspect = [&](const cpb::query_data& q,
-							 const int total_so_far) -> bool
+	auto black_inspect = [](const cpb::querier& Q,
+							const cpb::query_data& q,
+							const int total_so_far) -> bool
 	{
 		if (q.query_black) {
 			const bool cond =
@@ -188,45 +190,51 @@ void make_query(
 
 	auto white_pawns = [&](const char c) -> bool
 	{
-		Q.pawns.num_white = c;
-		return white_inspect(Q.pawns, Q.pawns.num_white);
+		Q_.pawns.num_white = c;
+		return white_inspect(Q_, Q_.pawns, Q_.pawns.num_white);
 	};
 
 	auto black_pawns = [&](const char c) -> bool
 	{
-		Q.pawns.num_black = c;
-		return black_inspect(Q.pawns, Q.pawns.total());
+		Q_.pawns.num_black = c;
+		return black_inspect(Q_, Q_.pawns, Q_.pawns.total());
 	};
 
 	// rooks
 
 	auto white_rooks = [&](const char c) -> bool
 	{
-		Q.rooks.num_white = c;
-		return white_inspect(Q.rooks, Q.pawns.total() + Q.rooks.num_white);
+		Q_.rooks.num_white = c;
+		return white_inspect(
+			Q_, Q_.rooks, Q_.pawns.total() + Q_.rooks.num_white
+		);
 	};
 
 	auto black_rooks = [&](const char c) -> bool
 	{
-		Q.rooks.num_black = c;
-		return black_inspect(Q.rooks, Q.pawns.total() + Q.rooks.total());
+		Q_.rooks.num_black = c;
+		return black_inspect(Q_, Q_.rooks, Q_.pawns.total() + Q_.rooks.total());
 	};
 
 	// knights
 
 	auto white_knights = [&](const char c) -> bool
 	{
-		Q.knights.num_white = c;
+		Q_.knights.num_white = c;
 		return white_inspect(
-			Q.knights, Q.pawns.total() + Q.rooks.total() + Q.knights.num_white
+			Q_,
+			Q_.knights,
+			Q_.pawns.total() + Q_.rooks.total() + Q_.knights.num_white
 		);
 	};
 
 	auto black_knights = [&](const char c) -> bool
 	{
-		Q.knights.num_black = c;
+		Q_.knights.num_black = c;
 		return black_inspect(
-			Q.knights, Q.pawns.total() + Q.rooks.total() + Q.knights.total()
+			Q_,
+			Q_.knights,
+			Q_.pawns.total() + Q_.rooks.total() + Q_.knights.total()
 		);
 	};
 
@@ -234,21 +242,23 @@ void make_query(
 
 	auto white_bishops = [&](const char c) -> bool
 	{
-		Q.bishops.num_white = c;
+		Q_.bishops.num_white = c;
 		return white_inspect(
-			Q.bishops,
-			Q.pawns.total() + Q.rooks.total() + Q.knights.total() +
-				Q.bishops.num_white
+			Q_,
+			Q_.bishops,
+			Q_.pawns.total() + Q_.rooks.total() + Q_.knights.total() +
+				Q_.bishops.num_white
 		);
 	};
 
 	auto black_bishops = [&](const char c) -> bool
 	{
-		Q.bishops.num_black = c;
+		Q_.bishops.num_black = c;
 		return black_inspect(
-			Q.bishops,
-			Q.pawns.total() + Q.rooks.total() + Q.knights.total() +
-				Q.bishops.total()
+			Q_,
+			Q_.bishops,
+			Q_.pawns.total() + Q_.rooks.total() + Q_.knights.total() +
+				Q_.bishops.total()
 		);
 	};
 
@@ -256,37 +266,40 @@ void make_query(
 
 	auto white_queens = [&](const char c) -> bool
 	{
-		Q.queens.num_white = c;
+		Q_.queens.num_white = c;
 		return white_inspect(
-			Q.queens,
-			Q.pawns.total() + Q.rooks.total() + Q.knights.total() +
-				Q.bishops.total() + Q.queens.num_white
+			Q_,
+			Q_.queens,
+			Q_.pawns.total() + Q_.rooks.total() + Q_.knights.total() +
+				Q_.bishops.total() + Q_.queens.num_white
 		);
 	};
 
 	auto black_queens = [&](const char c) -> bool
 	{
-		Q.queens.num_black = c;
-		const int total_so_far = Q.pawns.total() + Q.rooks.total() +
-								 Q.knights.total() + Q.bishops.total() +
-								 Q.queens.total();
+		Q_.queens.num_black = c;
+		const int total_so_far = Q_.pawns.total() + Q_.rooks.total() +
+								 Q_.knights.total() + Q_.bishops.total() +
+								 Q_.queens.total();
 
-		if (Q.query_total_pieces) {
+		if (Q_.query_total_pieces) {
 			const bool cond = in_interval(
-				Q.query_total_pieces->lb, total_so_far, Q.query_total_pieces->ub
+				Q_.query_total_pieces->lb,
+				total_so_far,
+				Q_.query_total_pieces->ub
 			);
 			if (not cond) {
 				return false;
 			}
 		}
-		return black_inspect(Q.queens, total_so_far);
+		return black_inspect(Q_, Q_.queens, total_so_far);
 	};
 
 	// player turn
 
 	auto turn_func = [&](const unsigned i) -> bool
 	{
-		return Q.query_player_turn ? i == Q.query_player_turn : true;
+		return Q_.query_player_turn ? i == Q_.query_player_turn : true;
 	};
 
 	auto& db_it = query_it->second.it;
