@@ -18,9 +18,11 @@ Users can check the checkboxes for the pieces they want the positions to have, s
 - where it is black to move.
 - (unchecked boxes are not used to search for positions).
 
-In the screenshot it can be seen that there are 25.307 such positions.
+In the screenshot it can be seen that there are 25.307 such positions of 5.009.706 _unique_ positions in the lichess database (downloaded May 2025).
 
 ![Screenshot of a query](figures/web_query_view.png)
+
+(Note: the May 2025 lichess database contained, at the time of writing, a total of 5.037.439 of which 5.009.706 are unique).
 
 ## Compile the client code
 
