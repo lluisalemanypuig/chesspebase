@@ -5,13 +5,15 @@ This is a tool to explore a database of chess positions by pieces, that is, the 
 - with 2 White rooks and a Black queen,
 - ...
 
-You just need to download a database file and feed it to the program. Supported databases
+The way this tool works is by loading first a database from a local file. We currently support the following databases
 - [lichess](https://database.lichess.org/#puzzles)
 
 ## Tools
 
 - [cli](/cli): the explorer can be used via a command line terminal.
-- [web](/web): the tool can be run as a web server with a backend.
+- [web](/web): the explorer can be run as a web server with a backend.
+
+See each subdirectory (by following the links) to read more about each tool.
 
 ## Building
 
