@@ -116,3 +116,7 @@ From there, run the server by feeding it the databases you want to host
     $ ./web/server --lichess-database lichess.csv
 
 Notice that databases are often licensed, and the terms of the license may prevent you from sharing the contents online. If a database is not licensed, you will have to contact the creators to give you permission to share it online.
+
+## Note on hosting this tool online
+
+You may use this for your site if you think it is useful enough. However, take good note that a better way to host an explorer like this online would be to not use this tool as is. Instead, if you insist in following a similar approach, you could implement a more efficient server if [the data structure behind this project](https://github.com/lluisalemanypuig/classification-tree) was implemented in the directory structure. Do not hesitate to contact me for more details.
