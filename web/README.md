@@ -1,10 +1,30 @@
 # Chess Puzzle Database explorer -- Web
 
-A small web client for the Chess Puzzle Database explorer. Run it locally, or host it online.
+A small web client for the Chess Puzzle Database explorer.
 
-## Install
+You can run a local server to explore the database via your browser, or host it online for other users to explore your databse. In either case, you have to download first the database file, and run the server by passing to it the path to the database file.
 
-Now follow instructions to explain how to install the webpage.
+## What does it look like
+
+The main view of the web looks like this.
+
+![Main view of the web tool](figures/web_main_view.png)
+
+Users can check the checkboxes for the pieces they want the positions to have, select the number of pieces. To see the positions, they have to click run next. For example, they can search for positions
+- with a number of pawns between 1 and 5,
+- with exactly 1 black rook,
+- with exactly 1 white bishop,
+- with a total number of bishops between 0 and 4,
+- where it is black to move.
+- (unchecked boxes are not used to search for positions).
+
+In the screenshot it can be seen that there are 25.307 such positions.
+
+![Screenshot of a query](figures/web_main_view.png)
+
+## Compile the client code
+
+Below are instructions to explain how to compile the typescript client code. The backend is written in C++ and can be compiled by following the instructions in the main [README](/) of this repository.
 
 ### Install all dependencies first
 
@@ -53,7 +73,7 @@ Now follow instructions to explain how to install the webpage.
 
         $ npm install -g --save-exact --save-dev esbuild
 
-### Install all packages required to run the website
+### Install all packages required
 
 First, navigate to the `web` directory within this repository.
 
@@ -83,7 +103,7 @@ To build the front end, simply run
 
     $ ./build/compile.sh
 
-### Run the server
+## Run the server
 
 Navigate to the build directory, say
 
