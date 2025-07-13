@@ -20,7 +20,7 @@ Users can check the checkboxes for the pieces they want the positions to have, s
 
 In the screenshot it can be seen that there are 25.307 such positions.
 
-![Screenshot of a query](figures/web_main_view.png)
+![Screenshot of a query](figures/web_query_view.png)
 
 ## Compile the client code
 
