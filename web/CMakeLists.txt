@@ -19,14 +19,14 @@ include(GNUInstallDirs)
 function(configure_server_executable executable)
 	add_dependencies(${executable} ${CPB_LIB_NAME})
 
-    # OpenSSL
-    find_package(OpenSSL REQUIRED)
-    target_link_libraries(${executable} OpenSSL::SSL OpenSSL::Crypto)
+	# OpenSSL
+	find_package(OpenSSL REQUIRED)
+	target_link_libraries(${executable} OpenSSL::SSL OpenSSL::Crypto)
 
-    # cpphttplib
-    target_include_directories(${executable} PRIVATE ${cpphttplib_SOURCE_DIR})
+	# cpphttplib
+	target_include_directories(${executable} PRIVATE ${cpphttplib_SOURCE_DIR})
 
-    # web includes
+	# web includes
 	target_include_directories(${executable} PRIVATE ${CPB_DIR}/web)
 
 	# cpb
