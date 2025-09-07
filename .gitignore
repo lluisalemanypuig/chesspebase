@@ -1,6 +1,7 @@
 build-debug/
 build-release/
 build-profiling/
+build-gprof/
 build/
 
 .cache
