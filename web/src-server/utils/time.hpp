@@ -27,6 +27,8 @@
 #include <chrono>
 #include <string>
 
+namespace utils {
+
 typedef std::chrono::high_resolution_clock::time_point time_point;
 
 [[nodiscard]] std::string time_to_str(double us);
@@ -46,3 +48,5 @@ elapsed_time(const time_point& begin, const time_point& end)
 	)
 		.count();
 }
+
+} // namespace utils

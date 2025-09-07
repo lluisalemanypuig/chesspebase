@@ -25,8 +25,10 @@
 #include <cstdint>
 #include <string>
 
+namespace utils {
+
 [[nodiscard]] static inline std::string
-time_to_str(uint64_t t, const std::string& unit)
+time_to_str(uint64_t t, const std::string_view unit)
 {
 	if (unit == "us") {
 		const uint64_t us = t % 1000;
@@ -80,3 +82,5 @@ std::string time_to_str(double us)
 {
 	return time_to_str(static_cast<uint64_t>(us), "us");
 }
+
+} // namespace utils

@@ -32,8 +32,12 @@
 
 static_assert(std::string{CPB_WORK_DIR} != "unknown");
 
+namespace utils {
+
 [[nodiscard]] static constexpr inline std::string
 get_filename(const std::string& f) noexcept
 {
 	return std::string{CPB_WORK_DIR} + "/" + f;
 }
+
+} // namespace utils

@@ -28,7 +28,7 @@
 #include <cpb/database.hpp>
 
 // custom includes
-#include "src-server/utils_files.hpp"
+#include "src-server/utils/files.hpp"
 
 void route_server_files(httplib::Server& svr)
 {
@@ -36,35 +36,35 @@ void route_server_files(httplib::Server& svr)
 		"",
 		[](const httplib::Request& /*req*/, httplib::Response& res)
 		{
-			res.set_file_content(get_filename("html/main.html"));
+			res.set_file_content(utils::get_filename("html/main.html"));
 		}
 	);
 	svr.Get(
 		"/",
 		[](const httplib::Request& /*req*/, httplib::Response& res)
 		{
-			res.set_file_content(get_filename("html/main.html"));
+			res.set_file_content(utils::get_filename("html/main.html"));
 		}
 	);
 	svr.Get(
 		R"(/js/[a-zA-Z0-9_/]*.js)",
 		[](const httplib::Request& req, httplib::Response& res)
 		{
-			res.set_file_content(get_filename(req.target));
+			res.set_file_content(utils::get_filename(req.target));
 		}
 	);
 	svr.Get(
 		R"(/css/[a-zA-Z0-9_/\-]*.css)",
 		[](const httplib::Request& req, httplib::Response& res)
 		{
-			res.set_file_content(get_filename(req.target));
+			res.set_file_content(utils::get_filename(req.target));
 		}
 	);
 	svr.Get(
 		R"(/node_modules/@[a-zA-Z0-9_/\-]*.css)",
 		[](const httplib::Request& req, httplib::Response& res)
 		{
-			res.set_file_content(get_filename(req.target));
+			res.set_file_content(utils::get_filename(req.target));
 		}
 	);
 }

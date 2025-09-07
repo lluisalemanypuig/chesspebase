@@ -54,7 +54,8 @@ int main(int argc, char *argv[])
 {
 	std::cout << "CPB_WORK_DIR: " << CPB_WORK_DIR << '\n';
 
-	std::vector<std::pair<std::string_view, cpb::database_format>> lichess_databases;
+	std::vector<std::pair<std::string_view, cpb::database_format>>
+		lichess_databases;
 
 	for (int i = 1; i < argc; ++i) {
 		const std::string_view option_name(argv[i]);
