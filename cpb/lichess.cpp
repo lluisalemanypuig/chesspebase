@@ -36,44 +36,70 @@
 namespace cpb {
 namespace lichess {
 
+#define CHUNK_SIZE 131072
+
+[[nodiscard]] inline char consume_char(
+	char *chunk, std::size_t& chunk_it, std::size_t& chunk_size, FILE *file
+)
+{
+	if (chunk_it < chunk_size) [[likely]] {
+		return chunk[chunk_it++];
+	}
+
+	const std::size_t r = fread(chunk, 1, CHUNK_SIZE, file);
+	if (ferror(file) != 0) {
+		return EOF;
+	}
+	if (feof(file) != 0 and r == 0) {
+		return EOF;
+	}
+	chunk_size = r;
+	chunk_it = 0;
+	return chunk[chunk_it++];
+}
+
 std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 {
-	FILE *file;
-	file = fopen(filename.data(), "r");
+	char chunk[CHUNK_SIZE];
+	std::size_t chunk_it = 0;
+	std::size_t chunk_size = 0;
+
+	FILE *file = fopen(filename.data(), "r");
 	if (file == NULL) {
 		std::cout << "Database file '" << filename << "' is not open.\n";
 		return 0;
 	}
 
 	// read first line
-	int c;
-	while ((c = fgetc(file)) != '\n') {
+	char c;
+	while ((c = consume_char(chunk, chunk_it, chunk_size, file)) != '\n' and
+		   c != EOF) {
 	}
 
 	char fen[128];
 	std::size_t fen_idx = 0;
 	std::size_t total_fen_read = 0;
 
-	while ((c = fgetc(file)) != EOF) {
+	while ((c = consume_char(chunk, chunk_it, chunk_size, file)) != EOF) {
 
 		// read until first ','
-		while ((c = fgetc(file)) != ',') {
+		while ((c = consume_char(chunk, chunk_it, chunk_size, file)) != ',') {
 		}
 
 		// read until second ','
 		fen_idx = 0;
-		while ((c = fgetc(file)) != ',') {
-			fen[fen_idx++] = static_cast<char>(c);
+		while ((c = consume_char(chunk, chunk_it, chunk_size, file)) != ',') {
+			fen[fen_idx++] = c;
 		}
 
 		// read the first move
 		char m1[2];
-		m1[0] = static_cast<char>(fgetc(file));
-		m1[1] = static_cast<char>(fgetc(file));
+		m1[0] = consume_char(chunk, chunk_it, chunk_size, file);
+		m1[1] = consume_char(chunk, chunk_it, chunk_size, file);
 		char m2[2];
-		m2[0] = static_cast<char>(fgetc(file));
-		m2[1] = static_cast<char>(fgetc(file));
-		const char promotion = static_cast<char>(fgetc(file));
+		m2[0] = consume_char(chunk, chunk_it, chunk_size, file);
+		m2[1] = consume_char(chunk, chunk_it, chunk_size, file);
+		const char promotion = consume_char(chunk, chunk_it, chunk_size, file);
 
 		// use the fen to parse the game
 		const std::string_view fen_view{&fen[0], fen_idx};
@@ -121,7 +147,7 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		++total_fen_read;
 
 		// read until '\n'
-		while ((c = fgetc(file)) != '\n') {
+		while ((c = consume_char(chunk, chunk_it, chunk_size, file)) != '\n') {
 		}
 	}
 
