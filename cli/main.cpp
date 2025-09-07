@@ -39,7 +39,8 @@
 // custom includes
 #include "cli/query.hpp"
 
-void unset_query_field(cpb::query_data& q, const std::string_view field) noexcept
+void unset_query_field(cpb::query_data& q, const std::string_view field)
+	noexcept
 {
 	if (field == "white") {
 		q.query_white = {};
@@ -73,7 +74,8 @@ void set_query_field(
 	}
 }
 
-void show_piece_query(const std::string_view name, const cpb::query_data& q) noexcept
+void show_piece_query(const std::string_view name, const cpb::query_data& q)
+	noexcept
 {
 	std::cout << "Piece type: " << name << '\n';
 	std::cout << "    Query white: ";
@@ -290,7 +292,8 @@ int main(int argc, char *argv[])
 	std::cout << "===========================\n";
 	std::cout << "Chess Puzzle Database cli\n";
 
-	std::vector<std::pair<std::string_view, cpb::database_format>> lichess_databases;
+	std::vector<std::pair<std::string_view, cpb::database_format>>
+		lichess_databases;
 
 	for (int i = 1; i < argc; ++i) {
 		const std::string_view option_name(argv[i]);
