@@ -64,7 +64,7 @@ namespace cpb {
 	return s == 'k' or s == 'K' or s == 'q' or s == 'Q';
 }
 
-position parse_fen(const std::string_view& s) noexcept
+position parse_fen(const std::string_view s) noexcept
 {
 	position p;
 

@@ -36,7 +36,7 @@
 namespace cpb {
 namespace lichess {
 
-std::size_t load_database(const std::string_view& filename, PuzzleDatabase& db)
+std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 {
 	FILE *file;
 	file = fopen(filename.data(), "r");

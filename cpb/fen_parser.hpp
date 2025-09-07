@@ -32,7 +32,7 @@
 
 namespace cpb {
 
-[[nodiscard]] position parse_fen(const std::string_view& s) noexcept;
+[[nodiscard]] position parse_fen(const std::string_view s) noexcept;
 [[nodiscard]] std::string make_fen(const position& p) noexcept;
 
 } // namespace cpb

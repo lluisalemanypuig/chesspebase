@@ -29,7 +29,8 @@
 namespace cpb {
 namespace lichess {
 
-std::size_t load_database(const std::string_view& filename, PuzzleDatabase& db);
+[[nodiscard]] std::size_t
+load_database(const std::string_view filename, PuzzleDatabase& db);
 
 } // namespace lichess
 } // namespace cpb
