@@ -18,6 +18,13 @@ function(add_compiler_flag executable flag)
 	endif()
 endfunction(add_compiler_flag)
 
+function(add_linker_flag executable flag)
+	check_cxx_compiler_flag(${flag} CXX_HAS_FLAG_${flag})
+	if (CXX_HAS_FLAG_${flag})
+		target_link_options(${executable} PRIVATE ${flag})
+	endif()
+endfunction(add_linker_flag)
+
 function(define_symbol executable symbol)
 	target_compile_options(${executable} PRIVATE ${symbol})
 endfunction(define_symbol)
@@ -57,11 +64,12 @@ function(configure_executable executable)
 	# Optimisation flags
 
 	if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-		define_symbol(${executable} -Og)
+		add_compiler_flag(${executable} -Og)
 		define_symbol(${executable} -DDEBUG)
 		define_symbol(${executable} -D_GLIBCXX_DEBUG)
 	elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Profiling")
-		define_symbol(${executable} -g)
+		add_compiler_flag(${executable} -g)
+		add_compiler_flag(${executable} -pg)
 		add_compiler_flag(${executable} -fno-omit-frame-pointer)
 	else()
 		# flags added by default:
@@ -132,10 +140,21 @@ message(STATUS "    CPB_LIB_NAME: ${CPB_LIB_NAME}")
 # *******************************************************************************
 # Add subdirectories
 
-add_subdirectory(cpb)
-add_subdirectory(cli)
-add_subdirectory(tests)
-add_subdirectory(web)
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+	add_subdirectory(cpb)
+	add_subdirectory(cli)
+	add_subdirectory(tests)
+	add_subdirectory(web)
+elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Profiling")
+	add_subdirectory(cpb)
+	add_subdirectory(cli)
+	add_subdirectory(web)
+else()
+	add_subdirectory(cpb)
+	add_subdirectory(cli)
+	add_subdirectory(tests)
+	add_subdirectory(web)
+endif()
 
 # *******************************************************************************
 # Other
