@@ -23,24 +23,28 @@
 
 // C++ includes
 #include <string_view>
+#include <optional>
+#define CHESSPEBASE_LOG
+#if defined CHESSPEBASE_LOG
 #include <iostream>
+#endif
 
 // cpb includes
 #include <cpb/position.hpp>
 
 namespace cpb {
 
-[[nodiscard]] constexpr bool is_letter(char s) noexcept
+[[nodiscard]] inline constexpr bool is_letter(const char s) noexcept
 {
 	return 'a' <= s and s <= 'h';
 }
 
-[[nodiscard]] constexpr bool is_number(char s) noexcept
+[[nodiscard]] inline constexpr bool is_number(const char s) noexcept
 {
 	return '0' <= s and s <= '9';
 }
 
-[[nodiscard]] constexpr bool is_piece(char s) noexcept
+[[nodiscard]] inline constexpr bool is_piece(const char s) noexcept
 {
 	switch (s) {
 	case WHITE_PAWN:
@@ -59,19 +63,17 @@ namespace cpb {
 	}
 }
 
-[[nodiscard]] constexpr bool is_castling_ok(char s) noexcept
+[[nodiscard]] inline constexpr bool is_castling_ok(const char s) noexcept
 {
 	return s == 'k' or s == 'K' or s == 'q' or s == 'Q';
 }
 
-position parse_fen(const std::string_view s) noexcept
+std::optional<position> parse_fen(const std::string_view s) noexcept
 {
 	position p;
 
-	for (std::size_t rank = 1; rank <= 8; ++rank) {
-		for (std::size_t file = 1; file <= 8; ++file) {
-			p[rank, file] = EMPTY;
-		}
+	for (std::size_t i = 0; i < 64; ++i) {
+		p.pieces[i] = EMPTY;
 	}
 
 	std::size_t i = 0;
@@ -91,8 +93,10 @@ position parse_fen(const std::string_view s) noexcept
 			file += static_cast<std::size_t>(s[i] - '0');
 		}
 		else if (not is_piece(s[i])) {
+#if defined CHESSPEBASE_LOG
 			std::cout << "A: " << s[i] << '\n';
-			return p;
+#endif
+			return {};
 		}
 		else {
 			p[file, rank] = s[i];
@@ -115,45 +119,41 @@ position parse_fen(const std::string_view s) noexcept
 	}
 
 	if (i == s.size()) {
+#if defined CHESSPEBASE_LOG
 		std::cout << "B: " << s[i] << '\n';
 		std::cout << s << '\n';
-#if defined DEBUG
-		check_correctness(p);
 #endif
-		return p;
+		return {};
 	}
 
 	// -- space --
 	if (s[i] != ' ') {
+#if defined CHESSPEBASE_LOG
 		std::cout << "C: " << s[i] << '\n';
 		std::cout << s << '\n';
-#if defined DEBUG
-		check_correctness(p);
 #endif
-		return p;
+		return {};
 	}
 
 	// -- player turn --
 	++i;
 	p.player_turn = (s[i] == 'w' ? cpb::TURN_WHITE : cpb::TURN_BLACK);
 	if (s[i] != 'w' and s[i] != 'b') {
+#if defined CHESSPEBASE_LOG
 		std::cout << "D: " << s[i] << '\n';
 		std::cout << s << '\n';
-#if defined DEBUG
-		check_correctness(p);
 #endif
-		return p;
+		return {};
 	}
 
 	// -- space --
 	++i;
 	if (s[i] != ' ') {
+#if defined CHESSPEBASE_LOG
 		std::cout << "E: " << s[i] << '\n';
 		std::cout << s << '\n';
-#if defined DEBUG
-		check_correctness(p);
 #endif
-		return p;
+		return {};
 	}
 
 	// -- castling rights --
@@ -161,45 +161,41 @@ position parse_fen(const std::string_view s) noexcept
 	while (i < s.size() and s[i] != ' ') {
 		if (s[i] == 'Q') {
 			if (p.white_queen_castle) [[unlikely]] {
+#if defined CHESSPEBASE_LOG
 				std::cout << "F: " << s[i] << '\n';
 				std::cout << s << '\n';
-#if defined DEBUG
-				check_correctness(p);
 #endif
-				return p;
+				return {};
 			}
 			p.white_queen_castle = 1;
 		}
 		else if (s[i] == 'K') {
 			if (p.white_king_castle) [[unlikely]] {
+#if defined CHESSPEBASE_LOG
 				std::cout << "G: " << s[i] << '\n';
 				std::cout << s << '\n';
-#if defined DEBUG
-				check_correctness(p);
 #endif
-				return p;
+				return  {};
 			}
 			p.white_king_castle = 1;
 		}
 		else if (s[i] == 'q') {
 			if (p.black_queen_castle) [[unlikely]] {
+#if defined CHESSPEBASE_LOG
 				std::cout << "H: " << s[i] << '\n';
 				std::cout << s << '\n';
-#if defined DEBUG
-				check_correctness(p);
 #endif
-				return p;
+				return {};
 			}
 			p.black_queen_castle = 1;
 		}
 		else if (s[i] == 'k') {
 			if (p.black_king_castle) [[unlikely]] {
+#if defined CHESSPEBASE_LOG
 				std::cout << "I: " << s[i] << '\n';
 				std::cout << s << '\n';
-#if defined DEBUG
-				check_correctness(p);
 #endif
-				return p;
+				return {};
 			}
 			p.black_king_castle = 1;
 		}
@@ -207,34 +203,31 @@ position parse_fen(const std::string_view s) noexcept
 			// do nothing
 		}
 		else {
+#if defined CHESSPEBASE_LOG
 			std::cout << "J: " << s[i] << '\n';
 			std::cout << s << '\n';
-#if defined DEBUG
-			check_correctness(p);
 #endif
-			return p;
+			return {};
 		}
 
 		++i;
 	}
 
 	if (i == s.size()) {
+#if defined CHESSPEBASE_LOG
 		std::cout << "K: " << s[i] << '\n';
 		std::cout << s << '\n';
-#if defined DEBUG
-		check_correctness(p);
 #endif
-		return p;
+		return {};
 	}
 
 	// -- space --
 	if (s[i] != ' ') {
+#if defined CHESSPEBASE_LOG
 		std::cout << "L: " << s[i] << '\n';
 		std::cout << s << '\n';
-#if defined DEBUG
-		check_correctness(p);
 #endif
-		return p;
+		return {};
 	}
 
 	// -- en passant --
@@ -246,23 +239,21 @@ position parse_fen(const std::string_view s) noexcept
 	}
 	else {
 		if (not is_letter(s[i])) {
+#if defined CHESSPEBASE_LOG
 			std::cout << "M: " << s[i] << '\n';
 			std::cout << s << '\n';
-#if defined DEBUG
-			check_correctness(p);
 #endif
-			return p;
+			return {};
 		}
 		p.en_passant[0] = s[i];
 		++i;
 
 		if (not is_number(s[i])) {
+#if defined CHESSPEBASE_LOG
 			std::cout << "N: " << s[i] << '\n';
 			std::cout << s << '\n';
-#if defined DEBUG
-			check_correctness(p);
 #endif
-			return p;
+			return {};
 		}
 		p.en_passant[1] = s[i];
 		++i;

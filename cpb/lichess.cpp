@@ -70,32 +70,35 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		// use the fen to parse the game
 		const std::string_view fen_view{&fen[0], fen_idx};
 
-		position p = parse_fen(fen_view);
+		std::optional<position> p = parse_fen(fen_view);
+		if (not p) {
+			continue;
+		}
 
 #if defined DEBUG
-		check_correctness(p);
+		check_correctness(*p);
 #endif
 
-		apply_move(m1, m2, promotion, p);
+		apply_move(m1, m2, promotion, *p);
 
 #if defined DEBUG
-		check_correctness(p);
+		check_correctness(*p);
 #endif
 
-		const char n_white_pawns = p.n_white_pawns;
-		const char n_black_pawns = p.n_black_pawns;
-		const char n_white_rooks = p.n_white_rooks;
-		const char n_black_rooks = p.n_black_rooks;
-		const char n_white_knights = p.n_white_knights;
-		const char n_black_knights = p.n_black_knights;
-		const char n_white_bishops = p.n_white_bishops;
-		const char n_black_bishops = p.n_black_bishops;
-		const char n_white_queens = p.n_white_queens;
-		const char n_black_queens = p.n_black_queens;
-		const char turn = p.player_turn;
+		const char n_white_pawns = p->n_white_pawns;
+		const char n_black_pawns = p->n_black_pawns;
+		const char n_white_rooks = p->n_white_rooks;
+		const char n_black_rooks = p->n_black_rooks;
+		const char n_white_knights = p->n_white_knights;
+		const char n_black_knights = p->n_black_knights;
+		const char n_white_bishops = p->n_white_bishops;
+		const char n_black_bishops = p->n_black_bishops;
+		const char n_white_queens = p->n_white_queens;
+		const char n_black_queens = p->n_black_queens;
+		const char turn = p->player_turn;
 
 		db.add(
-			std::move(p),
+			std::move(*p),
 			metadata{.num_occurrences = 1},
 			n_white_pawns,
 			n_black_pawns,

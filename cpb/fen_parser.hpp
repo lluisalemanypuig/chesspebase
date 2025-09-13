@@ -25,6 +25,7 @@
 
 // C++ includes
 #include <string_view>
+#include <optional>
 #include <string>
 
 // cpb includes
@@ -32,7 +33,7 @@
 
 namespace cpb {
 
-[[nodiscard]] position parse_fen(const std::string_view s) noexcept;
+[[nodiscard]] std::optional<position> parse_fen(const std::string_view s) noexcept;
 [[nodiscard]] std::string make_fen(const position& p) noexcept;
 
 } // namespace cpb
