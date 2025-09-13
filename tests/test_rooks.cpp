@@ -34,7 +34,9 @@
 TEST_CASE("1")
 {
 	static constexpr std::string_view s = "8/4k3/1r6/8/8/5R2/2R1K3/8 w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -68,7 +70,9 @@ TEST_CASE("2")
 {
 	static constexpr std::string_view s =
 		"3rrr2/4k3/1r6/8/8/5R2/2R1K3/8 w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -102,7 +106,9 @@ TEST_CASE("3")
 {
 	static constexpr std::string_view s =
 		"r3r2r/8/1r4k1/8/8/2K5/8/R6R w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -137,7 +143,9 @@ TEST_CASE("4")
 	static constexpr std::string_view s =
 		"rrrrrrrr/rrrrrrrr/rrrrrrkr/rrrrrrrr/RRRRRRRR/RRKRRRRR/RRRRRRRR/"
 		"RRRRRRRR w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -172,7 +180,9 @@ TEST_CASE("5")
 	static constexpr std::string_view s =
 		"1r1r1r1r/r1r1r1r1/1r1r1rkr/r1r1r1r1/R1R1R1R1/1RKR1R1R/R1R1R1R1/"
 		"1R1R1R1R w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -207,7 +217,9 @@ TEST_CASE("5")
 TEST_CASE("white :: rook -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3r4/8/K2R4/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -268,7 +280,9 @@ TEST_CASE("white :: rook -- no capture")
 TEST_CASE("white :: rook -- capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3r4/8/K2R4/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -329,7 +343,9 @@ TEST_CASE("white :: rook -- capture")
 TEST_CASE("black :: rook -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3r4/8/K2R4/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -390,7 +406,9 @@ TEST_CASE("black :: rook -- no capture")
 TEST_CASE("black :: rook -- capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3r4/8/K2R4/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -453,7 +471,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

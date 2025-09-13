@@ -35,7 +35,9 @@ TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 	CHECK(p.is_valid);
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 
@@ -46,7 +48,9 @@ TEST_CASE("2")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 	CHECK(p.is_valid);
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 
@@ -57,7 +61,9 @@ TEST_CASE("3")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 	CHECK(p.is_valid);
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 
@@ -68,7 +74,9 @@ TEST_CASE("4")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 	CHECK(p.is_valid);
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 
@@ -79,7 +87,9 @@ TEST_CASE("5")
 {
 	static constexpr std::string_view s =
 		"rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 	CHECK(p.is_valid);
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 
@@ -91,7 +101,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

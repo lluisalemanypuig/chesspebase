@@ -36,7 +36,9 @@
 TEST_CASE("white :: promotion :: queen")
 {
 	static constexpr std::string_view s = "8/1P5k/8/8/8/8/4K3/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -76,7 +78,9 @@ TEST_CASE("white :: promotion :: queen")
 TEST_CASE("white :: promotion :: rook")
 {
 	static constexpr std::string_view s = "8/1P5k/8/8/8/8/4K3/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -116,7 +120,9 @@ TEST_CASE("white :: promotion :: rook")
 TEST_CASE("white :: promotion :: knight")
 {
 	static constexpr std::string_view s = "8/1P5k/8/8/8/8/4K3/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -156,7 +162,9 @@ TEST_CASE("white :: promotion :: knight")
 TEST_CASE("white :: promotion :: bishop")
 {
 	static constexpr std::string_view s = "8/1P5k/8/8/8/8/4K3/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -198,7 +206,9 @@ TEST_CASE("white :: promotion :: bishop")
 TEST_CASE("black :: promotion :: queen")
 {
 	static constexpr std::string_view s = "8/7k/8/8/8/8/1p2K3/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -238,7 +248,9 @@ TEST_CASE("black :: promotion :: queen")
 TEST_CASE("black :: promotion :: rook")
 {
 	static constexpr std::string_view s = "8/7k/8/8/8/8/1p2K3/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -278,7 +290,9 @@ TEST_CASE("black :: promotion :: rook")
 TEST_CASE("black :: promotion :: knight")
 {
 	static constexpr std::string_view s = "8/7k/8/8/8/8/1p2K3/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -318,7 +332,9 @@ TEST_CASE("black :: promotion :: knight")
 TEST_CASE("black :: promotion :: bishops")
 {
 	static constexpr std::string_view s = "8/7k/8/8/8/8/1p2K3/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -360,7 +376,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

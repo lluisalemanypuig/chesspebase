@@ -37,7 +37,9 @@ TEST_CASE("white :: pawn -- advance once")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -99,7 +101,9 @@ TEST_CASE("white :: pawn -- advance twice")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -161,7 +165,9 @@ TEST_CASE("white :: pawn -- capture normal (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/4P3/8/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -224,7 +230,9 @@ TEST_CASE("white :: pawn -- capture normal (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/4P3/8/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -289,7 +297,9 @@ TEST_CASE("black :: pawn -- advance once")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -351,7 +361,9 @@ TEST_CASE("black :: pawn -- advance twice")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -413,7 +425,9 @@ TEST_CASE("black :: pawn -- capture normal (< 1)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/8/4p3/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -476,7 +490,9 @@ TEST_CASE("black :: pawn -- capture normal (< 2)")
 {
 	static constexpr std::string_view s =
 		"2r5/8/6R1/8/6pr/3K1R1k/8/5N2 b - - 16 55";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -541,7 +557,9 @@ TEST_CASE("black :: pawn -- capture normal (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/8/4p3/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -605,7 +623,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

@@ -76,7 +76,8 @@ typedef std::vector<cpb::position> array_db;
 
 		const std::string_view fen{&line[i], j - i};
 
-		cpb::position p = cpb::parse_fen(fen);
+		std::optional<cpb::position> _p = cpb::parse_fen(fen);
+		cpb::position& p = *_p;
 		cpb::apply_move(c1, c2, promotion, p);
 
 		v.emplace_back(std::move(p));
@@ -466,7 +467,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

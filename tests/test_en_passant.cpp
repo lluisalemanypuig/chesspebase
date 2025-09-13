@@ -35,7 +35,9 @@ TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -49,7 +51,9 @@ TEST_CASE("2")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -64,7 +68,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

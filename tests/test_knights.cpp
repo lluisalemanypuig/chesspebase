@@ -35,7 +35,9 @@ TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"8/2n3k1/8/n5n1/5N2/4nN2/1K3NN1/6N1 w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -70,7 +72,9 @@ TEST_CASE("1")
 TEST_CASE("2")
 {
 	static constexpr std::string_view s = "8/6k1/8/6n1/5N2/8/1K6/8 w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -104,7 +108,9 @@ TEST_CASE("3")
 {
 	static constexpr std::string_view s =
 		"N7/N5k1/N7/6n1/5N2/7n/1K5n/7n w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -138,7 +144,9 @@ TEST_CASE("4")
 {
 	static constexpr std::string_view s =
 		"N7/N5k1/N7/6n1/5N2/7n/1K5n/5nnn w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -172,7 +180,9 @@ TEST_CASE("5")
 {
 	static constexpr std::string_view s =
 		"N2n4/N1n3k1/Nn6/n5n1/5N2/7n/1K5n/5nnn w - - 0 1";
-	const cpb::position p = cpb::parse_fen(s);
+	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = *_p;
 
 	CHECK(p.is_valid);
 
@@ -207,7 +217,9 @@ TEST_CASE("5")
 TEST_CASE("white :: knight -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3n4/8/1K2N3/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -268,7 +280,9 @@ TEST_CASE("white :: knight -- no capture")
 TEST_CASE("white :: knight -- capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3n4/8/1K2N3/8 w - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -329,7 +343,9 @@ TEST_CASE("white :: knight -- capture")
 TEST_CASE("black :: knight -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3n4/8/1K2N3/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -390,7 +406,9 @@ TEST_CASE("black :: knight -- no capture")
 TEST_CASE("black :: knight -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3n4/8/1K2N3/8 b - - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -453,7 +471,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {

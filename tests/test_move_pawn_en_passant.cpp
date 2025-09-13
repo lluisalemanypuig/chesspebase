@@ -35,7 +35,9 @@ TEST_CASE("white :: pawn -- capture en passant (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -100,7 +102,9 @@ TEST_CASE("white :: pawn -- capture en passant (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/ppppp1pp/8/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -165,7 +169,9 @@ TEST_CASE("black :: pawn -- capture en passant (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/3Pp3/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -230,7 +236,9 @@ TEST_CASE("black :: pawn -- capture en passant (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/4pP2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -297,7 +305,9 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/4p3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -330,7 +340,9 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppp1p/8/8/6p1/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -363,7 +375,9 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/4p3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -396,7 +410,9 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/p1pppppp/8/8/1p6/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -429,7 +445,9 @@ TEST_CASE("white :: generate en passant -- double pawn")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pp1p1ppp/8/8/2p1p3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -462,7 +480,9 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/6P1/8/8/PPPPPP1P/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -495,7 +515,9 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -528,7 +550,9 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -561,7 +585,9 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/1P6/8/8/P1PPPPPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -594,7 +620,9 @@ TEST_CASE("black :: generate en passant -- double pawn")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/2P1P3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 1";
-	cpb::position p = cpb::parse_fen(s);
+	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	cpb::position& p = *_p;
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -628,7 +656,7 @@ int main(int argc, char **argv)
 	doctest::Context context;
 	context.applyCommandLine(argc, argv);
 
-	int res = context.run(); // run doctest
+	const int res = context.run(); // run doctest
 
 	// important - query flags (and --exit) rely on the user doing this
 	if (context.shouldExit()) {
