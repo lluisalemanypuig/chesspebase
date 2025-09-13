@@ -24,7 +24,6 @@
 // C++ includes
 #include <string_view>
 #include <optional>
-#define CHESSPEBASE_LOG
 #if defined CHESSPEBASE_LOG
 #include <iostream>
 #endif
