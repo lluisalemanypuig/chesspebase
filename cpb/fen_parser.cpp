@@ -69,6 +69,7 @@ namespace cpb {
 
 std::optional<position> parse_fen(const std::string_view s) noexcept
 {
+	const std::size_t N = s.size();
 	position p;
 
 	for (std::size_t i = 0; i < 64; ++i) {
@@ -80,7 +81,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 	std::size_t rank = 8; // row
 	std::size_t file = 1; // column
 
-	while (i < s.size() and s[i] != ' ') {
+	while (i < N and s[i] != ' ') {
 		if (s[i] == '/') {
 			--rank;
 			file = 1;
@@ -88,36 +89,41 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 			continue;
 		}
 
-		if (is_number(s[i])) {
-			file += static_cast<std::size_t>(s[i] - '0');
+		bool is_piece_;
+		bool is_number_;
+		if ((is_piece_ = is_piece(s[i])) or (is_number_ = is_number(s[i])))
+			[[likely]] {
+			if (is_piece_) {
+				p[file, rank] = s[i];
+				// black pieces
+				p.n_black_pawns += (s[i] == 'p');
+				p.n_black_rooks += (s[i] == 'r');
+				p.n_black_knights += (s[i] == 'n');
+				p.n_black_bishops += (s[i] == 'b');
+				p.n_black_queens += (s[i] == 'q');
+				// white pieces
+				p.n_white_pawns += (s[i] == 'P');
+				p.n_white_rooks += (s[i] == 'R');
+				p.n_white_knights += (s[i] == 'N');
+				p.n_white_bishops += (s[i] == 'B');
+				p.n_white_queens += (s[i] == 'Q');
+			}
+			else {
+				file += static_cast<std::size_t>(s[i] - '0');
+			}
 		}
-		else if (not is_piece(s[i])) {
+		else [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 			std::cout << "A: " << s[i] << '\n';
+			std::cout << s << '\n';
 #endif
 			return {};
-		}
-		else {
-			p[file, rank] = s[i];
-			// black pieces
-			p.n_black_pawns += (s[i] == 'p');
-			p.n_black_rooks += (s[i] == 'r');
-			p.n_black_knights += (s[i] == 'n');
-			p.n_black_bishops += (s[i] == 'b');
-			p.n_black_queens += (s[i] == 'q');
-			// white pieces
-			p.n_white_pawns += (s[i] == 'P');
-			p.n_white_rooks += (s[i] == 'R');
-			p.n_white_knights += (s[i] == 'N');
-			p.n_white_bishops += (s[i] == 'B');
-			p.n_white_queens += (s[i] == 'Q');
-			++file;
 		}
 
 		++i;
 	}
 
-	if (i == s.size()) {
+	if (i == N) [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 		std::cout << "B: " << s[i] << '\n';
 		std::cout << s << '\n';
@@ -126,7 +132,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 	}
 
 	// -- space --
-	if (s[i] != ' ') {
+	if (s[i] != ' ') [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 		std::cout << "C: " << s[i] << '\n';
 		std::cout << s << '\n';
@@ -137,7 +143,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 	// -- player turn --
 	++i;
 	p.player_turn = (s[i] == 'w' ? cpb::TURN_WHITE : cpb::TURN_BLACK);
-	if (s[i] != 'w' and s[i] != 'b') {
+	if (s[i] != 'w' and s[i] != 'b') [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 		std::cout << "D: " << s[i] << '\n';
 		std::cout << s << '\n';
@@ -147,7 +153,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 
 	// -- space --
 	++i;
-	if (s[i] != ' ') {
+	if (s[i] != ' ') [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 		std::cout << "E: " << s[i] << '\n';
 		std::cout << s << '\n';
@@ -157,7 +163,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 
 	// -- castling rights --
 	++i;
-	while (i < s.size() and s[i] != ' ') {
+	while (i < N and s[i] != ' ') {
 		if (s[i] == 'Q') {
 			if (p.white_queen_castle) [[unlikely]] {
 #if defined CHESSPEBASE_LOG
@@ -174,7 +180,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 				std::cout << "G: " << s[i] << '\n';
 				std::cout << s << '\n';
 #endif
-				return  {};
+				return {};
 			}
 			p.white_king_castle = 1;
 		}
@@ -212,7 +218,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 		++i;
 	}
 
-	if (i == s.size()) {
+	if (i == N) [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 		std::cout << "K: " << s[i] << '\n';
 		std::cout << s << '\n';
@@ -221,7 +227,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 	}
 
 	// -- space --
-	if (s[i] != ' ') {
+	if (s[i] != ' ') [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 		std::cout << "L: " << s[i] << '\n';
 		std::cout << s << '\n';
@@ -237,7 +243,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 		++i;
 	}
 	else {
-		if (not is_letter(s[i])) {
+		if (not is_letter(s[i])) [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 			std::cout << "M: " << s[i] << '\n';
 			std::cout << s << '\n';
@@ -247,7 +253,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 		p.en_passant[0] = s[i];
 		++i;
 
-		if (not is_number(s[i])) {
+		if (not is_number(s[i])) [[unlikely]] {
 #if defined CHESSPEBASE_LOG
 			std::cout << "N: " << s[i] << '\n';
 			std::cout << s << '\n';
