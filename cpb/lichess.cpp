@@ -45,18 +45,12 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 	std::string line;
 	std::getline(fin, line);
 
-	char fen[128];
 	std::size_t total_fen_read = 0;
 
 	while (std::getline(fin, line)) {
 
 		// read until second ','
-		std::size_t fen_idx = 0;
-		auto it = line.begin() + 6;
-		while (it != line.end() and *it != ',') {
-			fen[fen_idx++] = *it;
-			++it;
-		}
+		const auto it = std::find(line.begin() + 6, line.end(), ',');
 
 		// read the first move
 		char m1[2];
@@ -68,7 +62,7 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		const char promotion = *(it + 5);
 
 		// use the fen to parse the game
-		const std::string_view fen_view{&fen[0], fen_idx};
+		const std::string_view fen_view{&line[6]};
 
 		std::optional<position> p = parse_fen(fen_view);
 		if (not p) {
