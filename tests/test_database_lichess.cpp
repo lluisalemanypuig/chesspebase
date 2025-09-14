@@ -146,7 +146,7 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1wp_3bp(const cpb::PuzzleDatabase& cpb) noexcept
 {
-	auto it = cpb.get_const_range_iterator(
+	auto it = cpb.get_const_range_iterator_begin(
 		[](const auto c)
 		{
 			return c == 1;
@@ -202,7 +202,7 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1wp_3bn(const cpb::PuzzleDatabase& cpb) noexcept
 {
-	auto it = cpb.get_const_range_iterator(
+	auto it = cpb.get_const_range_iterator_begin(
 		[](const auto c)
 		{
 			return c == 1;
@@ -258,7 +258,7 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1_2bb(const cpb::PuzzleDatabase& cpb) noexcept
 {
-	auto it = cpb.get_const_range_iterator(
+	auto it = cpb.get_const_range_iterator_begin(
 		[](const auto)
 		{
 			return true;
@@ -315,7 +315,7 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_knights(const cpb::PuzzleDatabase& cpb) noexcept
 {
 	std::size_t white_knights = 0;
-	auto it = cpb.get_const_range_iterator(
+	auto it = cpb.get_const_range_iterator_begin(
 		[](const auto)
 		{
 			return true;
@@ -374,7 +374,7 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1wq_0bq(const cpb::PuzzleDatabase& cpb) noexcept
 {
-	auto it = cpb.get_const_range_iterator(
+	auto it = cpb.get_const_range_iterator_begin(
 		[](const auto)
 		{
 			return true;
