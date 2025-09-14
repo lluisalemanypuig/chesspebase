@@ -430,13 +430,14 @@ typedef std::vector<cpb::position> array_db;
 
 TEST_CASE("small")
 {
-	static const std::string_view file = "../tests/lichess_small.csv";
+	static const std::string_view file = "../../tests/lichess_small.csv";
 	const auto lichess = load_lichess(file);
 
 	cpb::PuzzleDatabase db;
-	[[maybe_unused]] const std::size_t _ =
-		cpb::lichess::load_database(file, db);
+	const std::size_t loaded = cpb::lichess::load_database(file, db);
 
+	CHECK(loaded > 0);
+	CHECK_EQ(loaded, db.size());
 	CHECK_EQ(lichess.size(), db.size());
 	CHECK_EQ(t_1wp_3bp(lichess), t_1wp_3bp(db));
 	CHECK_EQ(t_1wp_3bn(lichess), t_1wp_3bn(db));
@@ -447,13 +448,14 @@ TEST_CASE("small")
 
 TEST_CASE("medium")
 {
-	static const std::string_view file = "../tests/lichess_medium.csv";
+	static const std::string_view file = "../../tests/lichess_medium.csv";
 	const auto lichess = load_lichess(file);
 
 	cpb::PuzzleDatabase db;
-	[[maybe_unused]] const std::size_t _ =
-		cpb::lichess::load_database(file, db);
+	const std::size_t loaded = cpb::lichess::load_database(file, db);
 
+	CHECK(loaded > 0);
+	CHECK_EQ(loaded, db.size());
 	CHECK_EQ(lichess.size(), db.size());
 	CHECK_EQ(t_1wp_3bp(lichess), t_1wp_3bp(db));
 	CHECK_EQ(t_1wp_3bn(lichess), t_1wp_3bn(db));
