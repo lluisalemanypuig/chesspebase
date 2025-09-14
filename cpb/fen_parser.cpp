@@ -107,6 +107,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 				p.n_white_knights += (s[i] == 'N');
 				p.n_white_bishops += (s[i] == 'B');
 				p.n_white_queens += (s[i] == 'Q');
+				++file;
 			}
 			else {
 				file += static_cast<std::size_t>(s[i] - '0');
