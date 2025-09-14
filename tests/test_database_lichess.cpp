@@ -26,9 +26,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
 
-// C++ includes
-#include <fstream>
-
 // ctree includes
 #include <ctree/range_iterator.hpp>
 
@@ -146,52 +143,21 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1wp_3bp(const cpb::PuzzleDatabase& cpb) noexcept
 {
+	// clang-format off
 	auto it = cpb.get_const_range_iterator_begin(
-		[](const auto c)
-		{
-			return c == 1;
-		},
-		[](const auto c)
-		{
-			return c == 3;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const unsigned)
-		{
-			return true;
-		}
+		[](const auto c) -> bool { return c == 1; },
+		[](const auto c) -> bool { return c == 3; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const unsigned) -> bool { return true; }
 	);
+	// clang-format on
 	std::size_t c = 0;
 	while (not it.end()) {
 		++c;
@@ -202,52 +168,21 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1wp_3bn(const cpb::PuzzleDatabase& cpb) noexcept
 {
+	// clang-format off
 	auto it = cpb.get_const_range_iterator_begin(
-		[](const auto c)
-		{
-			return c == 1;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto c)
-		{
-			return 0 <= c and c <= 3;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const unsigned)
-		{
-			return true;
-		}
+		[](const auto c) -> bool { return c == 1; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto c) -> bool { return 0 <= c and c <= 3; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const unsigned) -> bool { return true; }
 	);
+	// clang-format on
 	std::size_t c = 0;
 	while (not it.end()) {
 		++c;
@@ -258,52 +193,21 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1_2bb(const cpb::PuzzleDatabase& cpb) noexcept
 {
+	// clang-format off
 	auto it = cpb.get_const_range_iterator_begin(
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto c)
-		{
-			return 1 <= c and c <= 2;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const unsigned)
-		{
-			return true;
-		}
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto c) -> bool { return 1 <= c and c <= 2; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const unsigned) -> bool { return true; }
 	);
+	// clang-format on
 	std::size_t c = 0;
 	while (not it.end()) {
 		++c;
@@ -315,23 +219,12 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_knights(const cpb::PuzzleDatabase& cpb) noexcept
 {
 	std::size_t white_knights = 0;
+	// clang-format off
 	auto it = cpb.get_const_range_iterator_begin(
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
 		[&](const auto c)
 		{
 			white_knights = static_cast<std::size_t>(c);
@@ -339,31 +232,17 @@ typedef std::vector<cpb::position> array_db;
 		},
 		[&](const auto c)
 		{
-			const std::size_t total =
-				white_knights + static_cast<std::size_t>(c);
+			const std::size_t black_knights = static_cast<std::size_t>(c);
+			const std::size_t total = white_knights + black_knights;
 			return 2 <= total and total <= 4;
 		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const unsigned)
-		{
-			return true;
-		}
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; }
 	);
+	// clang-format on
 	std::size_t c = 0;
 	while (not it.end()) {
 		++c;
@@ -374,52 +253,21 @@ typedef std::vector<cpb::position> array_db;
 
 [[nodiscard]] std::size_t t_1wq_0bq(const cpb::PuzzleDatabase& cpb) noexcept
 {
+	// clang-format off
 	auto it = cpb.get_const_range_iterator_begin(
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto)
-		{
-			return true;
-		},
-		[](const auto c)
-		{
-			return c == 1;
-		},
-		[](const auto c)
-		{
-			return c == 0;
-		},
-		[](const unsigned)
-		{
-			return true;
-		}
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto c) -> bool { return c == 1; },
+		[](const auto c) -> bool { return c == 0; },
+		[](const unsigned) -> bool { return true; }
 	);
+	// clang-format on
 	std::size_t c = 0;
 	while (not it.end()) {
 		++c;
