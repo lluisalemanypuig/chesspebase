@@ -33,17 +33,17 @@
 
 namespace cpb {
 
-[[nodiscard]] inline constexpr bool is_letter(const char s) noexcept
+[[nodiscard]] constexpr inline bool is_letter(const char s) noexcept
 {
 	return 'a' <= s and s <= 'h';
 }
 
-[[nodiscard]] inline constexpr bool is_number(const char s) noexcept
+[[nodiscard]] constexpr inline bool is_number(const char s) noexcept
 {
 	return '0' <= s and s <= '9';
 }
 
-[[nodiscard]] inline constexpr bool is_piece(const char s) noexcept
+[[nodiscard]] constexpr inline bool is_piece(const char s) noexcept
 {
 	switch (s) {
 	case WHITE_PAWN:
@@ -62,7 +62,7 @@ namespace cpb {
 	}
 }
 
-[[nodiscard]] inline constexpr bool is_castling_ok(const char s) noexcept
+[[nodiscard]] constexpr inline bool is_castling_ok(const char s) noexcept
 {
 	return s == 'k' or s == 'K' or s == 'q' or s == 'Q';
 }

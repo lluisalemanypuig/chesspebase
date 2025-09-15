@@ -54,34 +54,34 @@ std::string position::to_pretty_string() const noexcept
 	return s;
 }
 
-[[nodiscard]] constexpr bool is_pawn(const char c) noexcept
+[[nodiscard]] constexpr inline bool is_pawn(const char c) noexcept
 {
 	return c == WHITE_PAWN or c == BLACK_PAWN;
 }
 
-[[nodiscard]] constexpr bool is_king(const char c) noexcept
+[[nodiscard]] constexpr inline bool is_king(const char c) noexcept
 {
 	return c == WHITE_KING or c == BLACK_KING;
 }
 
-[[nodiscard]] constexpr bool is_rook(const char c) noexcept
+[[nodiscard]] constexpr inline bool is_rook(const char c) noexcept
 {
 	return c == WHITE_ROOK or c == BLACK_ROOK;
 }
 
-[[nodiscard]] constexpr std::pair<std::size_t, std::size_t>
+[[nodiscard]] constexpr inline std::pair<std::size_t, std::size_t>
 coordinates(const char m[2]) noexcept
 {
 	return {m[0] - 'a' + 1, m[1] - '1' + 1};
 }
 
-[[nodiscard]] constexpr std::size_t
+[[nodiscard]] constexpr inline std::size_t
 file_distance(const std::size_t f1, const std::size_t f2) noexcept
 {
 	return f1 > f2 ? f1 - f2 : f2 - f1;
 }
 
-[[nodiscard]] constexpr bool is_white(const char p) noexcept
+[[nodiscard]] constexpr inline bool is_white(const char p) noexcept
 {
 	switch (p) {
 	case WHITE_PAWN:
@@ -94,7 +94,7 @@ file_distance(const std::size_t f1, const std::size_t f2) noexcept
 	}
 }
 
-[[nodiscard]] constexpr bool is_black(const char p) noexcept
+[[nodiscard]] constexpr inline bool is_black(const char p) noexcept
 {
 	return not is_white(p);
 }

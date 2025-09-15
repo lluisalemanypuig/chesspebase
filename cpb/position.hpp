@@ -100,7 +100,7 @@ public:
 
 	[[nodiscard]] constexpr bool operator== (const position& p) const noexcept
 	{
-		for (int i = 0; i < 64; ++i) {
+		for (std::size_t i = 0; i < 64; ++i) {
 			if (pieces[i] != p.pieces[i]) {
 				return false;
 			}
