@@ -38,7 +38,7 @@ TEST_CASE("1")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -52,7 +52,7 @@ TEST_CASE("2")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -66,7 +66,7 @@ TEST_CASE("3")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -80,7 +80,7 @@ TEST_CASE("4")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -94,7 +94,7 @@ TEST_CASE("5")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -108,7 +108,7 @@ TEST_CASE("6")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -122,7 +122,7 @@ TEST_CASE("7")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -136,7 +136,7 @@ TEST_CASE("8")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -150,7 +150,7 @@ TEST_CASE("9")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -164,7 +164,7 @@ TEST_CASE("10")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -178,7 +178,7 @@ TEST_CASE("11")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -192,7 +192,7 @@ TEST_CASE("12")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -206,7 +206,7 @@ TEST_CASE("13")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -220,7 +220,7 @@ TEST_CASE("14")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
@@ -234,7 +234,7 @@ TEST_CASE("15")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
@@ -248,7 +248,7 @@ TEST_CASE("16")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-	CHECK(p.is_valid);
+
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);

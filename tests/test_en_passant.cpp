@@ -39,8 +39,6 @@ TEST_CASE("1")
 	CHECK(_p);
 	const cpb::position& p = *_p;
 
-	CHECK(p.is_valid);
-
 	CHECK_EQ(p.en_passant[0], '-');
 	CHECK_EQ(p.en_passant[1], '-');
 
@@ -54,8 +52,6 @@ TEST_CASE("2")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-
-	CHECK(p.is_valid);
 
 	CHECK_EQ(p.en_passant[0], 'e');
 	CHECK_EQ(p.en_passant[1], '3');

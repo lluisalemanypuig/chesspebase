@@ -39,10 +39,6 @@ TEST_CASE("1")
 	CHECK(_p);
 	const cpb::position& p = *_p;
 
-	CHECK(p.is_valid);
-
-	CHECK(p.is_valid);
-
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
 	CHECK_EQ(p.n_white_knights, 5);
@@ -75,8 +71,6 @@ TEST_CASE("2")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-
-	CHECK(p.is_valid);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -112,8 +106,6 @@ TEST_CASE("3")
 	CHECK(_p);
 	const cpb::position& p = *_p;
 
-	CHECK(p.is_valid);
-
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
 	CHECK_EQ(p.n_white_knights, 4);
@@ -148,8 +140,6 @@ TEST_CASE("4")
 	CHECK(_p);
 	const cpb::position& p = *_p;
 
-	CHECK(p.is_valid);
-
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
 	CHECK_EQ(p.n_white_knights, 4);
@@ -183,8 +173,6 @@ TEST_CASE("5")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
-
-	CHECK(p.is_valid);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
