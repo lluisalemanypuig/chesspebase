@@ -267,7 +267,6 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 
 	// we ignore half moves and full moves
 
-	p.is_valid = 1;
 #if defined DEBUG
 	check_correctness(p);
 #endif

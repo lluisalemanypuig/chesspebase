@@ -164,25 +164,40 @@ public:
 	unsigned black_king_castle : 1 = 0;
 	/// Can black kastle queen-side?
 	unsigned black_queen_castle : 1 = 0;
-
-	/// Is this position valid?
-	unsigned is_valid : 1 = 0;
 };
 
 #if defined DEBUG
 inline void check_correctness(const position& p)
 {
 	assert(p.n_white_pawns >= 0);
+	assert(p.n_white_pawns <= 8);
+
 	assert(p.n_black_pawns >= 0);
+	assert(p.n_black_pawns <= 8);
+
 	assert(p.n_white_rooks >= 0);
+	assert(p.n_white_rooks <= 10);
+
 	assert(p.n_black_rooks >= 0);
+	assert(p.n_black_rooks <= 10);
+
 	assert(p.n_white_knights >= 0);
+	assert(p.n_white_knights <= 10);
+
 	assert(p.n_black_knights >= 0);
+	assert(p.n_black_knights <= 10);
+
 	assert(p.n_white_bishops >= 0);
+	assert(p.n_white_bishops <= 10);
+
 	assert(p.n_black_bishops >= 0);
+	assert(p.n_black_bishops <= 10);
+
 	assert(p.n_white_queens >= 0);
+	assert(p.n_white_queens <= 9);
+
 	assert(p.n_black_queens >= 0);
-	assert(p.is_valid);
+	assert(p.n_black_queens <= 9);
 }
 #endif
 
