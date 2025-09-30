@@ -65,7 +65,7 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		const std::string_view fen_view{&line[6]};
 
 		std::optional<position> p = parse_fen(fen_view);
-		if (not p) {
+		if (not p) [[unlikely]] {
 			continue;
 		}
 
