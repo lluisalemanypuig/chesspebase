@@ -30,6 +30,7 @@
 #include <ctree/iterator.hpp>
 
 // cpb includes
+#include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/lichess.hpp>
 #include <cpb/position.hpp>
@@ -275,6 +276,8 @@ void process_query() noexcept
 
 void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
 {
+	PROFILE_FUNCTION;
+
 	const std::size_t initial_db_size = db.size();
 	const std::size_t n = cpb::lichess::load_database(file, db);
 
@@ -292,6 +295,10 @@ int main(int argc, char *argv[])
 	std::cout << "===========================\n";
 	std::cout << "Chess Puzzle Database cli\n";
 
+#if defined USE_INSTRUMENTATION
+	std::string_view profiler_session;
+#endif
+
 	std::vector<std::pair<std::string_view, cpb::database_format>>
 		lichess_databases;
 
@@ -303,10 +310,25 @@ int main(int argc, char *argv[])
 			);
 			++i;
 		}
+#if defined USE_INSTRUMENTATION
+		else if (option_name == "--profiler-session") {
+			profiler_session = argv[i + 1];
+			++i;
+		}
+#endif
 		else {
 			std::cerr << "Unknown option '" << option_name << "'\n";
 		}
 	}
+
+#if defined USE_INSTRUMENTATION
+	if (profiler_session == "") {
+		std::cerr << "Profiler session name not provided\n";
+		return 1;
+	}
+#endif
+	PROFILER_START_SESSION(profiler_session, "id");
+	PROFILE_FUNCTION;
 
 	cpb::PuzzleDatabase db;
 

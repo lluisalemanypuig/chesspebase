@@ -29,6 +29,7 @@
 #endif
 
 // cpb includes
+#include <cpb/profiler.hpp>
 #include <cpb/position.hpp>
 
 namespace cpb {
@@ -69,6 +70,8 @@ namespace cpb {
 
 std::optional<position> parse_fen(const std::string_view s) noexcept
 {
+	PROFILE_FUNCTION;
+
 	const std::size_t N = s.size();
 	position p;
 

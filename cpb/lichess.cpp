@@ -26,6 +26,7 @@
 #include <fstream>
 
 // cpb includes
+#include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
 #include <cpb/position.hpp>
@@ -35,6 +36,8 @@ namespace lichess {
 
 std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 {
+	PROFILE_FUNCTION;
+
 	std::ifstream fin(filename.data());
 	if (not fin.is_open()) {
 		std::cout << "Database file '" << filename << "' is not open.\n";

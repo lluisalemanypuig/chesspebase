@@ -22,6 +22,7 @@
  */
 
 // cpb includes
+#include <cpb/profiler.hpp>
 #include <cpb/position.hpp>
 
 namespace cpb {
@@ -105,6 +106,7 @@ void apply_move(
 {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
+	PROFILE_FUNCTION;
 
 	const auto [f1, r1] = coordinates(m1);
 	const auto [f2, r2] = coordinates(m2);
