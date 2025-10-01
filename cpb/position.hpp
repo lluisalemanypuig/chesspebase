@@ -100,12 +100,13 @@ public:
 
 	[[nodiscard]] constexpr bool operator== (const position& p) const noexcept
 	{
-		for (std::size_t i = 0; i < 64; ++i) {
-			if (pieces[i] != p.pieces[i]) {
-				return false;
-			}
-		}
-		return (en_passant[0] == p.en_passant[0]) and
+		const int64_t *ptr1 = reinterpret_cast<const int64_t *>(&pieces);
+		const int64_t *ptr2 = reinterpret_cast<const int64_t *>(&p.pieces);
+		return (ptr1[0] == ptr2[0]) and (ptr1[1] == ptr2[1]) and
+			   (ptr1[2] == ptr2[2]) and (ptr1[3] == ptr2[3]) and
+			   (ptr1[4] == ptr2[4]) and (ptr1[5] == ptr2[5]) and
+			   (ptr1[6] == ptr2[6]) and (ptr1[7] == ptr2[7]) and
+			   (en_passant[0] == p.en_passant[0]) and
 			   (en_passant[1] == p.en_passant[1]) and
 			   (player_turn == p.player_turn) and
 			   (white_king_castle == p.white_king_castle) and
