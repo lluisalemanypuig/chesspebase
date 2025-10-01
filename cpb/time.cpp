@@ -25,7 +25,7 @@
 #include <cstdint>
 #include <string>
 
-namespace utils {
+namespace cpb {
 
 [[nodiscard]] static inline std::string
 time_to_str(uint64_t t, const std::string_view unit)
@@ -83,4 +83,4 @@ std::string time_to_str(double us)
 	return time_to_str(static_cast<uint64_t>(us), "us");
 }
 
-} // namespace utils
+} // namespace cpb

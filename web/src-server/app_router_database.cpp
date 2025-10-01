@@ -32,12 +32,12 @@
 // cpb includes
 #include <cpb/fen_parser.hpp>
 #include <cpb/database.hpp>
+#include <cpb/time.hpp>
 
 // custom includes
 #include "src-server/query.hpp"
 #include "src-server/app_router.hpp"
 #include "src-server/cookies.hpp"
-#include "src-server/utils/time.hpp"
 
 [[nodiscard]] static inline bool
 in_interval(const int l, const int v, const int u) noexcept
@@ -318,10 +318,10 @@ void make_query(
 		std::move(turn_func)
 	);
 
-	const auto begin = utils::now();
+	const auto begin = cpb::now();
 	const std::size_t count = db_it.count();
-	const auto end = utils::now();
-	const auto total = utils::elapsed_time(begin, end);
+	const auto end = cpb::now();
+	const auto total = cpb::elapsed_time(begin, end);
 
 	query_it->second.current = 1;
 	query_it->second.total = count;
@@ -339,7 +339,7 @@ void make_query(
 	else {
 		res.body += "\"position\":\"end\",";
 	}
-	res.body += "\"time\":\"" + utils::time_to_str(total) + "\",";
+	res.body += "\"time\":\"" + cpb::time_to_str(total) + "\",";
 	res.body += "\"count\":\"" + std::to_string(count) + "\"";
 	res.body += "}";
 

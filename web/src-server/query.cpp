@@ -22,7 +22,6 @@
  */
 
 // C++ includes
-#include "cpb/position.hpp"
 #if defined DEBUG
 #include <cassert>
 #endif
@@ -32,6 +31,7 @@
 #include <optional>
 
 // cpb includes
+#include <cpb/position.hpp>
 #include <cpb/query.hpp>
 
 static constexpr auto end = std::string::npos;

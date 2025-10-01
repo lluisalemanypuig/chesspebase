@@ -27,7 +27,7 @@
 #include <chrono>
 #include <string>
 
-namespace utils {
+namespace cpb {
 
 typedef std::chrono::high_resolution_clock::time_point time_point;
 
@@ -49,4 +49,4 @@ elapsed_time(const time_point& begin, const time_point& end)
 		.count();
 }
 
-} // namespace utils
+} // namespace cpb
