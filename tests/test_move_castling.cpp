@@ -40,6 +40,7 @@ TEST_CASE("white :: king castle")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -60,6 +61,7 @@ TEST_CASE("white :: king castle")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("e1", "g1", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -94,6 +96,7 @@ TEST_CASE("white :: queen castle")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -114,6 +117,7 @@ TEST_CASE("white :: queen castle")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("e1", "c1", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -149,6 +153,7 @@ TEST_CASE("white :: move rook king-side")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -169,6 +174,7 @@ TEST_CASE("white :: move rook king-side")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("h1", "g1", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -203,6 +209,7 @@ TEST_CASE("white :: move rook queen-side")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -223,6 +230,7 @@ TEST_CASE("white :: move rook queen-side")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("a1", "b1", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -260,6 +268,7 @@ TEST_CASE("black :: king castle")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -280,6 +289,7 @@ TEST_CASE("black :: king castle")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("e8", "g8", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -314,6 +324,7 @@ TEST_CASE("black :: queen castle")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -334,6 +345,7 @@ TEST_CASE("black :: queen castle")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("e8", "c8", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -369,6 +381,7 @@ TEST_CASE("black :: move rook king-side")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -389,6 +402,7 @@ TEST_CASE("black :: move rook king-side")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("h8", "g8", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -423,6 +437,7 @@ TEST_CASE("black :: move rook queen-side")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -443,6 +458,7 @@ TEST_CASE("black :: move rook queen-side")
 	CHECK_EQ(p.black_queen_castle, 1);
 
 	cpb::apply_move("a8", "b8", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),

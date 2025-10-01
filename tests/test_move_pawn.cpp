@@ -40,6 +40,7 @@ TEST_CASE("white :: pawn -- advance once")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -66,6 +67,7 @@ TEST_CASE("white :: pawn -- advance once")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e2", "e3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e2"], cpb::EMPTY);
 	CHECK_EQ(p["e3"], cpb::WHITE_PAWN);
@@ -104,6 +106,7 @@ TEST_CASE("white :: pawn -- advance twice")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -130,6 +133,7 @@ TEST_CASE("white :: pawn -- advance twice")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e2", "e4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e2"], cpb::EMPTY);
 	CHECK_EQ(p["e4"], cpb::WHITE_PAWN);
@@ -168,6 +172,7 @@ TEST_CASE("white :: pawn -- capture normal (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -194,6 +199,7 @@ TEST_CASE("white :: pawn -- capture normal (<)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e6", "d7", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d7"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["e6"], cpb::EMPTY);
@@ -233,6 +239,7 @@ TEST_CASE("white :: pawn -- capture normal (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -259,6 +266,7 @@ TEST_CASE("white :: pawn -- capture normal (>)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e6", "f7", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d7"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["e6"], cpb::EMPTY);
@@ -300,6 +308,7 @@ TEST_CASE("black :: pawn -- advance once")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -326,6 +335,7 @@ TEST_CASE("black :: pawn -- advance once")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e7", "e6", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e7"], cpb::EMPTY);
 	CHECK_EQ(p["e6"], cpb::BLACK_PAWN);
@@ -364,6 +374,7 @@ TEST_CASE("black :: pawn -- advance twice")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -390,6 +401,7 @@ TEST_CASE("black :: pawn -- advance twice")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e7", "e5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e7"], cpb::EMPTY);
 	CHECK_EQ(p["e5"], cpb::BLACK_PAWN);
@@ -428,6 +440,7 @@ TEST_CASE("black :: pawn -- capture normal (< 1)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -454,6 +467,7 @@ TEST_CASE("black :: pawn -- capture normal (< 1)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e3", "d2", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d2"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["e3"], cpb::EMPTY);
@@ -493,6 +507,7 @@ TEST_CASE("black :: pawn -- capture normal (< 2)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -522,6 +537,7 @@ TEST_CASE("black :: pawn -- capture normal (< 2)")
 	CHECK_EQ(p["f3"], cpb::WHITE_ROOK);
 
 	cpb::apply_move("g4", "f3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["g4"], cpb::EMPTY);
 	CHECK_EQ(p["f3"], cpb::BLACK_PAWN);
@@ -560,6 +576,7 @@ TEST_CASE("black :: pawn -- capture normal (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -586,6 +603,7 @@ TEST_CASE("black :: pawn -- capture normal (>)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e3", "f2", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d2"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["f3"], cpb::EMPTY);

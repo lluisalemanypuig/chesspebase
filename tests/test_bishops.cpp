@@ -39,6 +39,7 @@ TEST_CASE("1")
 	CHECK(_p);
 
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -74,6 +75,7 @@ TEST_CASE("2")
 	CHECK(_p);
 
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -109,6 +111,7 @@ TEST_CASE("3")
 	CHECK(_p);
 
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -144,6 +147,7 @@ TEST_CASE("4")
 	CHECK(_p);
 
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -178,6 +182,7 @@ TEST_CASE("5")
 	CHECK(_p);
 
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -214,6 +219,7 @@ TEST_CASE("white :: bishop -- no capture")
 	CHECK(_p);
 
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -240,6 +246,7 @@ TEST_CASE("white :: bishop -- no capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("f2", "g3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["f2"], cpb::EMPTY);
 	CHECK_EQ(p["g3"], cpb::WHITE_BISHOP);
@@ -278,6 +285,7 @@ TEST_CASE("white :: bishop -- capture")
 	CHECK(_p);
 
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -304,6 +312,7 @@ TEST_CASE("white :: bishop -- capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("f2", "d4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["f2"], cpb::EMPTY);
 	CHECK_EQ(p["d4"], cpb::WHITE_BISHOP);
@@ -342,6 +351,7 @@ TEST_CASE("black :: bishop -- no capture")
 	CHECK(_p);
 
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -368,6 +378,7 @@ TEST_CASE("black :: bishop -- no capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("d4", "e5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 	CHECK_EQ(p["e5"], cpb::BLACK_BISHOP);
@@ -406,6 +417,7 @@ TEST_CASE("black :: bishop -- capture")
 	CHECK(_p);
 
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -432,6 +444,7 @@ TEST_CASE("black :: bishop -- capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("d4", "f2", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 	CHECK_EQ(p["f2"], cpb::BLACK_BISHOP);

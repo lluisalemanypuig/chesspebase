@@ -94,3 +94,7 @@ add_test(NAME test_move_castling COMMAND test_move_castling)
 add_executable(test_database_lichess test_database_lichess.cpp)
 configure_test_executable(test_database_lichess)
 add_test(NAME test_database_lichess COMMAND test_database_lichess)
+
+add_executable(test_comparison test_comparison.cpp)
+configure_test_executable(test_comparison)
+add_test(NAME test_comparison COMMAND test_comparison)

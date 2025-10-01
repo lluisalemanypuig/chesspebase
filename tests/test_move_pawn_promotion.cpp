@@ -39,6 +39,7 @@ TEST_CASE("white :: promotion :: queen")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -62,6 +63,7 @@ TEST_CASE("white :: promotion :: queen")
 	CHECK_EQ(p.n_white_bishops, 0);
 
 	cpb::apply_move("b7", "b8", 'q', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 	CHECK_EQ(p["b7"], cpb::EMPTY);
@@ -81,6 +83,7 @@ TEST_CASE("white :: promotion :: rook")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -104,6 +107,7 @@ TEST_CASE("white :: promotion :: rook")
 	CHECK_EQ(p.n_white_bishops, 0);
 
 	cpb::apply_move("b7", "b8", 'r', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 	CHECK_EQ(p["b7"], cpb::EMPTY);
@@ -123,6 +127,7 @@ TEST_CASE("white :: promotion :: knight")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -146,6 +151,7 @@ TEST_CASE("white :: promotion :: knight")
 	CHECK_EQ(p.n_white_bishops, 0);
 
 	cpb::apply_move("b7", "b8", 'n', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 	CHECK_EQ(p["b7"], cpb::EMPTY);
@@ -165,6 +171,7 @@ TEST_CASE("white :: promotion :: bishop")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -188,6 +195,7 @@ TEST_CASE("white :: promotion :: bishop")
 	CHECK_EQ(p.n_white_bishops, 0);
 
 	cpb::apply_move("b7", "b8", 'b', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 	CHECK_EQ(p["b7"], cpb::EMPTY);
@@ -209,6 +217,7 @@ TEST_CASE("black :: promotion :: queen")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -232,6 +241,7 @@ TEST_CASE("black :: promotion :: queen")
 	CHECK_EQ(p.n_black_bishops, 0);
 
 	cpb::apply_move("b2", "b1", 'q', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 	CHECK_EQ(p["b2"], cpb::EMPTY);
@@ -251,6 +261,7 @@ TEST_CASE("black :: promotion :: rook")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -274,6 +285,7 @@ TEST_CASE("black :: promotion :: rook")
 	CHECK_EQ(p.n_black_bishops, 0);
 
 	cpb::apply_move("b2", "b1", 'r', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 	CHECK_EQ(p["b2"], cpb::EMPTY);
@@ -293,6 +305,7 @@ TEST_CASE("black :: promotion :: knight")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -316,6 +329,7 @@ TEST_CASE("black :: promotion :: knight")
 	CHECK_EQ(p.n_black_bishops, 0);
 
 	cpb::apply_move("b2", "b1", 'n', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 	CHECK_EQ(p["b2"], cpb::EMPTY);
@@ -335,6 +349,7 @@ TEST_CASE("black :: promotion :: bishops")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -358,6 +373,7 @@ TEST_CASE("black :: promotion :: bishops")
 	CHECK_EQ(p.n_black_bishops, 0);
 
 	cpb::apply_move("b2", "b1", 'b', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 	CHECK_EQ(p["b2"], cpb::EMPTY);

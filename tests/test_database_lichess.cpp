@@ -75,7 +75,9 @@ typedef std::vector<cpb::position> array_db;
 
 		std::optional<cpb::position> _p = cpb::parse_fen(fen);
 		cpb::position& p = *_p;
+		CHECK(p == p);
 		cpb::apply_move(c1, c2, promotion, p);
+		CHECK(p == p);
 
 		v.emplace_back(std::move(p));
 	}

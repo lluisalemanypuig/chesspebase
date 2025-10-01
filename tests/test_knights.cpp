@@ -38,6 +38,7 @@ TEST_CASE("1")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -71,6 +72,7 @@ TEST_CASE("2")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -105,6 +107,7 @@ TEST_CASE("3")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -139,6 +142,7 @@ TEST_CASE("4")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -173,6 +177,7 @@ TEST_CASE("5")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -208,6 +213,7 @@ TEST_CASE("white :: knight -- no capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -234,6 +240,7 @@ TEST_CASE("white :: knight -- no capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("e2", "g3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e2"], cpb::EMPTY);
 	CHECK_EQ(p["g3"], cpb::WHITE_KNIGHT);
@@ -271,6 +278,7 @@ TEST_CASE("white :: knight -- capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -297,6 +305,7 @@ TEST_CASE("white :: knight -- capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("e2", "d4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e2"], cpb::EMPTY);
 	CHECK_EQ(p["d4"], cpb::WHITE_KNIGHT);
@@ -334,6 +343,7 @@ TEST_CASE("black :: knight -- no capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -360,6 +370,7 @@ TEST_CASE("black :: knight -- no capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("d4", "f3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 	CHECK_EQ(p["f3"], cpb::BLACK_KNIGHT);
@@ -397,6 +408,7 @@ TEST_CASE("black :: knight -- no capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -423,6 +435,7 @@ TEST_CASE("black :: knight -- no capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("d4", "e2", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 	CHECK_EQ(p["e2"], cpb::BLACK_KNIGHT);

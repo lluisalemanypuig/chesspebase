@@ -38,6 +38,7 @@ TEST_CASE("white :: pawn -- capture en passant (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -64,6 +65,7 @@ TEST_CASE("white :: pawn -- capture en passant (<)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e5", "d6", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e5"], cpb::EMPTY);
 	CHECK_EQ(p["e6"], cpb::EMPTY);
@@ -105,6 +107,7 @@ TEST_CASE("white :: pawn -- capture en passant (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -131,6 +134,7 @@ TEST_CASE("white :: pawn -- capture en passant (>)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e5", "f6", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e5"], cpb::EMPTY);
 	CHECK_EQ(p["e6"], cpb::EMPTY);
@@ -172,6 +176,7 @@ TEST_CASE("black :: pawn -- capture en passant (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -198,6 +203,7 @@ TEST_CASE("black :: pawn -- capture en passant (<)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e4", "d3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e4"], cpb::EMPTY);
 	CHECK_EQ(p["e3"], cpb::EMPTY);
@@ -239,6 +245,7 @@ TEST_CASE("black :: pawn -- capture en passant (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -265,6 +272,7 @@ TEST_CASE("black :: pawn -- capture en passant (>)")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("e4", "f3", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["e4"], cpb::EMPTY);
 	CHECK_EQ(p["e3"], cpb::EMPTY);
@@ -308,6 +316,7 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -326,6 +335,7 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["f4"], cpb::EMPTY);
 
 	cpb::apply_move("f2", "f4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["f2"], cpb::EMPTY);
 	CHECK_EQ(p["f4"], cpb::WHITE_PAWN);
@@ -343,6 +353,7 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -361,6 +372,7 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["h4"], cpb::EMPTY);
 
 	cpb::apply_move("h2", "h4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["h2"], cpb::EMPTY);
 	CHECK_EQ(p["h4"], cpb::WHITE_PAWN);
@@ -378,6 +390,7 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -396,6 +409,7 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 
 	cpb::apply_move("d2", "d4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d2"], cpb::EMPTY);
 	CHECK_EQ(p["d4"], cpb::WHITE_PAWN);
@@ -413,6 +427,7 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -431,6 +446,7 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["a4"], cpb::EMPTY);
 
 	cpb::apply_move("a2", "a4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["a2"], cpb::EMPTY);
 	CHECK_EQ(p["a4"], cpb::WHITE_PAWN);
@@ -448,6 +464,7 @@ TEST_CASE("white :: generate en passant -- double pawn")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -466,6 +483,7 @@ TEST_CASE("white :: generate en passant -- double pawn")
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 
 	cpb::apply_move("d2", "d4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d2"], cpb::EMPTY);
 	CHECK_EQ(p["d4"], cpb::WHITE_PAWN);
@@ -483,6 +501,7 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -501,6 +520,7 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["h5"], cpb::EMPTY);
 
 	cpb::apply_move("h7", "h5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["h7"], cpb::EMPTY);
 	CHECK_EQ(p["h5"], cpb::BLACK_PAWN);
@@ -518,6 +538,7 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -536,6 +557,7 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["d5"], cpb::EMPTY);
 
 	cpb::apply_move("d7", "d5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d7"], cpb::EMPTY);
 	CHECK_EQ(p["d5"], cpb::BLACK_PAWN);
@@ -553,6 +575,7 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -571,6 +594,7 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["f5"], cpb::EMPTY);
 
 	cpb::apply_move("f7", "f5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["f7"], cpb::EMPTY);
 	CHECK_EQ(p["f5"], cpb::BLACK_PAWN);
@@ -588,6 +612,7 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -606,6 +631,7 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["a5"], cpb::EMPTY);
 
 	cpb::apply_move("a7", "a5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["a7"], cpb::EMPTY);
 	CHECK_EQ(p["a5"], cpb::BLACK_PAWN);
@@ -623,6 +649,7 @@ TEST_CASE("black :: generate en passant -- double pawn")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -641,6 +668,7 @@ TEST_CASE("black :: generate en passant -- double pawn")
 	CHECK_EQ(p["d5"], cpb::EMPTY);
 
 	cpb::apply_move("d7", "d5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["d7"], cpb::EMPTY);
 	CHECK_EQ(p["d5"], cpb::BLACK_PAWN);

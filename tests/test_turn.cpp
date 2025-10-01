@@ -38,6 +38,7 @@ TEST_CASE("1")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 
@@ -51,6 +52,7 @@ TEST_CASE("2")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 
@@ -64,6 +66,7 @@ TEST_CASE("3")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 
@@ -77,6 +80,7 @@ TEST_CASE("4")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
 
@@ -90,6 +94,7 @@ TEST_CASE("5")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
 

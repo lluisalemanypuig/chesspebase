@@ -22,6 +22,7 @@
  */
 
 // doctest includes
+#include "cpb/position.hpp"
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
 
@@ -33,32 +34,43 @@
 
 TEST_CASE("1")
 {
-	static constexpr std::string_view s =
-		"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
-	CHECK(_p);
-	const cpb::position& p = *_p;
-	CHECK(p == p);
+	static constexpr std::string_view s1 =
+		"8/b1b3k1/8/1b6/5B2/8/1K3B2/6B1 w - - 0 1";
+	const std::optional<cpb::position> _p1 = cpb::parse_fen(s1);
+	CHECK(_p1);
+	const cpb::position& p1 = *_p1;
+	CHECK(p1 == p1);
 
-	CHECK_EQ(p.en_passant[0], '-');
-	CHECK_EQ(p.en_passant[1], '-');
+	static constexpr std::string_view s2 =
+		"r7/b1b3k1/8/1b6/5B2/8/1K3B2/6B1 w - - 0 1";
+	const std::optional<cpb::position> _p2 = cpb::parse_fen(s2);
+	CHECK(_p2);
+	const cpb::position& p2 = *_p2;
+	CHECK(p2 == p2);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
-}
+	static constexpr std::string_view s3 =
+		"r7/b1b3k1/8/1b6/5B2/8/1K3B2/Q5B1 w - - 0 1";
+	const std::optional<cpb::position> _p3 = cpb::parse_fen(s3);
+	CHECK(_p3);
+	const cpb::position& p3 = *_p3;
+	CHECK(p3 == p3);
 
-TEST_CASE("2")
-{
-	static constexpr std::string_view s =
-		"rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
-	CHECK(_p);
-	const cpb::position& p = *_p;
-	CHECK(p == p);
+	static constexpr std::string_view s4 =
+		"8/b1b3k1/8/1b6/5B2/8/1K3B2/Q5B1 w - - 0 1";
+	const std::optional<cpb::position> _p4 = cpb::parse_fen(s4);
+	CHECK(_p4);
+	const cpb::position& p4 = *_p4;
+	CHECK(p4 == p4);
 
-	CHECK_EQ(p.en_passant[0], 'e');
-	CHECK_EQ(p.en_passant[1], '3');
-
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	CHECK(p1 != p2);
+	CHECK(p1 != p3);
+	CHECK(p1 != p4);
+	CHECK(p2 != p1);
+	CHECK(p2 != p3);
+	CHECK(p2 != p4);
+	CHECK(p3 != p1);
+	CHECK(p3 != p2);
+	CHECK(p3 != p4);
 }
 
 int main(int argc, char **argv)

@@ -37,6 +37,7 @@ TEST_CASE("1")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -70,6 +71,7 @@ TEST_CASE("2")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -104,6 +106,7 @@ TEST_CASE("3")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -138,6 +141,7 @@ TEST_CASE("4")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -171,6 +175,7 @@ TEST_CASE("5")
 	const std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	const cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(p.n_white_pawns, 0);
 	CHECK_EQ(p.n_white_rooks, 0);
@@ -206,6 +211,7 @@ TEST_CASE("white :: queen -- no capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -232,6 +238,7 @@ TEST_CASE("white :: queen -- no capture")
 	CHECK_EQ(p.n_black_queens, 0);
 
 	cpb::apply_move("c3", "c5", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["c3"], cpb::EMPTY);
 	CHECK_EQ(p["c5"], cpb::WHITE_QUEEN);
@@ -269,6 +276,7 @@ TEST_CASE("white :: queen -- capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -297,6 +305,7 @@ TEST_CASE("white :: queen -- capture")
 	CHECK_EQ(p["f6"], cpb::BLACK_PAWN);
 
 	cpb::apply_move("c3", "f6", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["c3"], cpb::EMPTY);
 	CHECK_EQ(p["f6"], cpb::WHITE_QUEEN);
@@ -334,6 +343,7 @@ TEST_CASE("black :: queen -- no capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -360,6 +370,7 @@ TEST_CASE("black :: queen -- no capture")
 	CHECK_EQ(p.n_black_queens, 1);
 
 	cpb::apply_move("c6", "c4", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["c6"], cpb::EMPTY);
 	CHECK_EQ(p["c4"], cpb::BLACK_QUEEN);
@@ -397,6 +408,7 @@ TEST_CASE("black :: queen -- capture")
 	std::optional<cpb::position> _p = cpb::parse_fen(s);
 	CHECK(_p);
 	cpb::position& p = *_p;
+	CHECK(p == p);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -425,6 +437,7 @@ TEST_CASE("black :: queen -- capture")
 	CHECK_EQ(p["g2"], cpb::WHITE_PAWN);
 
 	cpb::apply_move("c6", "g2", ' ', p);
+	CHECK(p == p);
 
 	CHECK_EQ(p["c6"], cpb::EMPTY);
 	CHECK_EQ(p["g2"], cpb::BLACK_QUEEN);
