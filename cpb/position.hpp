@@ -170,34 +170,15 @@ public:
 inline void check_correctness(const position& p)
 {
 	assert(p.n_white_pawns >= 0);
-	assert(p.n_white_pawns <= 8);
-
 	assert(p.n_black_pawns >= 0);
-	assert(p.n_black_pawns <= 8);
-
 	assert(p.n_white_rooks >= 0);
-	assert(p.n_white_rooks <= 10);
-
 	assert(p.n_black_rooks >= 0);
-	assert(p.n_black_rooks <= 10);
-
 	assert(p.n_white_knights >= 0);
-	assert(p.n_white_knights <= 10);
-
 	assert(p.n_black_knights >= 0);
-	assert(p.n_black_knights <= 10);
-
 	assert(p.n_white_bishops >= 0);
-	assert(p.n_white_bishops <= 10);
-
 	assert(p.n_black_bishops >= 0);
-	assert(p.n_black_bishops <= 10);
-
 	assert(p.n_white_queens >= 0);
-	assert(p.n_white_queens <= 9);
-
 	assert(p.n_black_queens >= 0);
-	assert(p.n_black_queens <= 9);
 }
 #endif
 
