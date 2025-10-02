@@ -82,33 +82,37 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		check_correctness(*p);
 #endif
 
-		const char n_white_pawns = p->n_white_pawns;
-		const char n_black_pawns = p->n_black_pawns;
-		const char n_white_rooks = p->n_white_rooks;
-		const char n_black_rooks = p->n_black_rooks;
-		const char n_white_knights = p->n_white_knights;
-		const char n_black_knights = p->n_black_knights;
-		const char n_white_bishops = p->n_white_bishops;
-		const char n_black_bishops = p->n_black_bishops;
-		const char n_white_queens = p->n_white_queens;
-		const char n_black_queens = p->n_black_queens;
-		const char turn = p->player_turn;
+		{
+			PROFILE_SCOPE("add position");
 
-		db.add(
-			std::move(*p),
-			metadata{.num_occurrences = 1},
-			n_white_pawns,
-			n_black_pawns,
-			n_white_rooks,
-			n_black_rooks,
-			n_white_knights,
-			n_black_knights,
-			n_white_bishops,
-			n_black_bishops,
-			n_white_queens,
-			n_black_queens,
-			turn
-		);
+			const char n_white_pawns = p->n_white_pawns;
+			const char n_black_pawns = p->n_black_pawns;
+			const char n_white_rooks = p->n_white_rooks;
+			const char n_black_rooks = p->n_black_rooks;
+			const char n_white_knights = p->n_white_knights;
+			const char n_black_knights = p->n_black_knights;
+			const char n_white_bishops = p->n_white_bishops;
+			const char n_black_bishops = p->n_black_bishops;
+			const char n_white_queens = p->n_white_queens;
+			const char n_black_queens = p->n_black_queens;
+			const char turn = p->player_turn;
+
+			db.add(
+				std::move(*p),
+				metadata{.num_occurrences = 1},
+				n_white_pawns,
+				n_black_pawns,
+				n_white_rooks,
+				n_black_rooks,
+				n_white_knights,
+				n_black_knights,
+				n_white_bishops,
+				n_black_bishops,
+				n_white_queens,
+				n_black_queens,
+				turn
+			);
+		}
 
 		++total_fen_read;
 	}
