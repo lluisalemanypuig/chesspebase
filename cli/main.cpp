@@ -23,6 +23,7 @@
 
 // C++ includes
 #include <iostream>
+#include <print>
 
 // ctree includes
 #include <ctree/ctree.hpp>
@@ -40,6 +41,12 @@
 // custom includes
 #include "cli/query.hpp"
 
+template <class... Args>
+void printerr(std::format_string<Args...>&& fmt, Args&&...args)
+{
+	std::print(std::cerr, std::move(fmt), std::forward<Args...>(args)...);
+}
+
 void unset_query_field(cpb::query_data& q, const std::string_view field)
 	noexcept
 {
@@ -53,7 +60,7 @@ void unset_query_field(cpb::query_data& q, const std::string_view field)
 		q.query_both = {};
 	}
 	else {
-		std::cerr << "Unknown field '" << field << "'\n";
+		printerr("Unknown field '{}'\n", field);
 	}
 }
 
@@ -71,96 +78,92 @@ void set_query_field(
 		q.query_both = {lb, ub};
 	}
 	else {
-		std::cerr << "Unknown field '" << field << "'\n";
+		printerr("Unknown field '{}'\n", field);
 	}
 }
 
 void show_piece_query(const std::string_view name, const cpb::query_data& q)
 	noexcept
 {
-	std::cout << "Piece type: " << name << '\n';
-	std::cout << "    Query white: ";
+	std::print("Piece type: {}\n", name);
+
+	std::print("    Query white: ");
 	if (not q.query_white) {
-		std::cout << " no";
+		std::print(" no\n");
 	}
 	else {
-		std::cout << " {" << q.query_white->lb << ", " << q.query_white->ub
-				  << "}";
+		std::print(" {}, {}\n", q.query_white->lb, q.query_white->ub);
 	}
-	std::cout << '\n';
-	std::cout << "    Query black: ";
+
+	std::print("    Query black: ");
 	if (not q.query_black) {
-		std::cout << " no";
+		std::print(" no\n");
 	}
 	else {
-		std::cout << " {" << q.query_black->lb << ", " << q.query_black->ub
-				  << "}";
+		std::print(" {}, {}\n", q.query_black->lb, q.query_black->ub);
 	}
-	std::cout << '\n';
-	std::cout << "    Query both: ";
+
+	std::print("    Query both: ");
 	if (not q.query_both) {
-		std::cout << " no";
+		std::print(" no\n");
 	}
 	else {
-		std::cout << " {" << q.query_both->lb << ", " << q.query_both->ub
-				  << "}";
+		std::print(" {}, {}\n", q.query_both->lb, q.query_both->ub);
 	}
-	std::cout << '\n';
 }
 
 void show_total_query() noexcept
 {
-	std::cout << "Query for all pieces? ";
+	std::print("Query for all pieces? ");
 	if (not Q.query_total_pieces) {
-		std::cout << "No";
+		std::print("No\n");
 	}
 	else {
-		std::cout << "    {" << Q.query_total_pieces->lb << ", "
-				  << Q.query_total_pieces->ub << "}";
+		std::print(
+			"    {}, {}\n", Q.query_total_pieces->lb, Q.query_total_pieces->ub
+		);
 	}
-	std::cout << '\n';
 }
 
 void show_turn_query() noexcept
 {
-	std::cout << "Query for player turn? ";
+	std::print("Query for player turn? ");
 	if (not Q.query_player_turn) {
-		std::cout << "No";
+		std::print("No\n");
 	}
 	else {
 		const unsigned int turn = *Q.query_player_turn;
-		std::cout << "    " << (turn == cpb::TURN_WHITE ? 'w' : 'b') << '\n';
+		std::print("    {}\n", (turn == cpb::TURN_WHITE ? 'w' : 'b'));
 	}
-	std::cout << '\n';
 }
 
 void process_query() noexcept
 {
+	std::print("what (piece/global/turn/reset)> ");
 	std::string option;
-	std::cout << "what (piece/global/turn/reset)> ";
 	std::cin >> option;
 
 	if (option == "piece") {
 		// pawn, rook, knight, bishop, queen
-		std::cout << "piece type (pawns/rooks/knights/bishops/queens)> ";
+		std::print("piece type (pawns/rooks/knights/bishops/queens)> ");
 		std::string piece_type;
 		std::cin >> piece_type;
 
 		// white, black, both
-		std::cout << "query type (white/black/both)> ";
+		std::print("query type (white/black/both)> ");
 		std::string query_type;
 		std::cin >> query_type;
 
 		// set, unset
-		std::cout << "action (set/unset)> ";
+		std::print("action (set/unset)> ");
 		std::string action_type;
 		std::cin >> action_type;
 
 		int lb, ub;
 		if (action_type == "set") {
-			std::cout << "lb> ";
+			std::print("lb> ");
 			std::cin >> lb;
-			std::cout << "ub> ";
+			std::print("ub> ");
 			std::cin >> ub;
 		}
 
@@ -207,15 +210,15 @@ void process_query() noexcept
 	}
 	else if (option == "global") {
 		// set, unset
-		std::cout << "action (set/unset)> ";
+		std::print("action (set/unset)> ");
 		std::string action_type;
 		std::cin >> action_type;
 
 		int lb, ub;
 		if (action_type == "set") {
-			std::cout << "lb> ";
+			std::print("lb> ");
 			std::cin >> lb;
-			std::cout << "ub> ";
+			std::print("ub> ");
 			std::cin >> ub;
 		}
 
@@ -227,12 +230,12 @@ void process_query() noexcept
 		}
 	}
 	else if (option == "turn") {
-		std::cout << "player (white/black)> ";
+		std::print("player (white/black)> ");
 		std::string player;
 		std::cin >> player;
 
 		// set, unset
-		std::cout << "action (set/unset)> ";
+		std::print("action (set/unset)> ");
 		std::string action_type;
 		std::cin >> action_type;
 
@@ -278,22 +281,22 @@ void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
-	const std::size_t initial_db_size = db.size();
-	const std::size_t n = cpb::lichess::load_database(file, db);
+	[[maybe_unused]] const std::size_t initial_db_size = db.size();
+	[[maybe_unused]] const std::size_t n =
+		cpb::lichess::load_database(file, db);
 
-	std::cout << "Total fen read: " << n << ".\n";
-	std::cout << "Added " << db.size() - initial_db_size << " new positions.\n";
+	std::print("Total fen read: {}.\n", n);
+	std::print("Added {} new positions.\n", db.size() - initial_db_size);
 
 	if (n == 0) {
-		std::cerr << "The lichess database '" << file
-				  << "' could not be read.\n";
+		printerr("The lichess database '{}' could not be read.\n", file);
 	}
 }
 
 int main(int argc, char *argv[])
 {
-	std::cout << "===========================\n";
-	std::cout << "Chess Puzzle Database cli\n";
+	std::print("===========================\n");
+	std::print("Chess Puzzle Database cli\n");
 
 #if defined USE_INSTRUMENTATION
 	std::string_view profiler_session;
@@ -317,13 +320,13 @@ int main(int argc, char *argv[])
 		}
 #endif
 		else {
-			std::cerr << "Unknown option '" << option_name << "'\n";
+			printerr("Unkown option '{}'\n", option_name);
 		}
 	}
 
 #if defined USE_INSTRUMENTATION
 	if (profiler_session == "") {
-		std::cerr << "Profiler session name not provided\n";
+		printerr("Profiler session name not provided\n");
 		return 1;
 	}
 #endif
@@ -334,23 +337,23 @@ int main(int argc, char *argv[])
 
 	for (const auto& [file, format] : lichess_databases) {
 		if (format == cpb::database_format::lichess) {
-			std::cout << "--------------------------\n";
-			std::cout << "Loading lichess database " << file << '\n';
+			std::print("--------------------------\n");
+			std::print("Loading lichess database {}\n", file);
 			load_lichess_database(file, db);
 		}
 	}
 
-	std::cout << "===========================\n";
+	std::print("===========================\n");
 
 	std::string option;
-	std::cout << "option> ";
+	std::print("option> ");
 	while (std::cin >> option and option != "exit") {
 		if (option == "load") {
-			std::cout << "format (lichess)> ";
+			std::print("format (lichess)> ");
 			std::string format;
 			std::cin >> format;
 
-			std::cout << "filename> ";
+			std::print("filename> ");
 			std::string filename;
 			std::cin >> filename;
 
@@ -358,15 +361,15 @@ int main(int argc, char *argv[])
 				load_lichess_database(filename, db);
 			}
 			else {
-				std::cerr << "Unsupported format '" << format << "'\n";
+				printerr("Unsupported format '{}'\n", format);
 			}
 		}
 		else if (option == "query") {
 			process_query();
 		}
 		else if (option == "info") {
-			std::cout << "Databse statistics:\n";
-			std::cout << "    Size: " << db.size() << '\n';
+			std::print("Databse statistics:\n");
+			std::print("    Size: {}\n", db.size());
 		}
 		else if (option == "show") {
 			show_piece_query("pawns", Q.pawns);
@@ -399,11 +402,11 @@ int main(int argc, char *argv[])
 				++it;
 				++num_positions;
 			}
-			std::cout << "Num positions: " << num_positions << '\n';
+			std::print("Num positions: {}\n", num_positions);
 		}
 		else {
-			std::cout << "Unknown option '" << option << "'\n";
+			std::print("Unknown option '{}'\n", option);
 		}
-		std::cout << "option> ";
+		std::print("option> ");
 	}
 }
