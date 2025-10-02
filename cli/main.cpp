@@ -65,7 +65,7 @@ void unset_query_field(cpb::query_data& q, const std::string_view field)
 }
 
 void set_query_field(
-	cpb::query_data& q, const std::string_view field, int lb, int ub
+	cpb::query_data& q, const std::string_view field, const int lb, const int ub
 ) noexcept
 {
 	if (field == "white") {
