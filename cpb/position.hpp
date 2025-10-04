@@ -40,6 +40,11 @@ static constexpr char TURN_BLACK = 1;
 
 /// Empty square
 static constexpr char EMPTY = '.';
+constexpr int64_t EMPTY_ = static_cast<int64_t>(EMPTY);
+constexpr int64_t EMPTY_8 = (EMPTY_ << 56) | (EMPTY_ << 48) | (EMPTY_ << 40) |
+							(EMPTY_ << 32) | (EMPTY_ << 24) | (EMPTY_ << 16) |
+							(EMPTY_ << 8);
+
 /// White pawn
 static constexpr char WHITE_PAWN = 'P';
 /// Black pawn

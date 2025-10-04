@@ -65,7 +65,8 @@ namespace cpb {
 
 [[nodiscard]] constexpr inline bool is_castling_ok(const char s) noexcept
 {
-	return s == 'k' or s == 'K' or s == 'q' or s == 'Q';
+	return s == BLACK_KING or s == WHITE_KING or s == BLACK_QUEEN or
+		   s == WHITE_QUEEN;
 }
 
 std::optional<position> parse_fen(const std::string_view s) noexcept
@@ -75,8 +76,16 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 	const std::size_t N = s.size();
 	position p;
 
-	for (std::size_t i = 0; i < 64; ++i) {
-		p.pieces[i] = EMPTY;
+	{
+		int64_t *ptr = reinterpret_cast<int64_t *>(&p.pieces);
+		ptr[0] = EMPTY_8;
+		ptr[1] = EMPTY_8;
+		ptr[2] = EMPTY_8;
+		ptr[3] = EMPTY_8;
+		ptr[4] = EMPTY_8;
+		ptr[5] = EMPTY_8;
+		ptr[6] = EMPTY_8;
+		ptr[7] = EMPTY_8;
 	}
 
 	std::size_t i = 0;
@@ -99,17 +108,17 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 			if (is_piece_) {
 				p[file, rank] = s[i];
 				// black pieces
-				p.n_black_pawns += (s[i] == 'p');
-				p.n_black_rooks += (s[i] == 'r');
-				p.n_black_knights += (s[i] == 'n');
-				p.n_black_bishops += (s[i] == 'b');
-				p.n_black_queens += (s[i] == 'q');
+				p.n_black_pawns += (s[i] == BLACK_PAWN);
+				p.n_black_rooks += (s[i] == BLACK_ROOK);
+				p.n_black_knights += (s[i] == BLACK_KNIGHT);
+				p.n_black_bishops += (s[i] == BLACK_BISHOP);
+				p.n_black_queens += (s[i] == BLACK_QUEEN);
 				// white pieces
-				p.n_white_pawns += (s[i] == 'P');
-				p.n_white_rooks += (s[i] == 'R');
-				p.n_white_knights += (s[i] == 'N');
-				p.n_white_bishops += (s[i] == 'B');
-				p.n_white_queens += (s[i] == 'Q');
+				p.n_white_pawns += (s[i] == WHITE_PAWN);
+				p.n_white_rooks += (s[i] == WHITE_ROOK);
+				p.n_white_knights += (s[i] == WHITE_KNIGHT);
+				p.n_white_bishops += (s[i] == WHITE_BISHOP);
+				p.n_white_queens += (s[i] == WHITE_QUEEN);
 				++file;
 			}
 			else {
