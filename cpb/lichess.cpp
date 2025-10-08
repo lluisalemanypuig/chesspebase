@@ -170,6 +170,7 @@ std::size_t primary_load_database(
 
 		// use the fen to parse the game
 		const std::string_view fen_view{&line[6]};
+		++total_fen_read;
 
 		std::optional<position> p = parse_fen(fen_view);
 		if (not p) [[unlikely]] {
@@ -190,8 +191,6 @@ std::size_t primary_load_database(
 			static_cast<std::size_t>(p->n_white_pawns);
 		qs[n_white_pawns]->push_back(std::move(*p));
 		qs[n_white_pawns]->send_batch();
-
-		++total_fen_read;
 	}
 
 	for (std::size_t i = 0; i < qs.size(); ++i) {
