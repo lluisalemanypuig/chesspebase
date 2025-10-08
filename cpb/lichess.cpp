@@ -21,23 +21,31 @@
  * 		https://github.com/lluisalemanypuig
  */
 
+#define PARALLEL
+
 // C++ includes
+#if defined PARALLEL
 #include <filesystem>
-#include <iostream>
-#include <fstream>
 #include <thread>
 #include <future>
+#endif
+#include <iostream>
+#include <fstream>
 
 // cpb includes
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
 #include <cpb/position.hpp>
+#if defined PARALLEL
 #include <cpb/attribute_utils.hpp>
 #include <cpb/spsc.hpp>
+#endif
 
 namespace cpb {
 namespace lichess {
+
+#if defined PARALLEL
 
 typedef std::vector<position> position_list;
 
@@ -141,7 +149,7 @@ std::size_t primary_load_database(
 {
 	std::ifstream fin(filename.data());
 	if (not fin.is_open()) {
-		std::cout << "Database file '" << filename << "' is not open.\n";
+		std::cerr << "Database file '" << filename << "' is not open.\n";
 		for (std::size_t i = 0; i < qs.size(); ++i) {
 			qs[i]->finish();
 		}
@@ -247,6 +255,96 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 
 	return total_fen_read;
 }
+
+#else
+
+std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
+{
+	PROFILE_FUNCTION;
+
+	std::ifstream fin(filename.data());
+	if (not fin.is_open()) {
+		std::cerr << "Database file '" << filename << "' is not open.\n";
+		return 0;
+	}
+
+	// read first line
+	std::string line;
+	std::getline(fin, line);
+
+	std::size_t total_fen_read = 0;
+
+	while (std::getline(fin, line)) {
+
+		// read until second ','
+		const auto it = std::find(line.begin() + 6, line.end(), ',');
+
+		// read the first move
+		char m1[2];
+		m1[0] = *(it + 1);
+		m1[1] = *(it + 2);
+		char m2[2];
+		m2[0] = *(it + 3);
+		m2[1] = *(it + 4);
+		const char promotion = *(it + 5);
+
+		// use the fen to parse the game
+		const std::string_view fen_view{&line[6]};
+
+		std::optional<position> p = parse_fen(fen_view);
+		if (not p) [[unlikely]] {
+			continue;
+		}
+
+#if defined DEBUG
+		check_correctness(*p);
+#endif
+
+		apply_move(m1, m2, promotion, *p);
+
+#if defined DEBUG
+		check_correctness(*p);
+#endif
+
+		{
+			PROFILE_SCOPE("add position");
+
+			const char n_white_pawns = p->n_white_pawns;
+			const char n_black_pawns = p->n_black_pawns;
+			const char n_white_rooks = p->n_white_rooks;
+			const char n_black_rooks = p->n_black_rooks;
+			const char n_white_knights = p->n_white_knights;
+			const char n_black_knights = p->n_black_knights;
+			const char n_white_bishops = p->n_white_bishops;
+			const char n_black_bishops = p->n_black_bishops;
+			const char n_white_queens = p->n_white_queens;
+			const char n_black_queens = p->n_black_queens;
+			const char turn = p->player_turn;
+
+			db.add(
+				std::move(*p),
+				metadata{.num_occurrences = 1},
+				n_white_pawns,
+				n_black_pawns,
+				n_white_rooks,
+				n_black_rooks,
+				n_white_knights,
+				n_black_knights,
+				n_white_bishops,
+				n_black_bishops,
+				n_white_queens,
+				n_black_queens,
+				turn
+			);
+		}
+
+		++total_fen_read;
+	}
+
+	return total_fen_read;
+}
+
+#endif
 
 } // namespace lichess
 } // namespace cpb
