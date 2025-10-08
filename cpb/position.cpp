@@ -31,9 +31,9 @@ std::string position::to_natural_string() const noexcept
 {
 	std::string s(64, EMPTY);
 
-	std::size_t i = 0;
-	for (std::size_t rank = 8; rank >= 1; --rank) {
-		for (std::size_t file = 1; file <= 8; ++file) {
+	size_t i = 0;
+	for (size_t rank = 8; rank >= 1; --rank) {
+		for (size_t file = 1; file <= 8; ++file) {
 			s[i++] = (*this)[file, rank];
 		}
 	}
@@ -44,9 +44,9 @@ std::string position::to_pretty_string() const noexcept
 {
 	std::string s(64 + 8 + 1, EMPTY);
 
-	std::size_t i = 0;
-	for (std::size_t rank = 8; rank >= 1; --rank) {
-		for (std::size_t file = 1; file <= 8; ++file) {
+	size_t i = 0;
+	for (size_t rank = 8; rank >= 1; --rank) {
+		for (size_t file = 1; file <= 8; ++file) {
 			s[i++] = (*this)[file, rank];
 		}
 		s[i++] = '\n';
@@ -70,14 +70,14 @@ std::string position::to_pretty_string() const noexcept
 	return c == WHITE_ROOK or c == BLACK_ROOK;
 }
 
-[[nodiscard]] constexpr inline std::pair<std::size_t, std::size_t>
+[[nodiscard]] constexpr inline std::pair<size_t, size_t>
 coordinates(const char m[2]) noexcept
 {
 	return {m[0] - 'a' + 1, m[1] - '1' + 1};
 }
 
-[[nodiscard]] constexpr inline std::size_t
-file_distance(const std::size_t f1, const std::size_t f2) noexcept
+[[nodiscard]] constexpr inline size_t
+file_distance(const size_t f1, const size_t f2) noexcept
 {
 	return f1 > f2 ? f1 - f2 : f2 - f1;
 }
@@ -116,7 +116,7 @@ void apply_move(
 	const char piece1 = p[f1, r1];
 	const char piece2 = p[f2, r2];
 
-	const std::size_t dr = (r2 > r1 ? r2 - r1 : r1 - r2);
+	const size_t dr = (r2 > r1 ? r2 - r1 : r1 - r2);
 
 	bool simple_piece_move = true;
 	if (is_pawn(piece1)) [[unlikely]] {
@@ -257,7 +257,7 @@ void apply_move(
 				(f2 < 8 and is_pawn(p[f2 + 1, r2]))) {
 
 				p.en_passant[0] = 'a' + static_cast<char>(f2 - 1);
-				const std::size_t new_rank = (r2 > r1 ? r2 - 1 : r2 + 1);
+				const size_t new_rank = (r2 > r1 ? r2 - 1 : r2 + 1);
 				p.en_passant[1] = '1' + static_cast<char>(new_rank - 1);
 			}
 		}

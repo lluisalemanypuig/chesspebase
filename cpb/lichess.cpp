@@ -21,7 +21,7 @@
  * 		https://github.com/lluisalemanypuig
  */
 
-#define PARALLEL
+//#define PARALLEL
 
 // C++ includes
 #if defined PARALLEL
@@ -33,12 +33,12 @@
 #include <fstream>
 
 // cpb includes
+#include <cpb/attribute_utils.hpp>
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
 #include <cpb/position.hpp>
 #if defined PARALLEL
-#include <cpb/attribute_utils.hpp>
 #include <cpb/spsc.hpp>
 #endif
 
@@ -143,20 +143,20 @@ void worker_add_to_database(queue_wrap& q, PuzzleDatabase& db)
 	}
 }
 
-std::size_t primary_load_database(
+size_t primary_load_database(
 	const std::string_view filename, std::vector<queue_wrap *>& qs
 )
 {
 	std::ifstream fin(filename.data());
 	if (not fin.is_open()) {
 		std::cerr << "Database file '" << filename << "' is not open.\n";
-		for (std::size_t i = 0; i < qs.size(); ++i) {
+		for (size_t i = 0; i < qs.size(); ++i) {
 			qs[i]->finish();
 		}
 		return 0;
 	}
 
-	std::size_t total_fen_read = 0;
+	size_t total_fen_read = 0;
 
 	// read first line
 	std::string line;
@@ -195,13 +195,12 @@ std::size_t primary_load_database(
 		check_correctness(*p);
 #endif
 
-		const std::size_t n_white_pawns =
-			static_cast<std::size_t>(p->n_white_pawns);
+		const size_t n_white_pawns = static_cast<size_t>(p->n_white_pawns);
 		qs[n_white_pawns]->push_back(std::move(*p));
 		qs[n_white_pawns]->send_batch();
 	}
 
-	for (std::size_t i = 0; i < qs.size(); ++i) {
+	for (size_t i = 0; i < qs.size(); ++i) {
 		qs[i]->send();
 		qs[i]->finish();
 	}
@@ -209,7 +208,7 @@ std::size_t primary_load_database(
 	return total_fen_read;
 }
 
-std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
+size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
@@ -222,14 +221,14 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 	queue_wrap qs[9];
 	std::vector<queue_wrap *> vecqs(9);
 
-	for (std::size_t i = 0; i < 9; ++i) {
+	for (size_t i = 0; i < 9; ++i) {
 		vecqs[i] = &qs[i];
 	}
 
 	// Launch worker threads: these will wait for the queue to have some data,
 	// then read it and fill their respective databases.
 	std::vector<std::thread> workers;
-	for (std::size_t i = 0; i < 9; ++i) {
+	for (size_t i = 0; i < 9; ++i) {
 		workers.emplace_back(
 			worker_add_to_database, std::ref(qs[i]), std::ref(dbs[i])
 		);
@@ -237,18 +236,18 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 
 	// Launch primary thread: read the database file and send the positions to
 	// the worker's queues.
-	std::future<std::size_t> primary =
+	std::future<size_t> primary =
 		std::async(primary_load_database, filename, std::ref(vecqs));
 
 	// Join the workers.
-	for (std::size_t i = 0; i < 9; ++i) {
+	for (size_t i = 0; i < 9; ++i) {
 		workers[i].join();
 	}
 	// How much FEN were read
-	const std::size_t total_fen_read = primary.get();
+	const size_t total_fen_read = primary.get();
 
 	// Construct the full database with the worker's data
-	for (std::size_t i = 0; i < 9; ++i) {
+	for (size_t i = 0; i < 9; ++i) {
 		db.merge(std::move(dbs[i]));
 		dbs[i].clear();
 	}
@@ -258,7 +257,7 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 
 #else
 
-std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
+size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
@@ -272,7 +271,7 @@ std::size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 	std::string line;
 	std::getline(fin, line);
 
-	std::size_t total_fen_read = 0;
+	size_t total_fen_read = 0;
 
 	while (std::getline(fin, line)) {
 

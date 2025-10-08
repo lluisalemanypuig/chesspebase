@@ -33,17 +33,14 @@
 typedef std::map<std::string_view, std::string_view> cookie_map;
 
 void add_key_value_pair(
-	const std::string_view s,
-	const std::size_t i,
-	const std::size_t j,
-	cookie_map& m
+	const std::string_view s, const size_t i, const size_t j, cookie_map& m
 )
 {
 	if (s == "") {
 		return;
 	}
 
-	const std::size_t eq_pos = s.find("=", i);
+	const size_t eq_pos = s.find("=", i);
 	if (eq_pos == std::string::npos) {
 		std::cerr << __PRETTY_FUNCTION__ << '\n';
 		std::cerr << "Could not find '=' in '" << s << "'.\n";
@@ -75,9 +72,9 @@ cookie_map parse_cookies_into_map(const std::string_view cookie_header)
 {
 	cookie_map res;
 
-	std::size_t pos = 0;
+	size_t pos = 0;
 
-	std::size_t i = cookie_header.find(";", pos);
+	size_t i = cookie_header.find(";", pos);
 	while (i != std::string::npos) {
 		add_key_value_pair(cookie_header, pos, i, res);
 

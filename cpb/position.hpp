@@ -75,12 +75,12 @@ public:
 
 	// file, rank
 	[[nodiscard]] constexpr char&
-	operator[] (const std::size_t j, const std::size_t i) noexcept
+	operator[] (const size_t j, const size_t i) noexcept
 	{
 		return pieces[(i - 1) * 8 + (j - 1)];
 	}
 	[[nodiscard]] constexpr char
-	operator[] (const std::size_t j, const std::size_t i) const noexcept
+	operator[] (const size_t j, const size_t i) const noexcept
 	{
 		return pieces[(i - 1) * 8 + (j - 1)];
 	}
@@ -88,14 +88,14 @@ public:
 	// file, rank
 	[[nodiscard]] constexpr char& operator[] (const char c[2]) noexcept
 	{
-		const std::size_t j = static_cast<std::size_t>(c[0] - 'a' + 1);
-		const std::size_t i = static_cast<std::size_t>(c[1] - '1' + 1);
+		const size_t j = static_cast<size_t>(c[0] - 'a' + 1);
+		const size_t i = static_cast<size_t>(c[1] - '1' + 1);
 		return (*this)[j, i];
 	}
 	[[nodiscard]] constexpr char operator[] (const char c[2]) const noexcept
 	{
-		const std::size_t j = static_cast<std::size_t>(c[0] - 'a' + 1);
-		const std::size_t i = static_cast<std::size_t>(c[1] - '1' + 1);
+		const size_t j = static_cast<size_t>(c[0] - 'a' + 1);
+		const size_t i = static_cast<size_t>(c[1] - '1' + 1);
 		return (*this)[j, i];
 	}
 
@@ -190,7 +190,7 @@ inline void check_correctness(const position& p)
 
 struct metadata {
 	/// number of occurrences
-	std::size_t num_occurrences = 0;
+	size_t num_occurrences = 0;
 
 	metadata& operator+= (const metadata& other) noexcept
 	{

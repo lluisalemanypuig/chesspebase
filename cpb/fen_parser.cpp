@@ -73,7 +73,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 {
 	PROFILE_FUNCTION;
 
-	const std::size_t N = s.size();
+	const size_t N = s.size();
 	position p;
 
 	{
@@ -88,10 +88,10 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 		ptr[7] = EMPTY_8;
 	}
 
-	std::size_t i = 0;
+	size_t i = 0;
 
-	std::size_t rank = 8; // row
-	std::size_t file = 1; // column
+	size_t rank = 8; // row
+	size_t file = 1; // column
 
 	while (i < N and s[i] != ' ') {
 		if (s[i] == '/') {
@@ -122,7 +122,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 				++file;
 			}
 			else {
-				file += static_cast<std::size_t>(s[i] - '0');
+				file += static_cast<size_t>(s[i] - '0');
 			}
 		}
 		else [[unlikely]] {
@@ -291,11 +291,11 @@ std::string make_fen(const position& p) noexcept
 	fen.reserve(256);
 
 	// encode position first
-	for (std::size_t rank = 8; rank >= 1; --rank) {
-		std::size_t file = 1;
+	for (size_t rank = 8; rank >= 1; --rank) {
+		size_t file = 1;
 
 		while (file <= 8) {
-			std::size_t empty_squares = 0;
+			size_t empty_squares = 0;
 			while (file <= 8 and p[file, rank] == EMPTY) {
 				++empty_squares;
 				++file;

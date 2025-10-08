@@ -24,6 +24,7 @@
 #pragma once
 
 // classtree includes
+#include <cpb/attribute_utils.hpp>
 #include <ctree/ctree.hpp>
 
 // cpb includes

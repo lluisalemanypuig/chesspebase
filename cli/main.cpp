@@ -281,8 +281,8 @@ void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
-	[[maybe_unused]] const std::size_t initial_db_size = db.size();
-	[[maybe_unused]] const std::size_t n =
+	[[maybe_unused]] const size_t initial_db_size = db.size();
+	[[maybe_unused]] const size_t n =
 		cpb::lichess::load_database(file, db);
 
 	std::print("Total fen read: {}.\n", n);
@@ -395,7 +395,7 @@ int main(int argc, char *argv[])
 				turn_func
 			);
 
-			std::size_t num_positions = 0;
+			size_t num_positions = 0;
 			while (not it.end()) {
 				const auto& [pos, _] = *it;
 				std::cout << pos.to_pretty_string() << '\n';

@@ -42,8 +42,8 @@ void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
-	const std::size_t initial_db_size = db.size();
-	const std::size_t n = cpb::lichess::load_database(file, db);
+	const size_t initial_db_size = db.size();
+	const size_t n = cpb::lichess::load_database(file, db);
 
 	std::cout << "Total fen read: " << n << ".\n";
 	std::cout << "Added " << db.size() - initial_db_size << " new positions.\n";

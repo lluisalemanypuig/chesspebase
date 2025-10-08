@@ -319,7 +319,7 @@ void make_query(
 	);
 
 	const auto begin = cpb::now();
-	const std::size_t count = db_it.count();
+	const size_t count = db_it.count();
 	const auto end = cpb::now();
 	const auto total = cpb::elapsed_time(begin, end);
 

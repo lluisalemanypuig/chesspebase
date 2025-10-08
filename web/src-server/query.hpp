@@ -55,8 +55,8 @@ typedef classtree::const_range_iterator<
 struct web_query {
 	cpb::querier Q;
 	iterator_t it;
-	std::size_t current;
-	std::size_t total;
+	size_t current;
+	size_t total;
 };
 
 typedef std::map<std::string, web_query> user_query_t;

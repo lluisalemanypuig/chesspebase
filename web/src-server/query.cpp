@@ -45,13 +45,13 @@ std::optional<int> to_int(const std::string_view s) noexcept
 
 std::tuple<char, int, int> process_subfield(const std::string_view sub)
 {
-	const std::size_t colon = sub.find(':');
+	const size_t colon = sub.find(':');
 	if (colon == end) {
 		std::cerr << __PRETTY_FUNCTION__ << '\n';
 		std::cerr << "Could not find ':' in '" << sub << "'\n";
 		return {};
 	}
-	const std::size_t comma = sub.find(',', colon);
+	const size_t comma = sub.find(',', colon);
 	if (comma == end) {
 		std::cerr << __PRETTY_FUNCTION__ << '\n';
 		std::cerr << "Could not find ';' in '" << sub << "'\n";
@@ -89,8 +89,8 @@ std::tuple<char, int, int> process_subfield(const std::string_view sub)
 
 void process_piece_field(const std::string_view content, cpb::query_data& q)
 {
-	std::size_t pos = 0;
-	std::size_t i = content.find(';', pos);
+	size_t pos = 0;
+	size_t i = content.find(';', pos);
 
 	while (i != end) {
 		const std::string_view sub{&content[pos], &content[i]};
@@ -122,11 +122,11 @@ void parse_query_body(
 	Q.query_total_pieces = {};
 	Q.query_player_turn = {};
 
-	const std::size_t n_fields =
-		static_cast<std::size_t>(std::count(s.begin(), s.end(), '['));
+	const size_t n_fields =
+		static_cast<size_t>(std::count(s.begin(), s.end(), '['));
 
-	std::size_t p = 0;
-	for (std::size_t i = 0; i < n_fields; ++i) {
+	size_t p = 0;
+	for (size_t i = 0; i < n_fields; ++i) {
 		const auto first = s.find('[', p);
 		const auto second = s.find(']', p);
 		if (first == end or second == end) {
