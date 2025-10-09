@@ -33,10 +33,11 @@
 // cpb includes
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
-#include <cpb/lichess.hpp>
 #include <cpb/position.hpp>
+#include <cpb/lichess.hpp>
 #include <cpb/formats.hpp>
 #include <cpb/query.hpp>
+#include <cpb/time.hpp>
 
 // custom includes
 #include "cli/query.hpp"
@@ -281,12 +282,15 @@ void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
-	[[maybe_unused]] const size_t initial_db_size = db.size();
-	[[maybe_unused]] const size_t n =
-		cpb::lichess::load_database(file, db);
+	const auto begin = cpb::now();
+	const size_t initial_db_size = db.size();
+	const size_t n = cpb::lichess::load_database(file, db);
+	const auto end = cpb::now();
 
 	std::print("Total fen read: {}.\n", n);
 	std::print("Added {} new positions.\n", db.size() - initial_db_size);
+	const auto time = cpb::elapsed_time(begin, end);
+	std::print("In {}.\n", cpb::time_to_str(time));
 
 	if (n == 0) {
 		printerr("The lichess database '{}' could not be read.\n", file);
