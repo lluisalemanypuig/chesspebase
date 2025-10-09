@@ -21,19 +21,16 @@
  * 		https://github.com/lluisalemanypuig
  */
 
-//#define PARALLEL
+#define PARALLEL
 
 // C++ includes
 #if defined PARALLEL
-#include <filesystem>
 #include <thread>
-#include <future>
 #endif
 #include <iostream>
 #include <fstream>
 
 // cpb includes
-#include <cpb/attribute_utils.hpp>
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
@@ -143,17 +140,26 @@ void worker_add_to_database(queue_wrap& q, PuzzleDatabase& db)
 	}
 }
 
-size_t primary_load_database(
-	const std::string_view filename, std::vector<queue_wrap *>& qs
-)
+size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 {
+	PROFILE_FUNCTION;
+
 	std::ifstream fin(filename.data());
 	if (not fin.is_open()) {
 		std::cerr << "Database file '" << filename << "' is not open.\n";
-		for (size_t i = 0; i < qs.size(); ++i) {
-			qs[i]->finish();
-		}
 		return 0;
+	}
+
+	PuzzleDatabase dbs[9];
+	queue_wrap qs[9];
+
+	// Launch worker threads: these will wait for the queue to have some data,
+	// then read it and fill their respective databases.
+	std::vector<std::thread> workers;
+	for (size_t i = 0; i < 9; ++i) {
+		workers.emplace_back(
+			worker_add_to_database, std::ref(qs[i]), std::ref(dbs[i])
+		);
 	}
 
 	size_t total_fen_read = 0;
@@ -196,60 +202,23 @@ size_t primary_load_database(
 #endif
 
 		const size_t n_white_pawns = static_cast<size_t>(p->n_white_pawns);
-		qs[n_white_pawns]->push_back(std::move(*p));
-		qs[n_white_pawns]->send_batch();
+		qs[n_white_pawns].push_back(std::move(*p));
+		qs[n_white_pawns].send_batch();
 	}
-
-	for (size_t i = 0; i < qs.size(); ++i) {
-		qs[i]->send();
-		qs[i]->finish();
-	}
-
-	return total_fen_read;
-}
-
-size_t load_database(const std::string_view filename, PuzzleDatabase& db)
-{
-	PROFILE_FUNCTION;
-
-	if (not std::filesystem::exists(filename)) {
-		std::cout << "Database file '" << filename << "' does not exist.\n";
-		return 0;
-	}
-
-	PuzzleDatabase dbs[9];
-	queue_wrap qs[9];
-	std::vector<queue_wrap *> vecqs(9);
 
 	for (size_t i = 0; i < 9; ++i) {
-		vecqs[i] = &qs[i];
+		qs[i].send();
+		qs[i].finish();
 	}
-
-	// Launch worker threads: these will wait for the queue to have some data,
-	// then read it and fill their respective databases.
-	std::vector<std::thread> workers;
-	for (size_t i = 0; i < 9; ++i) {
-		workers.emplace_back(
-			worker_add_to_database, std::ref(qs[i]), std::ref(dbs[i])
-		);
-	}
-
-	// Launch primary thread: read the database file and send the positions to
-	// the worker's queues.
-	std::future<size_t> primary =
-		std::async(primary_load_database, filename, std::ref(vecqs));
 
 	// Join the workers.
 	for (size_t i = 0; i < 9; ++i) {
 		workers[i].join();
 	}
-	// How much FEN were read
-	const size_t total_fen_read = primary.get();
 
 	// Construct the full database with the worker's data
 	for (size_t i = 0; i < 9; ++i) {
 		db.merge(std::move(dbs[i]));
-		dbs[i].clear();
 	}
 
 	return total_fen_read;
