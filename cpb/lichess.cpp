@@ -44,7 +44,7 @@ namespace lichess {
 
 #if defined PARALLEL
 
-typedef std::vector<position> position_list;
+typedef std::vector<std::pair<position, position_info>> position_list;
 
 enum class queue_command {
 	vector,
@@ -52,7 +52,7 @@ enum class queue_command {
 };
 
 #define BUFFER_SIZE (2 << 16)
-#define VECTOR_DATA_SIZE 750
+#define VECTOR_DATA_SIZE 900
 
 struct queue_wrap {
 
@@ -66,9 +66,9 @@ struct queue_wrap {
 		data.reserve(VECTOR_DATA_SIZE);
 	}
 
-	void push_back(position&& p)
+	void push_back(position&& p, position_info&& info)
 	{
-		data.push_back(std::move(p));
+		data.emplace_back(std::move(p), std::move(info));
 	}
 
 	void send()
@@ -94,18 +94,18 @@ struct queue_wrap {
 	}
 };
 
-void add_position(position&& p, PuzzleDatabase& db)
+void add_position(position&& p, const position_info& info, PuzzleDatabase& db)
 {
-	const char n_white_pawns = p.n_white_pawns;
-	const char n_black_pawns = p.n_black_pawns;
-	const char n_white_rooks = p.n_white_rooks;
-	const char n_black_rooks = p.n_black_rooks;
-	const char n_white_knights = p.n_white_knights;
-	const char n_black_knights = p.n_black_knights;
-	const char n_white_bishops = p.n_white_bishops;
-	const char n_black_bishops = p.n_black_bishops;
-	const char n_white_queens = p.n_white_queens;
-	const char n_black_queens = p.n_black_queens;
+	const char n_white_pawns = info.n_white_pawns;
+	const char n_black_pawns = info.n_black_pawns;
+	const char n_white_rooks = info.n_white_rooks;
+	const char n_black_rooks = info.n_black_rooks;
+	const char n_white_knights = info.n_white_knights;
+	const char n_black_knights = info.n_black_knights;
+	const char n_white_bishops = info.n_white_bishops;
+	const char n_black_bishops = info.n_black_bishops;
+	const char n_white_queens = info.n_white_queens;
+	const char n_black_queens = info.n_black_queens;
 	const char turn = p.player_turn;
 
 	db.add(
@@ -131,8 +131,8 @@ void worker_add_to_database(queue_wrap& q, PuzzleDatabase& db)
 	while (command != queue_command::finish) {
 
 		position_list& v = q.queue.read<position_list>();
-		for (position& p : v) {
-			add_position(std::move(p), db);
+		for (auto& [position, info] : v) {
+			add_position(std::move(position), info, db);
 		}
 
 		q.queue.finish_read();
@@ -186,23 +186,19 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		const std::string_view fen_view{&line[6]};
 		++total_fen_read;
 
-		std::optional<position> p = parse_fen(fen_view);
-		if (not p) [[unlikely]] {
+		std::optional<std::pair<position, position_info>> data =
+			parse_fen(fen_view);
+		if (not data) [[unlikely]] {
 			continue;
 		}
 
-#if defined DEBUG
-		check_correctness(*p);
-#endif
+		position& p = data->first;
+		position_info& info = data->second;
 
-		apply_move(m1, m2, promotion, *p);
+		apply_move(m1, m2, promotion, p, info);
 
-#if defined DEBUG
-		check_correctness(*p);
-#endif
-
-		const size_t n_white_pawns = static_cast<size_t>(p->n_white_pawns);
-		qs[n_white_pawns].push_back(std::move(*p));
+		const size_t n_white_pawns = static_cast<size_t>(info.n_white_pawns);
+		qs[n_white_pawns].push_back(std::move(p), std::move(info));
 		qs[n_white_pawns].send_batch();
 	}
 
@@ -259,38 +255,35 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		// use the fen to parse the game
 		const std::string_view fen_view{&line[6]};
 
-		std::optional<position> p = parse_fen(fen_view);
-		if (not p) [[unlikely]] {
+		std::optional<std::pair<position, position_info>> data =
+			parse_fen(fen_view);
+
+		if (not data) [[unlikely]] {
 			continue;
 		}
 
-#if defined DEBUG
-		check_correctness(*p);
-#endif
+		position& p = data->first;
+		position_info& info = data->second;
 
-		apply_move(m1, m2, promotion, *p);
-
-#if defined DEBUG
-		check_correctness(*p);
-#endif
+		apply_move(m1, m2, promotion, p, info);
 
 		{
 			PROFILE_SCOPE("add position");
 
-			const char n_white_pawns = p->n_white_pawns;
-			const char n_black_pawns = p->n_black_pawns;
-			const char n_white_rooks = p->n_white_rooks;
-			const char n_black_rooks = p->n_black_rooks;
-			const char n_white_knights = p->n_white_knights;
-			const char n_black_knights = p->n_black_knights;
-			const char n_white_bishops = p->n_white_bishops;
-			const char n_black_bishops = p->n_black_bishops;
-			const char n_white_queens = p->n_white_queens;
-			const char n_black_queens = p->n_black_queens;
-			const char turn = p->player_turn;
+			const char n_white_pawns = info.n_white_pawns;
+			const char n_black_pawns = info.n_black_pawns;
+			const char n_white_rooks = info.n_white_rooks;
+			const char n_black_rooks = info.n_black_rooks;
+			const char n_white_knights = info.n_white_knights;
+			const char n_black_knights = info.n_black_knights;
+			const char n_white_bishops = info.n_white_bishops;
+			const char n_black_bishops = info.n_black_bishops;
+			const char n_white_queens = info.n_white_queens;
+			const char n_black_queens = info.n_black_queens;
+			const char turn = p.player_turn;
 
 			db.add(
-				std::move(*p),
+				std::move(p),
 				metadata{.num_occurrences = 1},
 				n_white_pawns,
 				n_black_pawns,

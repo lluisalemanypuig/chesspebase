@@ -33,7 +33,8 @@
 
 namespace cpb {
 
-[[nodiscard]] std::optional<position> parse_fen(const std::string_view s) noexcept;
+[[nodiscard]] std::optional<std::pair<position, position_info>>
+parse_fen(const std::string_view s) noexcept;
 [[nodiscard]] std::string make_fen(const position& p) noexcept;
 
 } // namespace cpb

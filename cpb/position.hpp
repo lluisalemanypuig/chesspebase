@@ -138,6 +138,20 @@ public:
 	/// Potential en-passant
 	char en_passant[2] = {};
 
+	/// Whose player_turn is it? 0: white, 1: black
+	unsigned player_turn : 1 = 0;
+
+	/// Can white kastle king-side?
+	unsigned white_king_castle : 1 = 0;
+	/// Can white kastle queen-side?
+	unsigned white_queen_castle : 1 = 0;
+	/// Can black kastle king-side?
+	unsigned black_king_castle : 1 = 0;
+	/// Can black kastle queen-side?
+	unsigned black_queen_castle : 1 = 0;
+};
+
+struct position_info {
 	/// Number of white pawns.
 	char n_white_pawns = 0;
 	/// Number of white rooks.
@@ -158,35 +172,7 @@ public:
 	char n_black_bishops = 0;
 	/// Number of black queens.
 	char n_black_queens = 0;
-
-	/// Whose player_turn is it? 0: white, 1: black
-	unsigned player_turn : 1 = 0;
-
-	/// Can white kastle king-side?
-	unsigned white_king_castle : 1 = 0;
-	/// Can white kastle queen-side?
-	unsigned white_queen_castle : 1 = 0;
-	/// Can black kastle king-side?
-	unsigned black_king_castle : 1 = 0;
-	/// Can black kastle queen-side?
-	unsigned black_queen_castle : 1 = 0;
 };
-
-#if defined DEBUG
-inline void check_correctness(const position& p)
-{
-	assert(p.n_white_pawns >= 0);
-	assert(p.n_black_pawns >= 0);
-	assert(p.n_white_rooks >= 0);
-	assert(p.n_black_rooks >= 0);
-	assert(p.n_white_knights >= 0);
-	assert(p.n_black_knights >= 0);
-	assert(p.n_white_bishops >= 0);
-	assert(p.n_black_bishops >= 0);
-	assert(p.n_white_queens >= 0);
-	assert(p.n_black_queens >= 0);
-}
-#endif
 
 struct metadata {
 	/// number of occurrences
@@ -206,7 +192,11 @@ struct metadata {
 };
 
 void apply_move(
-	const char m1[2], const char m2[2], const char promotion, position& p
+	const char m1[2],
+	const char m2[2],
+	const char promotion,
+	position& p,
+	position_info& info
 ) noexcept;
 
 } // namespace cpb

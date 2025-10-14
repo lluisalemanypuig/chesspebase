@@ -69,12 +69,14 @@ namespace cpb {
 		   s == WHITE_QUEEN;
 }
 
-std::optional<position> parse_fen(const std::string_view s) noexcept
+std::optional<std::pair<position, position_info>>
+parse_fen(const std::string_view s) noexcept
 {
 	PROFILE_FUNCTION;
 
 	const size_t N = s.size();
 	position p;
+	position_info info;
 
 	{
 		int64_t *ptr = reinterpret_cast<int64_t *>(&p.pieces);
@@ -108,17 +110,17 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 			if (is_piece_) {
 				p[file, rank] = s[i];
 				// black pieces
-				p.n_black_pawns += (s[i] == BLACK_PAWN);
-				p.n_black_rooks += (s[i] == BLACK_ROOK);
-				p.n_black_knights += (s[i] == BLACK_KNIGHT);
-				p.n_black_bishops += (s[i] == BLACK_BISHOP);
-				p.n_black_queens += (s[i] == BLACK_QUEEN);
+				info.n_black_pawns += (s[i] == BLACK_PAWN);
+				info.n_black_rooks += (s[i] == BLACK_ROOK);
+				info.n_black_knights += (s[i] == BLACK_KNIGHT);
+				info.n_black_bishops += (s[i] == BLACK_BISHOP);
+				info.n_black_queens += (s[i] == BLACK_QUEEN);
 				// white pieces
-				p.n_white_pawns += (s[i] == WHITE_PAWN);
-				p.n_white_rooks += (s[i] == WHITE_ROOK);
-				p.n_white_knights += (s[i] == WHITE_KNIGHT);
-				p.n_white_bishops += (s[i] == WHITE_BISHOP);
-				p.n_white_queens += (s[i] == WHITE_QUEEN);
+				info.n_white_pawns += (s[i] == WHITE_PAWN);
+				info.n_white_rooks += (s[i] == WHITE_ROOK);
+				info.n_white_knights += (s[i] == WHITE_KNIGHT);
+				info.n_white_bishops += (s[i] == WHITE_BISHOP);
+				info.n_white_queens += (s[i] == WHITE_QUEEN);
 				++file;
 			}
 			else {
@@ -278,11 +280,7 @@ std::optional<position> parse_fen(const std::string_view s) noexcept
 	}
 
 	// we ignore half moves and full moves
-
-#if defined DEBUG
-	check_correctness(p);
-#endif
-	return p;
+	return std::make_pair(p, info);
 }
 
 std::string make_fen(const position& p) noexcept

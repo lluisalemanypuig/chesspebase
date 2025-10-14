@@ -101,7 +101,11 @@ file_distance(const size_t f1, const size_t f2) noexcept
 }
 
 void apply_move(
-	const char m1[2], const char m2[2], const char promotion, position& p
+	const char m1[2],
+	const char m2[2],
+	const char promotion,
+	position& p,
+	position_info& info
 ) noexcept
 {
 #pragma GCC diagnostic push
@@ -130,8 +134,8 @@ void apply_move(
 
 		if (is_en_passant) [[unlikely]] {
 			// en passant
-			p.n_white_pawns -= p.player_turn == TURN_WHITE;
-			p.n_black_pawns -= p.player_turn == TURN_BLACK;
+			info.n_white_pawns -= p.player_turn == TURN_WHITE;
+			info.n_black_pawns -= p.player_turn == TURN_BLACK;
 			if (f2 < f1) {
 				p[f1 - 1, r1] = EMPTY;
 			}
@@ -146,48 +150,48 @@ void apply_move(
 		else if (is_promotion) [[unlikely]] {
 			p[f1, r1] = EMPTY;
 			if (is_white(piece1)) {
-				--p.n_white_pawns;
+				--info.n_white_pawns;
 			}
 			else {
-				--p.n_black_pawns;
+				--info.n_black_pawns;
 			}
 			if (promotion == 'q') {
 				if (is_white(piece1)) {
-					++p.n_white_queens;
+					++info.n_white_queens;
 					p[f2, r2] = WHITE_QUEEN;
 				}
 				else {
-					++p.n_black_queens;
+					++info.n_black_queens;
 					p[f2, r2] = BLACK_QUEEN;
 				}
 			}
 			else if (promotion == 'r') {
 				if (is_white(piece1)) {
-					++p.n_white_rooks;
+					++info.n_white_rooks;
 					p[f2, r2] = WHITE_ROOK;
 				}
 				else {
-					++p.n_black_rooks;
+					++info.n_black_rooks;
 					p[f2, r2] = BLACK_ROOK;
 				}
 			}
 			else if (promotion == 'b') {
 				if (is_white(piece1)) {
-					++p.n_white_bishops;
+					++info.n_white_bishops;
 					p[f2, r2] = WHITE_BISHOP;
 				}
 				else {
-					++p.n_black_bishops;
+					++info.n_black_bishops;
 					p[f2, r2] = BLACK_BISHOP;
 				}
 			}
 			else if (promotion == 'n') {
 				if (is_white(piece1)) {
-					++p.n_white_knights;
+					++info.n_white_knights;
 					p[f2, r2] = WHITE_KNIGHT;
 				}
 				else {
-					++p.n_black_knights;
+					++info.n_black_knights;
 					p[f2, r2] = BLACK_KNIGHT;
 				}
 			}
@@ -228,17 +232,17 @@ void apply_move(
 	if (simple_piece_move) [[likely]] {
 		// simple piece move
 		if (piece2 != '.') {
-			p.n_white_pawns -= piece2 == WHITE_PAWN;
-			p.n_white_rooks -= piece2 == WHITE_ROOK;
-			p.n_white_knights -= piece2 == WHITE_KNIGHT;
-			p.n_white_bishops -= piece2 == WHITE_BISHOP;
-			p.n_white_queens -= piece2 == WHITE_QUEEN;
+			info.n_white_pawns -= piece2 == WHITE_PAWN;
+			info.n_white_rooks -= piece2 == WHITE_ROOK;
+			info.n_white_knights -= piece2 == WHITE_KNIGHT;
+			info.n_white_bishops -= piece2 == WHITE_BISHOP;
+			info.n_white_queens -= piece2 == WHITE_QUEEN;
 
-			p.n_black_pawns -= piece2 == BLACK_PAWN;
-			p.n_black_rooks -= piece2 == BLACK_ROOK;
-			p.n_black_knights -= piece2 == BLACK_KNIGHT;
-			p.n_black_bishops -= piece2 == BLACK_BISHOP;
-			p.n_black_queens -= piece2 == BLACK_QUEEN;
+			info.n_black_pawns -= piece2 == BLACK_PAWN;
+			info.n_black_rooks -= piece2 == BLACK_ROOK;
+			info.n_black_knights -= piece2 == BLACK_KNIGHT;
+			info.n_black_bishops -= piece2 == BLACK_BISHOP;
+			info.n_black_queens -= piece2 == BLACK_QUEEN;
 		}
 
 		p[f2, r2] = piece1;
