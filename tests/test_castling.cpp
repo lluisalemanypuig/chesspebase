@@ -31,245 +31,327 @@
 // ctree includes
 #include <cpb/fen_parser.hpp>
 
+typedef std::pair<cpb::position, cpb::position_info> data;
+
 TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("2")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w KQk - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("3")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w KQq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("4")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Kkq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("5")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Qkq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("6")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w KQ - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("7")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Kk - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("8")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Qk - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("9")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Kq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("10")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Qq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("11")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w kq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("12")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w K - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("13")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w Q - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("14")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w k - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("15")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w q - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("16")
 {
 	static constexpr std::string_view s = "r3k2r/8/8/8/8/8/8/R3K2R w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_FALSE(p.white_king_castle);
 	CHECK_FALSE(p.white_queen_castle);
 	CHECK_FALSE(p.black_king_castle);
 	CHECK_FALSE(p.black_queen_castle);
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 int main(int argc, char **argv)

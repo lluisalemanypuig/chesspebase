@@ -31,26 +31,29 @@
 // ctree includes
 #include <cpb/fen_parser.hpp>
 
+typedef std::pair<cpb::position, cpb::position_info> data;
+
 TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"8/b1b3k1/8/1b6/5B2/8/1K3B2/6B1 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 3);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 3);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 3);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 3);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -64,29 +67,34 @@ TEST_CASE("1")
 		"......B."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("2")
 {
 	static constexpr std::string_view s =
 		"8/6k1/8/6b1/5B2/8/1K3B2/6B1 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 3);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 3);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -100,29 +108,34 @@ TEST_CASE("2")
 		"......B."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("3")
 {
 	static constexpr std::string_view s =
 		"bbbbbbbb/6k1/8/6b1/5B2/8/1K3B2/6B1 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 3);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 9);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 3);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 9);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -136,29 +149,34 @@ TEST_CASE("3")
 		"......B."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("4")
 {
 	static constexpr std::string_view s =
 		"1b1b1b1b/3B2k1/3B4/3B2b1/5B2/3B4/1K1B1B2/3B2B1 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 9);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 5);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 9);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 5);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -172,28 +190,33 @@ TEST_CASE("4")
 		"...B..B."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("5")
 {
 	static constexpr std::string_view s = "7b/6k1/8/8/8/8/1K6/B7 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -207,7 +230,11 @@ TEST_CASE("5")
 		"B......."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 /* Move */
@@ -215,10 +242,11 @@ TEST_CASE("5")
 TEST_CASE("white :: bishop -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3b4/8/1K3B2/8 w - - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -234,18 +262,18 @@ TEST_CASE("white :: bishop -- no capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	cpb::apply_move("f2", "g3", ' ', p);
+	cpb::apply_move("f2", "g3", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["f2"], cpb::EMPTY);
@@ -264,27 +292,32 @@ TEST_CASE("white :: bishop -- no capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: bishop -- capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3b4/8/1K3B2/8 w - - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -300,18 +333,18 @@ TEST_CASE("white :: bishop -- capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	cpb::apply_move("f2", "d4", ' ', p);
+	cpb::apply_move("f2", "d4", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["f2"], cpb::EMPTY);
@@ -330,27 +363,32 @@ TEST_CASE("white :: bishop -- capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 0);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 0);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: bishop -- no capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3b4/8/K4B2/8 b - - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -366,18 +404,18 @@ TEST_CASE("black :: bishop -- no capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	cpb::apply_move("d4", "e5", ' ', p);
+	cpb::apply_move("d4", "e5", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["d4"], cpb::EMPTY);
@@ -396,27 +434,32 @@ TEST_CASE("black :: bishop -- no capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: bishop -- capture")
 {
 	static constexpr std::string_view s = "8/8/6k1/8/3b4/8/K4B2/8 b - - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
 
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -432,18 +475,18 @@ TEST_CASE("black :: bishop -- capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 1);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 1);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	cpb::apply_move("d4", "f2", ' ', p);
+	cpb::apply_move("d4", "f2", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["d4"], cpb::EMPTY);
@@ -462,18 +505,22 @@ TEST_CASE("black :: bishop -- capture")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 0);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 0);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 0);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 1);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 0);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 0);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 0);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 1);
+	CHECK_EQ(info.n_black_queens, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 int main(int argc, char **argv)

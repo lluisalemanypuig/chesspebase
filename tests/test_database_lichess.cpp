@@ -34,7 +34,8 @@
 #include <cpb/database.hpp>
 #include <cpb/lichess.hpp>
 
-typedef std::vector<cpb::position> array_db;
+typedef std::pair<cpb::position, cpb::position_info> data;
+typedef std::vector<data> array_db;
 
 [[nodiscard]] array_db load_lichess(const std::string_view& file)
 {
@@ -73,13 +74,14 @@ typedef std::vector<cpb::position> array_db;
 
 		const std::string_view fen{&line[i], j - i};
 
-		std::optional<cpb::position> _p = cpb::parse_fen(fen);
-		cpb::position& p = *_p;
+		std::optional<data> _p = cpb::parse_fen(fen);
+		cpb::position& p = _p->first;
+		cpb::position_info& info = _p->second;
 		CHECK(p == p);
-		cpb::apply_move(c1, c2, promotion, p);
+		cpb::apply_move(c1, c2, promotion, p, info);
 		CHECK(p == p);
 
-		v.emplace_back(std::move(p));
+		v.emplace_back(std::move(p), std::move(info));
 	}
 
 	return v;
@@ -88,8 +90,8 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_1wp_3bp(const array_db& adb) noexcept
 {
 	std::size_t c = 0;
-	for (const auto& p : adb) {
-		if (p.n_white_pawns == 1 and p.n_black_pawns == 3) {
+	for (const auto& [p, info] : adb) {
+		if (info.n_white_pawns == 1 and info.n_black_pawns == 3) {
 			++c;
 		}
 	}
@@ -99,9 +101,9 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_1wp_3bn(const array_db& adb) noexcept
 {
 	std::size_t c = 0;
-	for (const auto& p : adb) {
-		if (p.n_white_pawns == 1 and 0 <= p.n_black_knights and
-			p.n_black_knights <= 3) {
+	for (const auto& [p, info] : adb) {
+		if (info.n_white_pawns == 1 and 0 <= info.n_black_knights and
+			info.n_black_knights <= 3) {
 			++c;
 		}
 	}
@@ -111,8 +113,8 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_1_2bb(const array_db& adb) noexcept
 {
 	std::size_t c = 0;
-	for (const auto& p : adb) {
-		if (1 <= p.n_black_bishops and p.n_black_bishops <= 2) {
+	for (const auto& [p, info] : adb) {
+		if (1 <= info.n_black_bishops and info.n_black_bishops <= 2) {
 			++c;
 		}
 	}
@@ -122,9 +124,9 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_knights(const array_db& adb) noexcept
 {
 	std::size_t c = 0;
-	for (const auto& p : adb) {
+	for (const auto& [p, info] : adb) {
 		const std::size_t total =
-			static_cast<std::size_t>(p.n_white_knights + p.n_black_knights);
+			static_cast<std::size_t>(info.n_white_knights + info.n_black_knights);
 		if (2 <= total and total <= 4) {
 			++c;
 		}
@@ -135,8 +137,8 @@ typedef std::vector<cpb::position> array_db;
 [[nodiscard]] std::size_t t_1wq_0bq(const array_db& adb) noexcept
 {
 	std::size_t c = 0;
-	for (const auto& p : adb) {
-		if (p.n_white_queens == 1 and p.n_black_queens == 0) {
+	for (const auto& [p, info] : adb) {
+		if (info.n_white_queens == 1 and info.n_black_queens == 0) {
 			++c;
 		}
 	}

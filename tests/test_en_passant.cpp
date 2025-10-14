@@ -31,34 +31,46 @@
 // ctree includes
 #include <cpb/fen_parser.hpp>
 
+typedef std::pair<cpb::position, cpb::position_info> data;
+
 TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(p.en_passant[0], '-');
 	CHECK_EQ(p.en_passant[1], '-');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("2")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	//const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(p.en_passant[0], 'e');
 	CHECK_EQ(p.en_passant[1], '3');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 int main(int argc, char **argv)

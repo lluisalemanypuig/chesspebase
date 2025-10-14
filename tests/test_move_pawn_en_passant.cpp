@@ -31,13 +31,16 @@
 // cpb includes
 #include <cpb/fen_parser.hpp>
 
+typedef std::pair<cpb::position, cpb::position_info> data;
+
 TEST_CASE("white :: pawn -- capture en passant (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -53,18 +56,18 @@ TEST_CASE("white :: pawn -- capture en passant (<)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	cpb::apply_move("e5", "d6", ' ', p);
+	cpb::apply_move("e5", "d6", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["e5"], cpb::EMPTY);
@@ -86,27 +89,32 @@ TEST_CASE("white :: pawn -- capture en passant (<)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 7);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 7);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: pawn -- capture en passant (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/ppppp1pp/8/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -122,18 +130,18 @@ TEST_CASE("white :: pawn -- capture en passant (>)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	cpb::apply_move("e5", "f6", ' ', p);
+	cpb::apply_move("e5", "f6", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["e5"], cpb::EMPTY);
@@ -155,27 +163,32 @@ TEST_CASE("white :: pawn -- capture en passant (>)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 7);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 7);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: pawn -- capture en passant (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/3Pp3/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -191,18 +204,18 @@ TEST_CASE("black :: pawn -- capture en passant (<)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	cpb::apply_move("e4", "d3", ' ', p);
+	cpb::apply_move("e4", "d3", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["e4"], cpb::EMPTY);
@@ -224,27 +237,32 @@ TEST_CASE("black :: pawn -- capture en passant (<)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 7);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 7);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: pawn -- capture en passant (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/4pP2/8/PPPPP1PP/RNBQKBNR b KQkq f3 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -260,18 +278,18 @@ TEST_CASE("black :: pawn -- capture en passant (>)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_BLACK);
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	cpb::apply_move("e4", "f3", ' ', p);
+	cpb::apply_move("e4", "f3", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["e4"], cpb::EMPTY);
@@ -293,18 +311,22 @@ TEST_CASE("black :: pawn -- capture en passant (>)")
 	);
 
 	CHECK_EQ(p.player_turn, cpb::TURN_WHITE);
-	CHECK_EQ(p.n_white_pawns, 7);
-	CHECK_EQ(p.n_white_rooks, 2);
-	CHECK_EQ(p.n_white_knights, 2);
-	CHECK_EQ(p.n_white_bishops, 2);
-	CHECK_EQ(p.n_white_queens, 1);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 2);
-	CHECK_EQ(p.n_black_knights, 2);
-	CHECK_EQ(p.n_black_bishops, 2);
-	CHECK_EQ(p.n_black_queens, 1);
+	CHECK_EQ(info.n_white_pawns, 7);
+	CHECK_EQ(info.n_white_rooks, 2);
+	CHECK_EQ(info.n_white_knights, 2);
+	CHECK_EQ(info.n_white_bishops, 2);
+	CHECK_EQ(info.n_white_queens, 1);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 2);
+	CHECK_EQ(info.n_black_knights, 2);
+	CHECK_EQ(info.n_black_bishops, 2);
+	CHECK_EQ(info.n_black_queens, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 /* Generate en passant */
@@ -313,9 +335,10 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/4p3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -334,7 +357,7 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["f2"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["f4"], cpb::EMPTY);
 
-	cpb::apply_move("f2", "f4", ' ', p);
+	cpb::apply_move("f2", "f4", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["f2"], cpb::EMPTY);
@@ -343,16 +366,21 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p.en_passant[0], 'f');
 	CHECK_EQ(p.en_passant[1], '3');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppp1p/8/8/6p1/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -371,7 +399,7 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["h2"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["h4"], cpb::EMPTY);
 
-	cpb::apply_move("h2", "h4", ' ', p);
+	cpb::apply_move("h2", "h4", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["h2"], cpb::EMPTY);
@@ -380,16 +408,21 @@ TEST_CASE("white :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p.en_passant[0], 'h');
 	CHECK_EQ(p.en_passant[1], '3');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppp1ppp/8/8/4p3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -408,7 +441,7 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["d2"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 
-	cpb::apply_move("d2", "d4", ' ', p);
+	cpb::apply_move("d2", "d4", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["d2"], cpb::EMPTY);
@@ -417,16 +450,21 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p.en_passant[0], 'd');
 	CHECK_EQ(p.en_passant[1], '3');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/p1pppppp/8/8/1p6/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -445,7 +483,7 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["a2"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["a4"], cpb::EMPTY);
 
-	cpb::apply_move("a2", "a4", ' ', p);
+	cpb::apply_move("a2", "a4", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["a2"], cpb::EMPTY);
@@ -454,16 +492,21 @@ TEST_CASE("white :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p.en_passant[0], 'a');
 	CHECK_EQ(p.en_passant[1], '3');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: generate en passant -- double pawn")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pp1p1ppp/8/8/2p1p3/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -482,7 +525,7 @@ TEST_CASE("white :: generate en passant -- double pawn")
 	CHECK_EQ(p["d2"], cpb::WHITE_PAWN);
 	CHECK_EQ(p["d4"], cpb::EMPTY);
 
-	cpb::apply_move("d2", "d4", ' ', p);
+	cpb::apply_move("d2", "d4", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["d2"], cpb::EMPTY);
@@ -491,16 +534,21 @@ TEST_CASE("white :: generate en passant -- double pawn")
 	CHECK_EQ(p.en_passant[0], 'd');
 	CHECK_EQ(p.en_passant[1], '3');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/6P1/8/8/PPPPPP1P/RNBQKBNR b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -519,7 +567,7 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["h7"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["h5"], cpb::EMPTY);
 
-	cpb::apply_move("h7", "h5", ' ', p);
+	cpb::apply_move("h7", "h5", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["h7"], cpb::EMPTY);
@@ -528,16 +576,21 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p.en_passant[0], 'h');
 	CHECK_EQ(p.en_passant[1], '6');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: generate en passant -- single pawn (<)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -556,7 +609,7 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p["d7"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["d5"], cpb::EMPTY);
 
-	cpb::apply_move("d7", "d5", ' ', p);
+	cpb::apply_move("d7", "d5", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["d7"], cpb::EMPTY);
@@ -565,16 +618,21 @@ TEST_CASE("black :: generate en passant -- single pawn (<)")
 	CHECK_EQ(p.en_passant[0], 'd');
 	CHECK_EQ(p.en_passant[1], '6');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -593,7 +651,7 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["f7"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["f5"], cpb::EMPTY);
 
-	cpb::apply_move("f7", "f5", ' ', p);
+	cpb::apply_move("f7", "f5", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["f7"], cpb::EMPTY);
@@ -602,16 +660,21 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p.en_passant[0], 'f');
 	CHECK_EQ(p.en_passant[1], '6');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: generate en passant -- single pawn (>)")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/1P6/8/8/P1PPPPPP/RNBQKBNR b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -630,7 +693,7 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p["a7"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["a5"], cpb::EMPTY);
 
-	cpb::apply_move("a7", "a5", ' ', p);
+	cpb::apply_move("a7", "a5", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["a7"], cpb::EMPTY);
@@ -639,16 +702,21 @@ TEST_CASE("black :: generate en passant -- single pawn (>)")
 	CHECK_EQ(p.en_passant[0], 'a');
 	CHECK_EQ(p.en_passant[1], '6');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: generate en passant -- double pawn")
 {
 	static constexpr std::string_view s =
 		"rnbqkbnr/pppppppp/8/2P1P3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -667,7 +735,7 @@ TEST_CASE("black :: generate en passant -- double pawn")
 	CHECK_EQ(p["d7"], cpb::BLACK_PAWN);
 	CHECK_EQ(p["d5"], cpb::EMPTY);
 
-	cpb::apply_move("d7", "d5", ' ', p);
+	cpb::apply_move("d7", "d5", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(p["d7"], cpb::EMPTY);
@@ -676,7 +744,11 @@ TEST_CASE("black :: generate en passant -- double pawn")
 	CHECK_EQ(p.en_passant[0], 'd');
 	CHECK_EQ(p.en_passant[1], '6');
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 int main(int argc, char **argv)

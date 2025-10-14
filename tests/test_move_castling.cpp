@@ -31,15 +31,18 @@
 // cpb includes
 #include <cpb/fen_parser.hpp>
 
+typedef std::pair<cpb::position, cpb::position_info> data;
+
 /* WHITE CASTLING */
 
 TEST_CASE("white :: king castle")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -60,7 +63,7 @@ TEST_CASE("white :: king castle")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("e1", "g1", ' ', p);
+	cpb::apply_move("e1", "g1", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -86,16 +89,21 @@ TEST_CASE("white :: king castle")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: queen castle")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -116,7 +124,7 @@ TEST_CASE("white :: queen castle")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("e1", "c1", ' ', p);
+	cpb::apply_move("e1", "c1", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -143,16 +151,21 @@ TEST_CASE("white :: queen castle")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: move rook king-side")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -173,7 +186,7 @@ TEST_CASE("white :: move rook king-side")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("h1", "g1", ' ', p);
+	cpb::apply_move("h1", "g1", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -199,16 +212,21 @@ TEST_CASE("white :: move rook king-side")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("white :: move rook queen-side")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -229,7 +247,7 @@ TEST_CASE("white :: move rook queen-side")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("a1", "b1", ' ', p);
+	cpb::apply_move("a1", "b1", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -256,7 +274,11 @@ TEST_CASE("white :: move rook queen-side")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 /* BLACK */
@@ -265,9 +287,10 @@ TEST_CASE("black :: king castle")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -288,7 +311,7 @@ TEST_CASE("black :: king castle")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("e8", "g8", ' ', p);
+	cpb::apply_move("e8", "g8", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -314,16 +337,21 @@ TEST_CASE("black :: king castle")
 	CHECK_EQ(p.black_king_castle, 0);
 	CHECK_EQ(p.black_queen_castle, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: queen castle")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -344,7 +372,7 @@ TEST_CASE("black :: queen castle")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("e8", "c8", ' ', p);
+	cpb::apply_move("e8", "c8", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -371,16 +399,21 @@ TEST_CASE("black :: queen castle")
 	CHECK_EQ(p.black_king_castle, 0);
 	CHECK_EQ(p.black_queen_castle, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: move rook king-side")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -401,7 +434,7 @@ TEST_CASE("black :: move rook king-side")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("h8", "g8", ' ', p);
+	cpb::apply_move("h8", "g8", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -427,16 +460,21 @@ TEST_CASE("black :: move rook king-side")
 	CHECK_EQ(p.black_king_castle, 0);
 	CHECK_EQ(p.black_queen_castle, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("black :: move rook queen-side")
 {
 	static constexpr std::string_view s =
 		"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R b KQkq - 0 1";
-	std::optional<cpb::position> _p = cpb::parse_fen(s);
+	std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	cpb::position& p = *_p;
+	cpb::position& p = _p->first;
+	cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -457,7 +495,7 @@ TEST_CASE("black :: move rook queen-side")
 	CHECK_EQ(p.black_king_castle, 1);
 	CHECK_EQ(p.black_queen_castle, 1);
 
-	cpb::apply_move("a8", "b8", ' ', p);
+	cpb::apply_move("a8", "b8", ' ', p, info);
 	CHECK(p == p);
 
 	CHECK_EQ(
@@ -484,7 +522,11 @@ TEST_CASE("black :: move rook queen-side")
 	CHECK_EQ(p.black_king_castle, 0);
 	CHECK_EQ(p.black_queen_castle, 0);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 int main(int argc, char **argv)

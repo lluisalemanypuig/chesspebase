@@ -31,25 +31,28 @@
 // ctree includes
 #include <cpb/fen_parser.hpp>
 
+typedef std::pair<cpb::position, cpb::position_info> data;
+
 TEST_CASE("1")
 {
 	static constexpr std::string_view s =
 		"4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
-	CHECK(_p.has_value());
-	const cpb::position& p = *_p;
+	const std::optional<data> _p = cpb::parse_fen(s);
+	CHECK(_p);
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 0);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 0);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 0);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 0);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -63,28 +66,33 @@ TEST_CASE("1")
 		"....K..."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("2")
 {
 	static constexpr std::string_view s =
 		"4k3/pp2pp2/2p3p1/3p3p/1P4P1/5P2/P1PPP2P/4K3 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 8);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 0);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 8);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 0);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 8);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 0);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 8);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 0);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -98,28 +106,33 @@ TEST_CASE("2")
 		"....K..."
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("3")
 {
 	static constexpr std::string_view s =
 		"8/1p2pp2/2pk2p1/3p3p/1P4P1/5P2/P1PP2KP/8 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 7);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 0);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 7);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 0);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 7);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 0);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 7);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 0);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -133,27 +146,32 @@ TEST_CASE("3")
 		"........"
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("4")
 {
 	static constexpr std::string_view s = "8/1p6/3k4/8/6P1/8/6K1/8 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 1);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 0);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 1);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 0);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 1);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 0);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 1);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 0);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -167,28 +185,33 @@ TEST_CASE("4")
 		"........"
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 TEST_CASE("5")
 {
 	static constexpr std::string_view s =
 		"8/2p1p1pp/1p6/p2p2k1/2K1P3/3P2P1/P4P1P/8 w - - 0 1";
-	const std::optional<cpb::position> _p = cpb::parse_fen(s);
+	const std::optional<data> _p = cpb::parse_fen(s);
 	CHECK(_p);
-	const cpb::position& p = *_p;
+	const cpb::position& p = _p->first;
+	const cpb::position_info& info = _p->second;
 	CHECK(p == p);
 
-	CHECK_EQ(p.n_white_pawns, 6);
-	CHECK_EQ(p.n_white_rooks, 0);
-	CHECK_EQ(p.n_white_knights, 0);
-	CHECK_EQ(p.n_white_bishops, 0);
-	CHECK_EQ(p.n_white_queens, 0);
-	CHECK_EQ(p.n_black_pawns, 7);
-	CHECK_EQ(p.n_black_rooks, 0);
-	CHECK_EQ(p.n_black_knights, 0);
-	CHECK_EQ(p.n_black_bishops, 0);
-	CHECK_EQ(p.n_black_queens, 0);
+	CHECK_EQ(info.n_white_pawns, 6);
+	CHECK_EQ(info.n_white_rooks, 0);
+	CHECK_EQ(info.n_white_knights, 0);
+	CHECK_EQ(info.n_white_bishops, 0);
+	CHECK_EQ(info.n_white_queens, 0);
+	CHECK_EQ(info.n_black_pawns, 7);
+	CHECK_EQ(info.n_black_rooks, 0);
+	CHECK_EQ(info.n_black_knights, 0);
+	CHECK_EQ(info.n_black_bishops, 0);
+	CHECK_EQ(info.n_black_queens, 0);
 
 	CHECK_EQ(
 		p.to_natural_string(),
@@ -202,7 +225,11 @@ TEST_CASE("5")
 		"........"
 	);
 
-	CHECK_EQ(cpb::parse_fen(cpb::make_fen(p)), p);
+	{
+	const std::optional<data> __p = cpb::parse_fen(cpb::make_fen(p));
+	CHECK(__p);
+	CHECK_EQ(__p->first, p);
+	}
 }
 
 int main(int argc, char **argv)
