@@ -109,8 +109,7 @@ void add_position(position&& p, const position_info& info, PuzzleDatabase& db)
 	const char turn = p.player_turn;
 
 	db.add(
-		std::move(p),
-		metadata{.num_occurrences = 1},
+		{std::move(p), metadata{.num_occurrences = 1}},
 		n_white_pawns,
 		n_black_pawns,
 		n_white_rooks,
@@ -283,8 +282,7 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 			const char turn = p.player_turn;
 
 			db.add(
-				std::move(p),
-				metadata{.num_occurrences = 1},
+				{std::move(p), metadata{.num_occurrences = 1}},
 				n_white_pawns,
 				n_black_pawns,
 				n_white_rooks,
