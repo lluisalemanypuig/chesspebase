@@ -401,7 +401,7 @@ int main(int argc, char *argv[])
 
 			size_t num_positions = 0;
 			while (not it.end()) {
-				const auto& [pos, _] = *it;
+				const auto& pos = *it;
 				std::cout << pos.to_pretty_string() << '\n';
 				++it;
 				++num_positions;
