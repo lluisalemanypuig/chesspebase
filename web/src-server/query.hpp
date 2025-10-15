@@ -37,7 +37,7 @@
 
 typedef classtree::const_range_iterator<
 	cpb::position,
-	cpb::metadata,
+	void,
 	char, // white pawns
 	char, // black pawns
 	char, // white rooks

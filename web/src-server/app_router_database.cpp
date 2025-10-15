@@ -334,7 +334,7 @@ void make_query(
 	}
 
 	if (not db_it.end()) {
-		res.body += "\"position\":\"" + cpb::make_fen((*db_it).first) + "\",";
+		res.body += "\"position\":\"" + cpb::make_fen(*db_it) + "\",";
 	}
 	else {
 		res.body += "\"position\":\"end\",";

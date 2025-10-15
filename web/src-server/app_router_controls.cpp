@@ -86,7 +86,7 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 			res.body = "{";
 			if (include_fen) {
 				res.body +=
-					"\"position\":\"" + cpb::make_fen((*db_it).first) + "\",";
+					"\"position\":\"" + cpb::make_fen(*db_it) + "\",";
 			}
 			else {
 				res.body += "\"position\":\"end\",";
@@ -147,7 +147,7 @@ void route_server_controls(httplib::Server& svr, user_query_t& user_query)
 			res.body = "{";
 			if (include_fen) {
 				res.body +=
-					"\"position\":\"" + cpb::make_fen((*db_it).first) + "\",";
+					"\"position\":\"" + cpb::make_fen(*db_it) + "\",";
 			}
 			else {
 				res.body += "\"position\":\"begin\",";
