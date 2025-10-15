@@ -174,23 +174,6 @@ struct position_info {
 	char n_black_queens = 0;
 };
 
-struct metadata {
-	/// number of occurrences
-	size_t num_occurrences = 0;
-
-	metadata& operator+= (const metadata& other) noexcept
-	{
-		num_occurrences += other.num_occurrences;
-		return *this;
-	}
-
-	inline friend std::ostream& operator<< (std::ostream& os, const metadata& m)
-	{
-		os << m.num_occurrences;
-		return os;
-	}
-};
-
 void apply_move(
 	const char m1[2],
 	const char m2[2],

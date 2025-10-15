@@ -34,7 +34,7 @@ namespace cpb {
 
 using PuzzleDatabase = classtree::ctree<
 	position,
-	metadata,
+	void,
 	char, // white pawns
 	char, // black pawns
 	char, // white rooks
