@@ -17,7 +17,7 @@ include(GNUInstallDirs)
 # Custom functions
 
 function(configure_cli_executable executable)
-	add_dependencies(cli ${CPB_LIB_NAME})
+	add_dependencies(${executable} ${CPB_LIB_NAME})
 
 	# cpb
 	target_link_libraries(${executable}	${CPB_LIB_DIR}/lib${CPB_LIB_NAME}.so)
