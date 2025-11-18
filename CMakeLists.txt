@@ -81,6 +81,8 @@ function(configure_executable executable)
 		# flags added by default:
 		#   -O3
 		#   -DNDEBUG
+		add_compile_flag(${executable} -flto)
+		add_link_flag(${executable} -flto=auto)
 		define_symbol(${executable} -UDEBUG)
 	endif()
 
