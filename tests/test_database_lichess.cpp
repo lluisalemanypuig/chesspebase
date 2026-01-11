@@ -159,7 +159,12 @@ typedef std::vector<data> array_db;
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
-		[](const unsigned) -> bool { return true; }
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; }
 	);
 	// clang-format on
 	std::size_t c = 0;
@@ -184,7 +189,12 @@ typedef std::vector<data> array_db;
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
-		[](const unsigned) -> bool { return true; }
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; }
 	);
 	// clang-format on
 	std::size_t c = 0;
@@ -209,7 +219,12 @@ typedef std::vector<data> array_db;
 		[](const auto c) -> bool { return 1 <= c and c <= 2; },
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
-		[](const unsigned) -> bool { return true; }
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; }
 	);
 	// clang-format on
 	std::size_t c = 0;
@@ -244,6 +259,11 @@ typedef std::vector<data> array_db;
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
 		[](const auto) -> bool { return true; }
 	);
 	// clang-format on
@@ -269,7 +289,12 @@ typedef std::vector<data> array_db;
 		[](const auto) -> bool { return true; },
 		[](const auto c) -> bool { return c == 1; },
 		[](const auto c) -> bool { return c == 0; },
-		[](const unsigned) -> bool { return true; }
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; },
+		[](const auto) -> bool { return true; }
 	);
 	// clang-format on
 	std::size_t c = 0;
