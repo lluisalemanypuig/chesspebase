@@ -108,6 +108,12 @@ void add_position(position&& p, const position_info& info, PuzzleDatabase& db)
 	const char n_black_queens = info.n_black_queens;
 	const char turn = p.player_turn;
 
+	const char a8 = p["a8"];
+	const char b8 = p["b8"];
+	const char c8 = p["c8"];
+	const char d8 = p["d8"];
+	const char e8 = p["e8"];
+
 	db.add(
 		std::move(p),
 		n_white_pawns,
@@ -120,7 +126,12 @@ void add_position(position&& p, const position_info& info, PuzzleDatabase& db)
 		n_black_bishops,
 		n_white_queens,
 		n_black_queens,
-		turn
+		turn,
+		a8,
+		b8,
+		c8,
+		d8,
+		e8
 	);
 }
 
@@ -281,6 +292,12 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 			const char n_black_queens = info.n_black_queens;
 			const char turn = p.player_turn;
 
+			const char a8 = p["a8"];
+			const char b8 = p["b8"];
+			const char c8 = p["c8"];
+			const char d8 = p["d8"];
+			const char e8 = p["e8"];
+
 			db.add(
 				std::move(p),
 				n_white_pawns,
@@ -293,7 +310,12 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 				n_black_bishops,
 				n_white_queens,
 				n_black_queens,
-				turn
+				turn,
+				a8,
+				b8,
+				c8,
+				d8,
+				e8
 			);
 		}
 

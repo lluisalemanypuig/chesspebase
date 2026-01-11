@@ -45,7 +45,12 @@ using PuzzleDatabase = classtree::ctree<
 	char, // black bishops
 	char, // white queens
 	char, // black queens
-	char  // player turn
+	char, // player turn
+	char, // fake: a8
+	char, // fake: b8
+	char, // fake: c8
+	char, // fake: d8
+	char  // fake: e8
 	>;
 
 } // namespace cpb
