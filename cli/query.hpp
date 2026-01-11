@@ -203,3 +203,10 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 {
 	return Q.query_player_turn ? i == Q.query_player_turn : true;
 }
+
+// identity true
+
+[[nodiscard]] static inline bool true_func(const char) noexcept
+{
+	return true;
+}

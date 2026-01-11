@@ -396,7 +396,12 @@ int main(int argc, char *argv[])
 				black_bishops,
 				white_queens,
 				black_queens,
-				turn_func
+				turn_func,
+				true_func,
+				true_func,
+				true_func,
+				true_func,
+				true_func
 			);
 
 			size_t num_positions = 0;
