@@ -45,26 +45,94 @@ in_interval(const int l, const int v, const int u) noexcept
 	return l <= v and v <= u;
 }
 
+[[nodiscard]] inline bool true_func(const char)
+{
+	return true;
+}
+
 auto make_empty_iterator(const cpb::PuzzleDatabase& db)
 {
-	auto id_lambda = [](const char) -> bool
-	{
-		return true;
-	};
 	return db.get_const_range_iterator(
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda,
-		id_lambda
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func
 	);
 }
+
+[[nodiscard]] bool white_inspect(
+	const cpb::querier& Q, const cpb::query_data& q, const int total_so_far
+)
+{
+	if (q.query_white) {
+		const bool cond =
+			in_interval(q.query_white->lb, q.num_white, q.query_white->ub);
+		if (not cond) {
+			return false;
+		}
+	}
+
+	const int both = q.num_white;
+	if (q.query_both) {
+		const bool cond = in_interval(0, both, q.query_both->ub);
+		if (not cond) {
+			return false;
+		}
+	}
+
+	if (Q.query_total_pieces) {
+		const bool cond =
+			in_interval(0, total_so_far, Q.query_total_pieces->ub);
+		if (not cond) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
+[[nodiscard]] bool black_inspect(
+	const cpb::querier& Q, const cpb::query_data& q, const int total_so_far
+)
+{
+	if (q.query_black) {
+		const bool cond =
+			in_interval(q.query_black->lb, q.num_black, q.query_black->ub);
+		if (not cond) {
+			return false;
+		}
+	}
+
+	const int both = q.total();
+	if (q.query_both) {
+		const bool cond = in_interval(q.query_both->lb, both, q.query_both->ub);
+		if (not cond) {
+			return false;
+		}
+	}
+
+	if (Q.query_total_pieces) {
+		const bool cond =
+			in_interval(0, total_so_far, Q.query_total_pieces->ub);
+		if (not cond) {
+			return false;
+		}
+	}
+
+	return true;
+};
 
 void make_query(
 	const httplib::Request& req,
@@ -122,69 +190,6 @@ void make_query(
 	parse_query_body(req.body, Q_);
 
 	// create lambda functions that take a reference to 'query_it->second.Q'
-
-	auto white_inspect = [](const cpb::querier& Q,
-							const cpb::query_data& q,
-							const int total_so_far) -> bool
-	{
-		if (q.query_white) {
-			const bool cond =
-				in_interval(q.query_white->lb, q.num_white, q.query_white->ub);
-			if (not cond) {
-				return false;
-			}
-		}
-
-		const int both = q.num_white;
-		if (q.query_both) {
-			const bool cond = in_interval(0, both, q.query_both->ub);
-			if (not cond) {
-				return false;
-			}
-		}
-
-		if (Q.query_total_pieces) {
-			const bool cond =
-				in_interval(0, total_so_far, Q.query_total_pieces->ub);
-			if (not cond) {
-				return false;
-			}
-		}
-
-		return true;
-	};
-
-	auto black_inspect = [](const cpb::querier& Q,
-							const cpb::query_data& q,
-							const int total_so_far) -> bool
-	{
-		if (q.query_black) {
-			const bool cond =
-				in_interval(q.query_black->lb, q.num_black, q.query_black->ub);
-			if (not cond) {
-				return false;
-			}
-		}
-
-		const int both = q.total();
-		if (q.query_both) {
-			const bool cond =
-				in_interval(q.query_both->lb, both, q.query_both->ub);
-			if (not cond) {
-				return false;
-			}
-		}
-
-		if (Q.query_total_pieces) {
-			const bool cond =
-				in_interval(0, total_so_far, Q.query_total_pieces->ub);
-			if (not cond) {
-				return false;
-			}
-		}
-
-		return true;
-	};
 
 	// pawns
 
@@ -315,7 +320,12 @@ void make_query(
 		std::move(black_bishops),
 		std::move(white_queens),
 		std::move(black_queens),
-		std::move(turn_func)
+		std::move(turn_func),
+		true_func,
+		true_func,
+		true_func,
+		true_func,
+		true_func
 	);
 
 	const auto begin = cpb::now();
