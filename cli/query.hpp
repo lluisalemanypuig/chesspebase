@@ -28,8 +28,9 @@
 
 // cpb includes
 #include <cpb/query.hpp>
+#include <cpb/attribute_utils.hpp>
 
-[[nodiscard]] static inline bool
+[[nodiscard]] FORCE_INLINE bool
 in_interval(const int lb, const int v, const int ub) noexcept
 {
 	return lb <= v and v <= ub;
@@ -101,13 +102,13 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 
 // pawns
 
-[[nodiscard]] static inline bool white_pawns(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool white_pawns(const char c) noexcept
 {
 	Q.pawns.num_white = c;
 	return white_inspect(Q.pawns, Q.pawns.num_white);
 }
 
-[[nodiscard]] static inline bool black_pawns(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool black_pawns(const char c) noexcept
 {
 	Q.pawns.num_black = c;
 	return black_inspect(Q.pawns, Q.pawns.total());
@@ -115,13 +116,13 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 
 // rooks
 
-[[nodiscard]] static inline bool white_rooks(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool white_rooks(const char c) noexcept
 {
 	Q.rooks.num_white = c;
 	return white_inspect(Q.rooks, Q.pawns.total() + Q.rooks.num_white);
 }
 
-[[nodiscard]] static inline bool black_rooks(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool black_rooks(const char c) noexcept
 {
 	Q.rooks.num_black = c;
 	return black_inspect(Q.rooks, Q.pawns.total() + Q.rooks.total());
@@ -129,7 +130,7 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 
 // knights
 
-[[nodiscard]] static inline bool white_knights(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool white_knights(const char c) noexcept
 {
 	Q.knights.num_white = c;
 	return white_inspect(
@@ -137,7 +138,7 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 	);
 }
 
-[[nodiscard]] static inline bool black_knights(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool black_knights(const char c) noexcept
 {
 	Q.knights.num_black = c;
 	return black_inspect(
@@ -147,7 +148,7 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 
 // bishops
 
-[[nodiscard]] static inline bool white_bishops(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool white_bishops(const char c) noexcept
 {
 	Q.bishops.num_white = c;
 	return white_inspect(
@@ -157,7 +158,7 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 	);
 }
 
-[[nodiscard]] static inline bool black_bishops(const char c) noexcept
+[[nodiscard]] FORCE_INLINE bool black_bishops(const char c) noexcept
 {
 	Q.bishops.num_black = c;
 	return black_inspect(
@@ -199,14 +200,14 @@ black_inspect(const cpb::query_data& q, const int total_so_far) noexcept
 
 // player turn
 
-[[nodiscard]] static inline bool turn_func(const unsigned i) noexcept
+[[nodiscard]] FORCE_INLINE bool turn_func(const unsigned i) noexcept
 {
 	return Q.query_player_turn ? i == Q.query_player_turn : true;
 }
 
 // identity true
 
-[[nodiscard]] static inline bool true_func(const char) noexcept
+[[nodiscard]] FORCE_INLINE bool true_func(const char) noexcept
 {
 	return true;
 }
