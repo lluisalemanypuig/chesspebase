@@ -40,7 +40,7 @@
 #include <cpb/time.hpp>
 
 // custom includes
-#include "cli/query.hpp"
+#include <cli/query.hpp>
 
 template <class... Args>
 void printerr(std::format_string<Args...>&& fmt, Args&&...args)
