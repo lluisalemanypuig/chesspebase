@@ -29,6 +29,9 @@
 // classtree includes
 #include <ctree/ctree.hpp>
 
+// cpb includes
+#include <cpb/attribute_utils.hpp>
+
 namespace cpb {
 
 struct pair {
@@ -45,12 +48,12 @@ struct query_data {
 	int num_white = 0;
 	int num_black = 0;
 
-	[[nodiscard]] inline int total() const noexcept
+	[[nodiscard]] FORCE_INLINE int total() const noexcept
 	{
 		return num_white + num_black;
 	}
 
-	inline void reset() noexcept
+	FORCE_INLINE void reset() noexcept
 	{
 		query_white = {};
 		query_black = {};
