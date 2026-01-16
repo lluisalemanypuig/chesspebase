@@ -33,6 +33,7 @@
 
 // cpb includes
 #include <cpb/profiler.hpp>
+#include <cpb/arena_allocator.hpp>
 #include <cpb/database.hpp>
 #include <cpb/position.hpp>
 #include <cpb/lichess.hpp>
@@ -295,7 +296,6 @@ void load_lichess_database(
 	const auto end = cpb::now();
 
 	if (res.has_value()) {
-		std::print("From database '{}'.\n", file);
 		std::print("Total fen read: {}.\n", *res);
 		std::print("Added {} new positions.\n", db.size() - initial_db_size);
 		std::print(
@@ -307,7 +307,7 @@ void load_lichess_database(
 		std::print("In {}.\n", cpb::time_to_str(time));
 	}
 	else {
-		printerr("The lichess database '{}' could not be read.\n", file);
+		printerr("The database could not be read.\n");
 		if (res.error() == cpb::lichess::load_error::file_error) {
 			printerr("    File could not be loaded.\n");
 		}
@@ -372,14 +372,20 @@ int main(int argc, char *argv[])
 	PROFILER_START_SESSION(intstrumentation_session, "id");
 	PROFILE_FUNCTION;
 
+	cpb::ArenaMemoryResource arena;
 	cpb::PuzzleDatabase db;
 
 	if (read_memory_profile) {
 		std::print("--------------------------\n");
 		std::print("Reading memory profile '{}'.\n", input_memory_profile);
+
 		std::ifstream fin(input_memory_profile.data());
+
 		size_t total_bytes;
 		fin >> total_bytes;
+		std::print("    Total bytes: {}\n", total_bytes);
+		arena.initialize(total_bytes);
+
 		if (not fin.is_open()) {
 			printerr(
 				"Input memory profile file '{}' could not be opened.\n",
@@ -387,7 +393,7 @@ int main(int argc, char *argv[])
 			);
 			return 1;
 		}
-		classtree::initialize(db, fin);
+		classtree::initialize(db, fin, &arena);
 		fin.close();
 	}
 
