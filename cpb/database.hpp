@@ -53,4 +53,24 @@ using PuzzleDatabase = classtree::ctree<
 	char  // fake: e8
 	>;
 
+using PuzzleDatabaseNoWhitePawns = classtree::ctree<
+	position,
+	void,
+	char, // black pawns
+	char, // white rooks
+	char, // black rooks
+	char, // white knights
+	char, // black knights
+	char, // white bishops
+	char, // black bishops
+	char, // white queens
+	char, // black queens
+	char, // player turn
+	char, // fake: a8
+	char, // fake: b8
+	char, // fake: c8
+	char, // fake: d8
+	char  // fake: e8
+	>;
+
 } // namespace cpb

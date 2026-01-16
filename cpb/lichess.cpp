@@ -21,13 +21,15 @@
  * 		https://github.com/lluisalemanypuig
  */
 
-#define PARALLEL
+#include <cpb/mode_operation.hpp>
 
 // C++ includes
-#if defined PARALLEL
+#if defined LICHESS_PARALLEL
 #include <thread>
 #endif
-#include <iostream>
+#if defined DEBUG
+#include <cassert>
+#endif
 #include <fstream>
 
 // cpb includes
@@ -35,14 +37,15 @@
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
 #include <cpb/position.hpp>
-#if defined PARALLEL
+#include <cpb/lichess.hpp>
+#if defined LICHESS_PARALLEL
 #include <cpb/spsc.hpp>
 #endif
 
 namespace cpb {
 namespace lichess {
 
-#if defined PARALLEL
+#if defined LICHESS_PARALLEL
 
 typedef std::vector<std::pair<position, position_info>> position_list;
 
@@ -94,7 +97,8 @@ struct queue_wrap {
 	}
 };
 
-void add_position(position&& p, const position_info& info, PuzzleDatabase& db)
+template <typename database_t>
+void add_position(position&& p, const position_info& info, database_t& db)
 {
 	const char n_white_pawns = info.n_white_pawns;
 	const char n_black_pawns = info.n_black_pawns;
@@ -114,35 +118,67 @@ void add_position(position&& p, const position_info& info, PuzzleDatabase& db)
 	const char d8 = p["d8"];
 	const char e8 = p["e8"];
 
-	db.add(
-		std::move(p),
-		n_white_pawns,
-		n_black_pawns,
-		n_white_rooks,
-		n_black_rooks,
-		n_white_knights,
-		n_black_knights,
-		n_white_bishops,
-		n_black_bishops,
-		n_white_queens,
-		n_black_queens,
-		turn,
-		a8,
-		b8,
-		c8,
-		d8,
-		e8
-	);
+	if constexpr (std::is_same_v<database_t, PuzzleDatabaseNoWhitePawns>) {
+		db.add(
+			std::move(p),
+			//n_white_pawns,
+			n_black_pawns,
+			n_white_rooks,
+			n_black_rooks,
+			n_white_knights,
+			n_black_knights,
+			n_white_bishops,
+			n_black_bishops,
+			n_white_queens,
+			n_black_queens,
+			turn,
+			a8,
+			b8,
+			c8,
+			d8,
+			e8
+		);
+	}
+	else {
+		db.add(
+			std::move(p),
+			n_white_pawns,
+			n_black_pawns,
+			n_white_rooks,
+			n_black_rooks,
+			n_white_knights,
+			n_black_knights,
+			n_white_bishops,
+			n_black_bishops,
+			n_white_queens,
+			n_black_queens,
+			turn,
+			a8,
+			b8,
+			c8,
+			d8,
+			e8
+		);
+	}
 }
 
-void worker_add_to_database(queue_wrap& q, PuzzleDatabase& db)
+template <typename database_t>
+void worker_add_to_database(queue_wrap& q, database_t db)
 {
 	queue_command command = q.queue.read<queue_command>();
 	while (command != queue_command::finish) {
 
 		position_list& v = q.queue.read<position_list>();
 		for (auto& [position, info] : v) {
-			add_position(std::move(position), info, db);
+			if constexpr (std::is_pointer_v<database_t>) {
+#if defined DEBUG
+				assert(db != nullptr);
+#endif
+				add_position(std::move(position), info, *db);
+			}
+			else {
+				add_position(std::move(position), info, db);
+			}
 		}
 
 		q.queue.finish_read();
@@ -150,14 +186,14 @@ void worker_add_to_database(queue_wrap& q, PuzzleDatabase& db)
 	}
 }
 
-size_t load_database(const std::string_view filename, PuzzleDatabase& db)
+std::expected<size_t, load_error>
+load_database(const std::string_view filename, PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
 	std::ifstream fin(filename.data());
 	if (not fin.is_open()) {
-		std::cerr << "Database file '" << filename << "' is not open.\n";
-		return 0;
+		return std::unexpected(load_error::file_error);
 	}
 
 	PuzzleDatabase dbs[9];
@@ -168,7 +204,9 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 	std::vector<std::thread> workers;
 	for (size_t i = 0; i < 9; ++i) {
 		workers.emplace_back(
-			worker_add_to_database, std::ref(qs[i]), std::ref(dbs[i])
+			worker_add_to_database<PuzzleDatabase&>,
+			std::ref(qs[i]),
+			std::ref(dbs[i])
 		);
 	}
 
@@ -199,7 +237,7 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		std::optional<std::pair<position, position_info>> data =
 			parse_fen(fen_view);
 		if (not data) [[unlikely]] {
-			continue;
+			return std::unexpected(load_error::invalid_position);
 		}
 
 		position& p = data->first;
@@ -217,12 +255,10 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 		qs[i].finish();
 	}
 
-	// Join the workers.
 	for (size_t i = 0; i < 9; ++i) {
 		workers[i].join();
 	}
 
-	// Construct the full database with the worker's data
 	for (size_t i = 0; i < 9; ++i) {
 		db.merge(std::move(dbs[i]));
 	}
@@ -230,16 +266,105 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 	return total_fen_read;
 }
 
-#else
-
-size_t load_database(const std::string_view filename, PuzzleDatabase& db)
+std::expected<size_t, load_error>
+load_database_initialized(const std::string_view filename, PuzzleDatabase& db)
 {
 	PROFILE_FUNCTION;
 
 	std::ifstream fin(filename.data());
 	if (not fin.is_open()) {
-		std::cerr << "Database file '" << filename << "' is not open.\n";
-		return 0;
+		return std::unexpected(load_error::file_error);
+	}
+
+	PuzzleDatabaseNoWhitePawns *dbs[9];
+	{
+		for (size_t i = 0; i < 9; ++i) {
+			dbs[i] = nullptr;
+		}
+		auto it = db.begin();
+		while (it != db.end()) {
+			const size_t i = static_cast<size_t>(it->first);
+			dbs[i] = &it->second;
+			++it;
+		}
+	}
+	queue_wrap qs[9];
+
+	// Launch worker threads: these will wait for the queue to have some data,
+	// then read it and fill their respective databases.
+	std::vector<std::thread> workers;
+	for (size_t i = 0; i < 9; ++i) {
+		workers.emplace_back(
+			worker_add_to_database<PuzzleDatabaseNoWhitePawns *>,
+			std::ref(qs[i]),
+			dbs[i]
+		);
+	}
+
+	size_t total_fen_read = 0;
+
+	// read first line
+	std::string line;
+	std::getline(fin, line);
+
+	while (std::getline(fin, line)) {
+
+		// read until second ','
+		const auto it = std::find(line.begin() + 6, line.end(), ',');
+
+		// read the first move
+		char m1[2];
+		m1[0] = *(it + 1);
+		m1[1] = *(it + 2);
+		char m2[2];
+		m2[0] = *(it + 3);
+		m2[1] = *(it + 4);
+		const char promotion = *(it + 5);
+
+		// use the fen to parse the game
+		const std::string_view fen_view{&line[6]};
+		++total_fen_read;
+
+		std::optional<std::pair<position, position_info>> data =
+			parse_fen(fen_view);
+		if (not data) [[unlikely]] {
+			return std::unexpected(load_error::invalid_position);
+		}
+
+		position& p = data->first;
+		position_info& info = data->second;
+
+		apply_move(m1, m2, promotion, p, info);
+
+		const size_t n_white_pawns = static_cast<size_t>(info.n_white_pawns);
+		qs[n_white_pawns].push_back(std::move(p), std::move(info));
+		qs[n_white_pawns].send_batch();
+	}
+
+	for (size_t i = 0; i < 9; ++i) {
+		qs[i].send();
+		qs[i].finish();
+	}
+
+	for (size_t i = 0; i < 9; ++i) {
+		workers[i].join();
+	}
+
+	db.update_size();
+
+	return total_fen_read;
+}
+
+#else
+
+std::expected<size_t, load_error>
+load_database(const std::string_view filename, PuzzleDatabase& db)
+{
+	PROFILE_FUNCTION;
+
+	std::ifstream fin(filename.data());
+	if (not fin.is_open()) {
+		return std::unexpected(load_error::file_error);
 	}
 
 	// read first line
@@ -269,7 +394,7 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 			parse_fen(fen_view);
 
 		if (not data) [[unlikely]] {
-			continue;
+			return std::unexpected(load_error::invalid_position);
 		}
 
 		position& p = data->first;
@@ -323,6 +448,12 @@ size_t load_database(const std::string_view filename, PuzzleDatabase& db)
 	}
 
 	return total_fen_read;
+}
+
+std::expected<size_t, load_error>
+load_database_initialized(const std::string_view filename, PuzzleDatabase& db)
+{
+	return load_database(filename, db);
 }
 
 #endif

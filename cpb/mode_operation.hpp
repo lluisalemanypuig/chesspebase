@@ -23,25 +23,4 @@
 
 #pragma once
 
-// C++
-#include <expected>
-
-// cpb includes
-#include <cpb/database.hpp>
-
-namespace cpb {
-namespace lichess {
-
-enum class load_error {
-	file_error,
-	invalid_position
-};
-
-[[nodiscard]] std::expected<size_t, load_error>
-load_database(const std::string_view filename, PuzzleDatabase& db);
-
-[[nodiscard]] std::expected<size_t, load_error>
-load_database_initialized(const std::string_view filename, PuzzleDatabase& db);
-
-} // namespace lichess
-} // namespace cpb
+#define LICHESS_PARALLEL
