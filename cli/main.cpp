@@ -29,6 +29,7 @@
 #include <ctree/ctree.hpp>
 #include <ctree/range_iterator.hpp>
 #include <ctree/iterator.hpp>
+#include <ctree/memory_profile.hpp>
 
 // cpb includes
 #include <cpb/profiler.hpp>
@@ -278,22 +279,41 @@ void process_query() noexcept
 	}
 }
 
-void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
+void load_lichess_database(
+	const std::string_view file,
+	const bool read_memory_profile,
+	cpb::PuzzleDatabase& db
+)
 {
 	PROFILE_FUNCTION;
 
 	const auto begin = cpb::now();
 	const size_t initial_db_size = db.size();
-	const size_t n = cpb::lichess::load_database(file, db);
+	const auto res =
+		(read_memory_profile ? cpb::lichess::load_database_initialized(file, db)
+							 : cpb::lichess::load_database(file, db));
 	const auto end = cpb::now();
 
-	std::print("Total fen read: {}.\n", n);
-	std::print("Added {} new positions.\n", db.size() - initial_db_size);
-	const auto time = cpb::elapsed_time(begin, end);
-	std::print("In {}.\n", cpb::time_to_str(time));
-
-	if (n == 0) {
+	if (res.has_value()) {
+		std::print("From database '{}'.\n", file);
+		std::print("Total fen read: {}.\n", *res);
+		std::print("Added {} new positions.\n", db.size() - initial_db_size);
+		std::print(
+			"    From {} positions to {} positions.\n",
+			initial_db_size,
+			db.size()
+		);
+		const auto time = cpb::elapsed_time(begin, end);
+		std::print("In {}.\n", cpb::time_to_str(time));
+	}
+	else {
 		printerr("The lichess database '{}' could not be read.\n", file);
+		if (res.error() == cpb::lichess::load_error::file_error) {
+			printerr("    File could not be loaded.\n");
+		}
+		else if (res.error() == cpb::lichess::load_error::invalid_position) {
+			printerr("    Contains some invalid position.\n");
+		}
 	}
 }
 
@@ -306,6 +326,11 @@ int main(int argc, char *argv[])
 	std::string_view instrumentation_session;
 #endif
 
+	bool write_memory_profile = false;
+	std::string_view output_memory_profile;
+	bool read_memory_profile = false;
+	std::string_view input_memory_profile;
+
 	std::vector<std::pair<std::string_view, cpb::database_format>>
 		lichess_databases;
 
@@ -315,6 +340,16 @@ int main(int argc, char *argv[])
 			lichess_databases.emplace_back(
 				argv[i + 1], cpb::database_format::lichess
 			);
+			++i;
+		}
+		else if (option_name == "--read-memory-profile") {
+			read_memory_profile = true;
+			input_memory_profile = argv[i + 1];
+			++i;
+		}
+		else if (option_name == "--write-memory-profile") {
+			write_memory_profile = true;
+			output_memory_profile = argv[i + 1];
 			++i;
 		}
 #if defined USE_INSTRUMENTATION
@@ -339,11 +374,28 @@ int main(int argc, char *argv[])
 
 	cpb::PuzzleDatabase db;
 
+	if (read_memory_profile) {
+		std::print("--------------------------\n");
+		std::print("Reading memory profile '{}'.\n", input_memory_profile);
+		std::ifstream fin(input_memory_profile.data());
+		size_t total_bytes;
+		fin >> total_bytes;
+		if (not fin.is_open()) {
+			printerr(
+				"Input memory profile file '{}' could not be opened.\n",
+				input_memory_profile
+			);
+			return 1;
+		}
+		classtree::initialize(db, fin);
+		fin.close();
+	}
+
 	for (const auto& [file, format] : lichess_databases) {
 		if (format == cpb::database_format::lichess) {
 			std::print("--------------------------\n");
 			std::print("Loading lichess database {}\n", file);
-			load_lichess_database(file, db);
+			load_lichess_database(file, read_memory_profile, db);
 		}
 	}
 
@@ -352,23 +404,7 @@ int main(int argc, char *argv[])
 	std::string option;
 	std::print("option> ");
 	while (std::cin >> option and option != "exit") {
-		if (option == "load") {
-			std::print("format (lichess)> ");
-			std::string format;
-			std::cin >> format;
-
-			std::print("filename> ");
-			std::string filename;
-			std::cin >> filename;
-
-			if (format == "lichess") {
-				load_lichess_database(filename, db);
-			}
-			else {
-				printerr("Unsupported format '{}'\n", format);
-			}
-		}
-		else if (option == "query") {
+		if (option == "query") {
 			process_query();
 		}
 		else if (option == "info") {
@@ -417,5 +453,21 @@ int main(int argc, char *argv[])
 			std::print("Unknown option '{}'\n", option);
 		}
 		std::print("option> ");
+	}
+	std::print("\n");
+
+	if (write_memory_profile) {
+		std::print("--------------------------\n");
+		std::print("Writing memory profile '{}'.\n", output_memory_profile);
+		std::ofstream fout(output_memory_profile.data());
+		if (not fout.is_open()) {
+			printerr(
+				"Output memory profile file '{}' could not be opened.\n",
+				output_memory_profile
+			);
+			return 1;
+		}
+		classtree::output_profile(db, fout);
+		fout.close();
 	}
 }
