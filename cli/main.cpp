@@ -372,7 +372,7 @@ int main(int argc, char *argv[])
 	PROFILER_START_SESSION(intstrumentation_session, "id");
 	PROFILE_FUNCTION;
 
-	cpb::ArenaMemoryResource arena;
+	cpb::arena_allocator arena;
 	cpb::PuzzleDatabase db;
 
 	if (read_memory_profile) {
@@ -393,6 +393,7 @@ int main(int argc, char *argv[])
 			);
 			return 1;
 		}
+
 		classtree::initialize(db, fin, &arena);
 		fin.close();
 	}
@@ -476,4 +477,6 @@ int main(int argc, char *argv[])
 		classtree::output_profile(db, fout);
 		fout.close();
 	}
+
+	arena.reset();
 }
