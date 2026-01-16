@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 	std::print("Chess Puzzle Database cli\n");
 
 #if defined USE_INSTRUMENTATION
-	std::string_view profiler_session;
+	std::string_view instrumentation_session;
 #endif
 
 	std::vector<std::pair<std::string_view, cpb::database_format>>
@@ -318,8 +318,8 @@ int main(int argc, char *argv[])
 			++i;
 		}
 #if defined USE_INSTRUMENTATION
-		else if (option_name == "--profiler-session") {
-			profiler_session = argv[i + 1];
+		else if (option_name == "--instrumentation-session") {
+			intstrumentation_session = argv[i + 1];
 			++i;
 		}
 #endif
@@ -329,12 +329,12 @@ int main(int argc, char *argv[])
 	}
 
 #if defined USE_INSTRUMENTATION
-	if (profiler_session == "") {
-		printerr("Profiler session name not provided\n");
+	if (intstrumentation_session == "") {
+		printerr("Instrumentation session name not provided\n");
 		return 1;
 	}
 #endif
-	PROFILER_START_SESSION(profiler_session, "id");
+	PROFILER_START_SESSION(intstrumentation_session, "id");
 	PROFILE_FUNCTION;
 
 	cpb::PuzzleDatabase db;
