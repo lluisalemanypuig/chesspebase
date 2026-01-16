@@ -29,13 +29,13 @@
 namespace cpb {
 
 /// Arena memory allocator
-class ArenaMemoryResource : public std::pmr::memory_resource {
+class arena_allocator : public std::pmr::memory_resource {
 public:
 
 	/// Default constructor
-	ArenaMemoryResource() noexcept = default;
+	arena_allocator() noexcept = default;
 	/// Default destructor
-	~ArenaMemoryResource() override = default;
+	~arena_allocator() override = default;
 
 	/// Initialize the arena with the given number of bytes.
 	void initialize(size_t bytes);

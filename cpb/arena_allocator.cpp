@@ -22,14 +22,14 @@
  */
 
 // C++ includes
-#include <iostream>
+#include <memory>
 
 // cpb includes
 #include <cpb/arena_allocator.hpp>
 
 namespace cpb {
 
-void ArenaMemoryResource::initialize(size_t bytes)
+void arena_allocator::initialize(size_t bytes)
 {
 	m_buffer.reset(new char[bytes]);
 	m_begin = m_buffer.get();
@@ -38,7 +38,7 @@ void ArenaMemoryResource::initialize(size_t bytes)
 	m_upstream = std::pmr::get_default_resource();
 }
 
-void *ArenaMemoryResource::do_allocate(size_t bytes, size_t alignment)
+void *arena_allocator::do_allocate(size_t bytes, size_t alignment)
 {
 	const std::uintptr_t cur = reinterpret_cast<std::uintptr_t>(m_ptr);
 	const std::uintptr_t aligned = (cur + (alignment - 1)) & ~(alignment - 1);
@@ -48,11 +48,10 @@ void *ArenaMemoryResource::do_allocate(size_t bytes, size_t alignment)
 		return p;
 	}
 
-	std::cout << "Ran out of arena\n";
 	return m_upstream->allocate(bytes, alignment);
 }
 
-void ArenaMemoryResource::do_deallocate(void *p, size_t bytes, size_t alignment)
+void arena_allocator::do_deallocate(void *p, size_t bytes, size_t alignment)
 {
 	char *cp = static_cast<char *>(p);
 	if (cp < m_begin or cp >= m_end) {
