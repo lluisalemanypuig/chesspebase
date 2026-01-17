@@ -8,6 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CPB_MAJOR 99.99)
 set(CPB_PATCH 99)
 
+option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+
 # ******************************************************************************
 # Custom functions
 
@@ -84,6 +86,11 @@ function(configure_executable executable)
 		add_compile_flag(${executable} -flto)
 		add_link_flag(${executable} -flto=auto)
 		define_symbol(${executable} -UDEBUG)
+	endif()
+
+	if (ENABLE_ASAN)
+		target_compile_options(${executable} PRIVATE -fsanitize=address)
+		target_link_options(${executable} PRIVATE -fsanitize=address)
 	endif()
 
 	# ***************************************************************************
