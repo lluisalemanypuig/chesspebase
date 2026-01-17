@@ -477,6 +477,4 @@ int main(int argc, char *argv[])
 		classtree::output_profile(db, fout);
 		fout.close();
 	}
-
-	arena.reset();
 }
