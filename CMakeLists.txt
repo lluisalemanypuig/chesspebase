@@ -131,23 +131,39 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
 	message(STATUS "Link against cpb (debug compilation of cpb)")
+	set(BUILD_DIR build-debug)
 	set(CPB_LIB_DIR ${CPB_DIR}/build-debug/cpb)
 	set(CPB_LIB_NAME cpb)
 elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Profiling")
 	message(STATUS "Link against cpbprofiling (profiling compilation of cpb)")
+	set(BUILD_DIR build-profiling)
 	set(CPB_LIB_DIR ${CPB_DIR}/build-profiling/cpb)
 	set(CPB_LIB_NAME cpbprofiling)
 elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Instrumentation")
 	message(STATUS "Link against cpbinstrumentation (instrumentation compilation of cpb)")
+	set(BUILD_DIR build-instrumentation)
 	set(CPB_LIB_DIR ${CPB_DIR}/build-instrumentation/cpb)
 	set(CPB_LIB_NAME cpbinstrumentation)
 else()
 	message(STATUS "Link against cpbpotimized (release compilation of cpb)")
+	set(BUILD_DIR build-release)
 	set(CPB_LIB_DIR ${CPB_DIR}/build-release/cpb)
 	set(CPB_LIB_NAME cpboptimized)
 endif()
 message(STATUS "    CPB_LIB_DIR:  ${CPB_LIB_DIR}")
 message(STATUS "    CPB_LIB_NAME: ${CPB_LIB_NAME}")
+
+set(COMPILE_COMMANDS_ORIG ${CPB_DIR}/${BULD_DIR}/compile_commands.json)
+set(COMPILE_COMMANDS_DEST ${CPB_DIR}/compile_commands.json)
+
+message(STATUS "    Current compile_commands.json:     ${COMPILE_COMMANDS_ORIG}")
+message(STATUS "    Destination compile_commands.json: ${COMPILE_COMMANDS_DEST}")
+
+add_custom_target(
+	copy_compile_commands ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${COMPILE_COMMANDS_ORIG} ${COMPILE_COMMANDS_DEST}
+	DEPENDS ${COMPILE_COMMANDS_ORIG}
+)
 
 # *******************************************************************************
 # Add subdirectories
