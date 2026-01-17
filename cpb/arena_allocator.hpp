@@ -40,12 +40,6 @@ public:
 	/// Initialize the arena with the given number of bytes.
 	void initialize(size_t bytes);
 
-	// Reset the bump pointer (drops all allocations at once)
-	void reset() noexcept
-	{
-		m_ptr = m_begin;
-	}
-
 protected:
 
 	/// Allocate @e bytes aligned at @e alignment.
