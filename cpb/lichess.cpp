@@ -59,11 +59,12 @@ enum class queue_command {
 
 struct queue_wrap {
 
+	// TODO: fix memory leak
 	position_list data;
 	spsc::queue queue;
 	alignas(128) char buffer[BUFFER_SIZE];
 
-	queue_wrap()
+	void initialize()
 	{
 		queue.initialize(&buffer, BUFFER_SIZE);
 		data.reserve(VECTOR_DATA_SIZE);
@@ -196,13 +197,14 @@ load_database(const std::string_view filename, PuzzleDatabase& db)
 		return std::unexpected(load_error::file_error);
 	}
 
-	PuzzleDatabase dbs[9];
 	queue_wrap qs[9];
+	PuzzleDatabase dbs[9];
 
 	// Launch worker threads: these will wait for the queue to have some data,
 	// then read it and fill their respective databases.
 	std::vector<std::thread> workers;
 	for (size_t i = 0; i < 9; ++i) {
+		qs[i].initialize();
 		workers.emplace_back(
 			worker_add_to_database<PuzzleDatabase&>,
 			std::ref(qs[i]),
@@ -257,9 +259,6 @@ load_database(const std::string_view filename, PuzzleDatabase& db)
 
 	for (size_t i = 0; i < 9; ++i) {
 		workers[i].join();
-	}
-
-	for (size_t i = 0; i < 9; ++i) {
 		db.merge(std::move(dbs[i]));
 	}
 
@@ -276,6 +275,7 @@ load_database_initialized(const std::string_view filename, PuzzleDatabase& db)
 		return std::unexpected(load_error::file_error);
 	}
 
+	queue_wrap qs[9];
 	PuzzleDatabaseNoWhitePawns *dbs[9];
 	{
 		for (size_t i = 0; i < 9; ++i) {
@@ -285,10 +285,10 @@ load_database_initialized(const std::string_view filename, PuzzleDatabase& db)
 		while (it != db.end()) {
 			const size_t i = static_cast<size_t>(it->first);
 			dbs[i] = &it->second;
+			qs[i].initialize();
 			++it;
 		}
 	}
-	queue_wrap qs[9];
 
 	// Launch worker threads: these will wait for the queue to have some data,
 	// then read it and fill their respective databases.
