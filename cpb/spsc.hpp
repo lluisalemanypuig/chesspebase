@@ -26,14 +26,14 @@ namespace detail {
 
 static constexpr size_t CACHE_LINE_SIZE = 64;
 
-static constexpr FORCE_INLINE size_t
+[[nodiscard]] static constexpr FORCE_INLINE size_t
 align(const size_t pos, const size_t alignment)
 {
 	return (pos + alignment - 1) & ~(alignment - 1);
 }
 
 template <typename T>
-static constexpr FORCE_INLINE ptrdiff_t to_ptrdiff(const T& t)
+[[nodiscard]] static constexpr FORCE_INLINE ptrdiff_t to_ptrdiff(const T& t)
 {
 	return static_cast<ptrdiff_t>(t);
 }
@@ -101,7 +101,7 @@ public:
 
 	// read an element from the buffer.
 	template <typename T>
-	FORCE_INLINE T& read()
+	[[nodiscard]] FORCE_INLINE T& read()
 	{
 		void *src = prepare_read(sizeof(T), alignof(T));
 		return *static_cast<T *>(src);
@@ -109,7 +109,7 @@ public:
 
 	// read an array of elements from the buffer.
 	template <typename T>
-	FORCE_INLINE T *read_array(const size_t count)
+	[[nodiscard]] FORCE_INLINE T *read_array(const size_t count)
 	{
 		void *src = prepare_read(sizeof(T) * count, alignof(T));
 		return static_cast<T *>(src);
@@ -170,7 +170,8 @@ private:
 	 * @param bytes The number of bytes to allocate.
 	 * @param alignment The alignment of the data to allocate.
 	 */
-	FORCE_INLINE void *prepare_write(const size_t bytes, const size_t alignment)
+	[[nodiscard]] FORCE_INLINE void *
+	prepare_write(const size_t bytes, const size_t alignment)
 	{
 		size_t begin = detail::align(m_writer.begin, alignment);
 		size_t end = begin + bytes;
@@ -224,7 +225,8 @@ private:
 	/*                           READING                              */
 
 	// Get read pointer. Size and alignment should match written data.
-	FORCE_INLINE void *prepare_read(const size_t bytes, const size_t alignment)
+	[[nodiscard]] FORCE_INLINE void *
+	prepare_read(const size_t bytes, const size_t alignment)
 	{
 		size_t begin = detail::align(m_reader.begin, alignment);
 		size_t end = begin + bytes;
