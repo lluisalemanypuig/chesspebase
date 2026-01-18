@@ -63,7 +63,7 @@ public:
 	FORCE_INLINE void write_into(T&& value)
 	{
 		void *dest = prepare_write(sizeof(T), alignof(T));
-		new (dest) T(std::move(value));
+		new (dest) T(std::forward<T>(value));
 	}
 
 	// write an array of elements to the buffer.
