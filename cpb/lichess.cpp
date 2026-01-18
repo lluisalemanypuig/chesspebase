@@ -55,8 +55,8 @@ enum class queue_command {
 	finish
 };
 
-#define BUFFER_SIZE (2 << 16)
-#define VECTOR_DATA_SIZE 900
+#define VECTOR_DATA_SIZE 1000
+#define BUFFER_SIZE 1024
 
 struct queue_wrap {
 
