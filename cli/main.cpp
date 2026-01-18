@@ -474,7 +474,7 @@ int main(int argc, char *argv[])
 			);
 			return 1;
 		}
-		classtree::output_profile(db, fout);
+		classtree::output_profile<true>(db, fout);
 		fout.close();
 	}
 }
