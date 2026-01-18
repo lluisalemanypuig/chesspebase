@@ -33,6 +33,7 @@
 #include <fstream>
 
 // cpb includes
+#include <cpb/attribute_utils.hpp>
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
@@ -64,18 +65,18 @@ struct queue_wrap {
 	spsc::queue queue;
 	alignas(128) char buffer[BUFFER_SIZE];
 
-	void initialize()
+	FORCE_INLINE void initialize()
 	{
 		queue.initialize(&buffer, BUFFER_SIZE);
 		data.reserve(VECTOR_DATA_SIZE);
 	}
 
-	void push_back(position&& p, position_info&& info)
+	FORCE_INLINE void push_back(position&& p, position_info&& info)
 	{
 		data.emplace_back(std::move(p), std::move(info));
 	}
 
-	void send()
+	FORCE_INLINE void send()
 	{
 		queue.write(queue_command::vector);
 		queue.write_into(std::move(data));
@@ -84,14 +85,14 @@ struct queue_wrap {
 		data.clear();
 		data.reserve(VECTOR_DATA_SIZE);
 	}
-	void send_batch()
+	FORCE_INLINE void send_batch()
 	{
 		if (data.size() == VECTOR_DATA_SIZE) {
 			send();
 		}
 	}
 
-	void finish()
+	FORCE_INLINE void finish()
 	{
 		queue.write(queue_command::finish);
 		queue.finish_write();

@@ -17,9 +17,8 @@
 #include <algorithm>
 #include <atomic>
 
-#if not defined FORCE_INLINE
-#define FORCE_INLINE
-#endif
+// cpb includes
+#include <cpb/attribute_utils.hpp>
 
 namespace spsc {
 namespace detail {
@@ -66,6 +65,7 @@ public:
 		new (dest) T(std::forward<T>(value));
 	}
 
+	/*
 	// write an array of elements to the buffer.
 	template <typename T>
 	FORCE_INLINE void write_array(const T *values, const size_t count)
@@ -83,6 +83,7 @@ public:
 			new (static_cast<T *>(dest) + i) T(std::move(values[i]));
 		}
 	}
+	*/
 
 	// Publish written data.
 	FORCE_INLINE void finish_write()
@@ -107,6 +108,7 @@ public:
 		return *static_cast<T *>(src);
 	}
 
+	/*
 	// read an array of elements from the buffer.
 	template <typename T>
 	[[nodiscard]] FORCE_INLINE T *read_array(const size_t count)
@@ -114,6 +116,7 @@ public:
 		void *src = prepare_read(sizeof(T) * count, alignof(T));
 		return static_cast<T *>(src);
 	}
+	*/
 
 	// Finish and make buffer space available to writer.
 	FORCE_INLINE void finish_read()
