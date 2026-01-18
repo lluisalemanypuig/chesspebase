@@ -47,7 +47,8 @@ namespace lichess {
 
 #if defined LICHESS_PARALLEL
 
-typedef std::vector<std::pair<position, position_info>> position_list;
+typedef std::pair<position, position_info> position_plus_info;
+typedef std::vector<position_plus_info> position_list;
 
 enum class queue_command {
 	vector,
@@ -59,7 +60,6 @@ enum class queue_command {
 
 struct queue_wrap {
 
-	// TODO: fix memory leak
 	position_list data;
 	spsc::queue queue;
 	alignas(128) char buffer[BUFFER_SIZE];
@@ -182,6 +182,7 @@ void worker_add_to_database(queue_wrap& q, database_t db)
 			}
 		}
 
+		v.~vector<position_plus_info>();
 		q.queue.finish_read();
 		command = q.queue.read<queue_command>();
 	}
