@@ -89,6 +89,7 @@ function(configure_executable executable)
 	endif()
 
 	if (ENABLE_ASAN)
+		add_compile_flag(${executable} -fno-omit-frame-pointer)
 		target_compile_options(${executable} PRIVATE -fsanitize=address)
 		target_link_options(${executable} PRIVATE -fsanitize=address)
 	endif()
