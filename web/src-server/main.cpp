@@ -22,13 +22,18 @@
  */
 
 // C++ includes
-#include <iostream>
+#include <fstream>
+#include <print>
 
 // HTTP lib includes
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 #include <httplib.h>
 
+// ctree includes
+#include <ctree/memory_profile.hpp>
+
 // cpb includes
+#include <cpb/arena_allocator.hpp>
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/lichess.hpp>
@@ -38,19 +43,42 @@
 #include "src-server/app_router.hpp"
 #include "src-server/query.hpp"
 
-void load_lichess_database(const std::string_view file, cpb::PuzzleDatabase& db)
+template <class... Args>
+void printerr(std::format_string<Args...>&& fmt, Args&&...args)
+{
+	std::print(std::cerr, std::move(fmt), std::forward<Args...>(args)...);
+}
+
+void load_lichess_database(
+	const std::string_view file,
+	const bool read_memory_profile,
+	cpb::PuzzleDatabase& db
+)
 {
 	PROFILE_FUNCTION;
 
 	const size_t initial_db_size = db.size();
-	const size_t n = cpb::lichess::load_database(file, db);
+	const auto res =
+		(read_memory_profile ? cpb::lichess::load_database_initialized(file, db)
+							 : cpb::lichess::load_database(file, db));
 
-	std::cout << "Total fen read: " << n << ".\n";
-	std::cout << "Added " << db.size() - initial_db_size << " new positions.\n";
-
-	if (n == 0) {
-		std::cerr << "The lichess database '" << file
-				  << "' could not be read.\n";
+	if (res.has_value()) {
+		std::print("Total fen read: {}.\n", *res);
+		std::print("Added {} new positions.\n", db.size() - initial_db_size);
+		std::print(
+			"    From {} positions to {} positions.\n",
+			initial_db_size,
+			db.size()
+		);
+	}
+	else {
+		printerr("The database could not be read.\n");
+		if (res.error() == cpb::lichess::load_error::file_error) {
+			printerr("    File could not be loaded.\n");
+		}
+		else if (res.error() == cpb::lichess::load_error::invalid_position) {
+			printerr("    Contains some invalid position.\n");
+		}
 	}
 }
 
@@ -61,6 +89,11 @@ int main(int argc, char *argv[])
 #if defined USE_INSTRUMENTATION
 	std::string_view profiler_session;
 #endif
+
+	bool write_memory_profile = false;
+	std::string_view output_memory_profile;
+	bool read_memory_profile = false;
+	std::string_view input_memory_profile;
 
 	std::vector<std::pair<std::string_view, cpb::database_format>>
 		lichess_databases;
@@ -73,6 +106,16 @@ int main(int argc, char *argv[])
 			);
 			++i;
 		}
+		else if (option_name == "--read-memory-profile") {
+			read_memory_profile = true;
+			input_memory_profile = argv[i + 1];
+			++i;
+		}
+		else if (option_name == "--write-memory-profile") {
+			write_memory_profile = true;
+			output_memory_profile = argv[i + 1];
+			++i;
+		}
 #if defined USE_INSTRUMENTATION
 		else if (option_name == "--profiler-session") {
 			profiler_session = argv[i + 1];
@@ -80,7 +123,7 @@ int main(int argc, char *argv[])
 		}
 #endif
 		else {
-			std::cerr << "Unknown option '" << option_name << "'\n";
+			printerr("Unkown option '{}'\n", option_name);
 		}
 	}
 
@@ -93,14 +136,53 @@ int main(int argc, char *argv[])
 	PROFILER_START_SESSION(profiler_session, "id");
 	PROFILE_FUNCTION;
 
+	cpb::arena_allocator arena;
 	cpb::PuzzleDatabase db;
+
+	if (read_memory_profile) {
+		std::print("--------------------------\n");
+		std::print("Reading memory profile '{}'.\n", input_memory_profile);
+
+		std::ifstream fin(input_memory_profile.data());
+
+		size_t total_bytes;
+		fin >> total_bytes;
+		std::print("    Total bytes: {}\n", total_bytes);
+		arena.initialize(total_bytes);
+
+		if (not fin.is_open()) {
+			printerr(
+				"Input memory profile file '{}' could not be opened.\n",
+				input_memory_profile
+			);
+			return 1;
+		}
+
+		classtree::initialize(db, fin, &arena);
+		fin.close();
+	}
 
 	for (const auto& [file, format] : lichess_databases) {
 		if (format == cpb::database_format::lichess) {
 			std::cout << "--------------------------\n";
 			std::cout << "Loading lichess database " << file << '\n';
-			load_lichess_database(file, db);
+			load_lichess_database(file, read_memory_profile, db);
 		}
+	}
+
+	if (write_memory_profile) {
+		std::print("--------------------------\n");
+		std::print("Writing memory profile '{}'.\n", output_memory_profile);
+		std::ofstream fout(output_memory_profile.data());
+		if (not fout.is_open()) {
+			printerr(
+				"Output memory profile file '{}' could not be opened.\n",
+				output_memory_profile
+			);
+			return 1;
+		}
+		classtree::output_profile<true>(db, fout);
+		fout.close();
 	}
 
 	httplib::Server svr;
