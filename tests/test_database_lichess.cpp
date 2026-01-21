@@ -311,10 +311,11 @@ TEST_CASE("small")
 	const auto lichess = load_lichess(file);
 
 	cpb::PuzzleDatabase db;
-	const std::size_t loaded = cpb::lichess::load_database(file, db);
+	const auto loaded = cpb::lichess::load_database(file, db);
 
-	CHECK(loaded > 0);
-	CHECK_EQ(loaded, db.size());
+	CHECK(loaded.has_value());
+	CHECK(loaded.value() > 0);
+	CHECK_EQ(loaded.value(), db.size());
 	CHECK_EQ(lichess.size(), db.size());
 	CHECK_EQ(t_1wp_3bp(lichess), t_1wp_3bp(db));
 	CHECK_EQ(t_1wp_3bn(lichess), t_1wp_3bn(db));
@@ -329,10 +330,11 @@ TEST_CASE("medium")
 	const auto lichess = load_lichess(file);
 
 	cpb::PuzzleDatabase db;
-	const std::size_t loaded = cpb::lichess::load_database(file, db);
+	const auto loaded = cpb::lichess::load_database(file, db);
 
-	CHECK(loaded > 0);
-	CHECK_EQ(loaded, db.size());
+	CHECK(loaded.has_value());
+	CHECK(loaded.value() > 0);
+	CHECK_EQ(loaded.value(), db.size());
 	CHECK_EQ(lichess.size(), db.size());
 	CHECK_EQ(t_1wp_3bp(lichess), t_1wp_3bp(db));
 	CHECK_EQ(t_1wp_3bn(lichess), t_1wp_3bn(db));
