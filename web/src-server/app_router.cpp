@@ -1,6 +1,6 @@
 /**
  * Web Server of the Chess Puzzle Database Explorer
- * Copyright (C) 2025  Lluís Alemany Puig
+ * Copyright (C) 2025 - 2026  Lluís Alemany Puig
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
