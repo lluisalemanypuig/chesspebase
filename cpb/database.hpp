@@ -24,7 +24,9 @@
 #pragma once
 
 // classtree includes
-#include <cpb/attribute_utils.hpp>
+// visit
+//    https://github.com/lluisalemanypuig/classification-tree
+// for details
 #include <ctree/ctree.hpp>
 
 // cpb includes
