@@ -55,7 +55,7 @@ function(configure_executable executable)
 	add_compile_flag(${executable} -Wsign-conversion)
 	add_compile_flag(${executable} -Wnull-dereference)
 	add_compile_flag(${executable} -Wdouble-promotion)
-	add_compile_flag(${executable} -Wformat=2)
+	#add_compile_flag(${executable} -Wformat=2)
 	add_compile_flag(${executable} -Wduplicated-cond)
 	add_compile_flag(${executable} -Wduplicated-branches)
 	add_compile_flag(${executable} -Wlogical-op)
@@ -83,9 +83,11 @@ function(configure_executable executable)
 		# flags added by default:
 		#   -O3
 		#   -DNDEBUG
-		add_compile_flag(${executable} -flto)
-		add_link_flag(${executable} -flto=auto)
 		define_symbol(${executable} -UDEBUG)
+
+		if("${IPO_IS_SUPPORTED}" STREQUAL "YES")
+			set_property(TARGET ${executable} PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+		endif()
 	endif()
 
 	if (ENABLE_ASAN)
@@ -161,7 +163,7 @@ endif()
 message(STATUS "    CPB_LIB_DIR:  ${CPB_LIB_DIR}")
 message(STATUS "    CPB_LIB_NAME: ${CPB_LIB_NAME}")
 
-set(COMPILE_COMMANDS_ORIG ${CPB_DIR}/${BULD_DIR}/compile_commands.json)
+set(COMPILE_COMMANDS_ORIG ${CPB_DIR}/${BUILD_DIR}/compile_commands.json)
 set(COMPILE_COMMANDS_DEST ${CPB_DIR}/compile_commands.json)
 
 message(STATUS "    Current compile_commands.json:     ${COMPILE_COMMANDS_ORIG}")
@@ -172,6 +174,26 @@ add_custom_target(
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${COMPILE_COMMANDS_ORIG} ${COMPILE_COMMANDS_DEST}
 	DEPENDS ${COMPILE_COMMANDS_ORIG}
 )
+
+# *******************************************************************************
+# Build-dependent options
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Profiling")
+elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Instrumentation")
+else()
+
+	# IPO: Inter-Procedural Optimization
+	include(CheckIPOSupported)
+	check_ipo_supported(RESULT IPO_IS_SUPPORTED OUTPUT IPO_CHECK_ERROR)
+	message(STATUS "IPO_IS_SUPPORTED='${IPO_IS_SUPPORTED}'")
+	if("${IPO_IS_SUPPORTED}" STREQUAL "YES")
+		message(STATUS "    IPO is supported.")
+	else()
+		message(STATUS "    IPO is not supported.")
+		message(STATUS "    Error message: ${IPO_CHECK_ERROR}")
+	endif()
+endif()
 
 # *******************************************************************************
 # Add subdirectories
