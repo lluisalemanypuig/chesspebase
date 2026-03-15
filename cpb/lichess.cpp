@@ -34,6 +34,7 @@
 
 // cpb includes
 #include <cpb/attribute_utils.hpp>
+#include <cpb/arena_allocator.hpp>
 #include <cpb/profiler.hpp>
 #include <cpb/database.hpp>
 #include <cpb/fen_parser.hpp>
@@ -49,15 +50,15 @@ namespace lichess {
 #if defined LICHESS_PARALLEL
 
 typedef std::pair<position, position_info> position_plus_info;
-typedef std::vector<position_plus_info> position_list;
+typedef std::pmr::vector<position_plus_info> position_list;
 
 enum class queue_command {
 	vector,
 	finish
 };
 
-#define VECTOR_DATA_SIZE 1000
-#define BUFFER_SIZE 1024
+static constexpr inline size_t VECTOR_DATA_SIZE = 1000;
+static constexpr inline size_t BUFFER_SIZE = 1024;
 
 struct queue_wrap {
 
@@ -65,8 +66,19 @@ struct queue_wrap {
 	spsc::queue queue;
 	alignas(128) char buffer[BUFFER_SIZE];
 
-	FORCE_INLINE void initialize()
+	template <bool use_memory_resource>
+	FORCE_INLINE void initialize(std::pmr::memory_resource *mem_res)
 	{
+		if constexpr (use_memory_resource) {
+#if defined DEBUG
+			assert(mem_res != nullptr);
+#endif
+			data.~vector();
+			new (&data) std::pmr::vector<position_plus_info>(
+				std::pmr::polymorphic_allocator{mem_res}
+			);
+		}
+
 		queue.initialize(&buffer, BUFFER_SIZE);
 		data.reserve(VECTOR_DATA_SIZE);
 	}
@@ -183,7 +195,8 @@ void worker_add_to_database(queue_wrap& q, database_t db)
 			}
 		}
 
-		v.~vector<position_plus_info>();
+		v.~vector();
+
 		q.queue.finish_read();
 		command = q.queue.read<queue_command>();
 	}
@@ -206,7 +219,8 @@ load_database(const std::string_view filename, PuzzleDatabase& db)
 	// then read it and fill their respective databases.
 	std::vector<std::thread> workers;
 	for (size_t i = 0; i < 9; ++i) {
-		qs[i].initialize();
+		qs[i].initialize<false>(nullptr);
+
 		workers.emplace_back(
 			worker_add_to_database<PuzzleDatabase&>,
 			std::ref(qs[i]),
@@ -277,17 +291,25 @@ load_database_initialized(const std::string_view filename, PuzzleDatabase& db)
 		return std::unexpected(load_error::file_error);
 	}
 
+	arena_allocator arena[9];
 	queue_wrap qs[9];
 	PuzzleDatabaseNoWhitePawns *dbs[9];
+
 	{
 		for (size_t i = 0; i < 9; ++i) {
 			dbs[i] = nullptr;
 		}
+
 		auto it = db.begin();
 		while (it != db.end()) {
 			const size_t i = static_cast<size_t>(it->first);
+
+			const size_t cap = db.get_child(i).capacity() + VECTOR_DATA_SIZE;
+			const size_t bytes = cap * sizeof(position_plus_info);
+			arena[i].initialize(bytes);
+
 			dbs[i] = &it->second;
-			qs[i].initialize();
+			qs[i].initialize<true>(&arena[i]);
 			++it;
 		}
 	}
