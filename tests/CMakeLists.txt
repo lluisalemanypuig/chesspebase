@@ -15,6 +15,8 @@ include(GNUInstallDirs)
 # include CTest for testing
 include(CTest)
 
+message(STATUS "Library ${CPB_LIB_DIR}/lib${CPB_LIB_NAME}.so")
+
 # ******************************************************************************
 # Custom functions
 
