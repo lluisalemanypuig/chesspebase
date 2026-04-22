@@ -22,7 +22,7 @@ function(configure_cli_executable executable)
 	# cpb
 	target_link_libraries(${executable}	${CPB_LIB_DIR}/lib${CPB_LIB_NAME}.so)
 
-	configure_executable(${executable})
+	configure_thing(${executable})
 
 endfunction(configure_cli_executable)
 

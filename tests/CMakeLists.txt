@@ -30,7 +30,7 @@ function(configure_test_executable executable)
 	target_link_libraries(${executable}	${CPB_LIB_DIR}/lib${CPB_LIB_NAME}.so)
 
 	# configure executable normally
-	configure_executable(${executable})
+	configure_thing(${executable})
 
 endfunction(configure_test_executable)
 

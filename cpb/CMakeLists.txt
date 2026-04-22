@@ -52,4 +52,4 @@ file(GLOB LIBCPB_MAIN_HEADER ${CPB_DIR}/cpb/*.hpp)
 # ******************************************************************************
 # CONFIGURE
 
-configure_executable(${TargetStringLibrary})
+configure_thing(${TargetStringLibrary})

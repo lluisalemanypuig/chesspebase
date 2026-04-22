@@ -13,28 +13,28 @@ option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
 # ******************************************************************************
 # Custom functions
 
-function(add_compile_flag executable flag)
+function(add_compile_flag thing flag)
 	check_cxx_compiler_flag(${flag} CXX_HAS_FLAG_${flag})
 	if (CXX_HAS_FLAG_${flag})
-		target_compile_options(${executable} PRIVATE ${flag})
+		target_compile_options(${thing} PRIVATE ${flag})
 	endif()
 endfunction(add_compile_flag)
 
-function(add_link_flag executable flag)
+function(add_link_flag thing flag)
 	check_cxx_compiler_flag(${flag} CXX_HAS_FLAG_${flag})
 	if (CXX_HAS_FLAG_${flag})
-		target_link_options(${executable} PRIVATE ${flag})
+		target_link_options(${thing} PRIVATE ${flag})
 	endif()
 endfunction(add_link_flag)
 
-function(define_symbol executable symbol)
-	target_compile_options(${executable} PRIVATE ${symbol})
+function(define_symbol thing symbol)
+	target_compile_options(${thing} PRIVATE ${symbol})
 endfunction(define_symbol)
 
-function(configure_executable executable)
-	# define executable's properties
-	set_target_properties(${executable} PROPERTIES SOVERSION 1)
-	set_target_properties(${executable} PROPERTIES LINKER_LANGUAGE CXX)
+function(configure_thing thing)
+	# define thing's properties
+	set_target_properties(${thing} PROPERTIES SOVERSION 1)
+	set_target_properties(${thing} PROPERTIES LINKER_LANGUAGE CXX)
 
 	# ******************************************************************************
 	# Definitions
@@ -42,67 +42,67 @@ function(configure_executable executable)
 	# ******************************************************************************
 	# Warning flags
 
-	add_compile_flag(${executable} -Wall)
-	add_compile_flag(${executable} -Wextra)
-	add_compile_flag(${executable} -Wshadow)
-	add_compile_flag(${executable} -Wnon-virtual-dtor)
-	add_compile_flag(${executable} -Wold-style-cast)
-	add_compile_flag(${executable} -Wcast-align)
-	add_compile_flag(${executable} -Wunused)
-	add_compile_flag(${executable} -Woverloaded-virtual)
-	add_compile_flag(${executable} -Wpedantic)
-	add_compile_flag(${executable} -Wconversion)
-	add_compile_flag(${executable} -Wsign-conversion)
-	add_compile_flag(${executable} -Wnull-dereference)
-	add_compile_flag(${executable} -Wdouble-promotion)
-	#add_compile_flag(${executable} -Wformat=2)
-	add_compile_flag(${executable} -Wduplicated-cond)
-	add_compile_flag(${executable} -Wduplicated-branches)
-	add_compile_flag(${executable} -Wlogical-op)
-	add_compile_flag(${executable} -Wuseless-cast)
-	add_compile_flag(${executable} -Wrestrict)
+	add_compile_flag(${thing} -Wall)
+	add_compile_flag(${thing} -Wextra)
+	add_compile_flag(${thing} -Wshadow)
+	add_compile_flag(${thing} -Wnon-virtual-dtor)
+	add_compile_flag(${thing} -Wold-style-cast)
+	add_compile_flag(${thing} -Wcast-align)
+	add_compile_flag(${thing} -Wunused)
+	add_compile_flag(${thing} -Woverloaded-virtual)
+	add_compile_flag(${thing} -Wpedantic)
+	add_compile_flag(${thing} -Wconversion)
+	add_compile_flag(${thing} -Wsign-conversion)
+	add_compile_flag(${thing} -Wnull-dereference)
+	add_compile_flag(${thing} -Wdouble-promotion)
+	#add_compile_flag(${thing} -Wformat=2)
+	add_compile_flag(${thing} -Wduplicated-cond)
+	add_compile_flag(${thing} -Wduplicated-branches)
+	add_compile_flag(${thing} -Wlogical-op)
+	add_compile_flag(${thing} -Wuseless-cast)
+	add_compile_flag(${thing} -Wrestrict)
 
 	# ******************************************************************************
 	# Compile-mode dependent flags
 
 	if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-		add_compile_flag(${executable} -Og)
-		define_symbol(${executable} -DDEBUG)
-		define_symbol(${executable} -D_GLIBCXX_DEBUG)
+		add_compile_flag(${thing} -Og)
+		define_symbol(${thing} -DDEBUG)
+		define_symbol(${thing} -D_GLIBCXX_DEBUG)
 	elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Profiling")
-		add_compile_flag(${executable} -g)
-		add_compile_flag(${executable} -pg)
-		add_compile_flag(${executable} -fno-omit-frame-pointer)
+		add_compile_flag(${thing} -g)
+		add_compile_flag(${thing} -pg)
+		add_compile_flag(${thing} -fno-omit-frame-pointer)
 	elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "Instrumentation")
-		target_include_directories(${executable} PRIVATE ../../flame-charts)
-		add_compile_flag(${executable} -O3)
-		define_symbol(${executable} -DUSE_INSTRUMENTATION)
-		define_symbol(${executable} -UDEBUG)
-		define_symbol(${executable} -DNDEBUG)
+		target_include_directories(${thing} PRIVATE ../../flame-charts)
+		add_compile_flag(${thing} -O3)
+		define_symbol(${thing} -DUSE_INSTRUMENTATION)
+		define_symbol(${thing} -UDEBUG)
+		define_symbol(${thing} -DNDEBUG)
 	else()
 		# flags added by default:
 		#   -O3
 		#   -DNDEBUG
-		define_symbol(${executable} -UDEBUG)
+		define_symbol(${thing} -UDEBUG)
 
 		if("${IPO_IS_SUPPORTED}" STREQUAL "YES")
-			set_property(TARGET ${executable} PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+			set_property(TARGET ${thing} PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
 		endif()
 	endif()
 
 	if (ENABLE_ASAN)
-		add_compile_flag(${executable} -fno-omit-frame-pointer)
-		target_compile_options(${executable} PRIVATE -fsanitize=address)
-		target_link_options(${executable} PRIVATE -fsanitize=address)
+		add_compile_flag(${thing} -fno-omit-frame-pointer)
+		target_compile_options(${thing} PRIVATE -fsanitize=address)
+		target_link_options(${thing} PRIVATE -fsanitize=address)
 	endif()
 
 	# ***************************************************************************
 	# Include paths
 
-	target_include_directories(${executable} PRIVATE ${CPB_DIR})
-	target_include_directories(${executable} PRIVATE ../../classification-tree)
+	target_include_directories(${thing} PRIVATE ${CPB_DIR})
+	target_include_directories(${thing} PRIVATE ${CTREE_DIR})
 
-endfunction(configure_executable)
+endfunction(configure_thing)
 
 # ******************************************************************************
 # Set default build type
@@ -126,6 +126,7 @@ endif()
 
 # ******************************************************************************
 # Use C++23
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -134,6 +135,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CPB_DIR ${CMAKE_SOURCE_DIR})
 message(STATUS "CPB_DIR: ${CPB_DIR}")
+
+# ******************************************************************************
+# Path to CTREE's directory
+
+if (NOT DEFINED CTREE_DIR)
+	message(STATUS      "CTREE's root directory was not given.")
+	message(STATUS      "    Please, rerun 'cmake' with the location of CTREE's root directory:")
+	message(STATUS      "        -DCTREE_DIR=/path/to/ctree")
+	message(STATUS      "    Make sure it is an absolute path!")
+	message(STATUS      "    Download ctree from https://github.com/lluisalemanypuig/classification-tree")
+	message(FATAL_ERROR "Please, read the last few lines above and follow the instructions given.")
+endif()
 
 # ******************************************************************************
 
